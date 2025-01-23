@@ -64,19 +64,19 @@ class CandidateServiceImplTest {
   @Test
   @DisplayName("Test find candidate by id")
   void testFindById() {
-    UUID id = UUID.randomUUID();
+    UUID publicId = UUID.randomUUID();
     CandidateDocument candidateDocument = new CandidateDocument();
     Candidate candidate = new Candidate();
 
     when(candidateMongoRepository
-        .findByUuid(id))
+        .findByPublicId(publicId))
         .thenReturn(Optional.of(candidateDocument));
 
     when(candidateMapper
         .toCandidateModel(candidateDocument))
         .thenReturn(candidate);
 
-    Candidate result = candidateService.findById(id);
+    Candidate result = candidateService.findByPublicId(publicId);
 
     assertNotNull(result);
     assertEquals(candidate, result);
@@ -85,15 +85,15 @@ class CandidateServiceImplTest {
   @Test
   @DisplayName("Test find candidate by id not found")
   void testFindById_NotFound() {
-    UUID id = UUID.randomUUID();
+    UUID publicId = UUID.randomUUID();
 
     when(candidateMongoRepository
-        .findByUuid(id))
+        .findByPublicId(publicId))
         .thenReturn(Optional.empty());
 
     Exception exception = assertThrows(
         RuntimeException.class,
-        () -> candidateService.findById(id),
+        () -> candidateService.findByPublicId(publicId),
         "Should throw an exception if the candidate is not found"
     );
 
