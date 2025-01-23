@@ -37,7 +37,6 @@ public interface CandidateMapper {
    * @param entity the database candidate entity
    * @return the corresponding anonymised mongo document
    */
-  @Mapping(source = "id", target = "uuid") // todo sm this mocks a uuid based on the id - remove it when uuid's are sent from tc
   @Mapping(source = "createdDate", target = "createdDate")
   CandidateDocument anonymize(org.tctalent.anonymization.entity.db.Candidate entity);
 
@@ -48,6 +47,5 @@ public interface CandidateMapper {
    * @param model the identifiable candidate model
    * @return the corresponding anonymised mongo document
    */
-  @Mapping(source = "id", target = "uuid") // todo sm this mocks a uuid based on the id - remove it when uuid's are sent from tc
   CandidateDocument anonymize(IdentifiableCandidate model);
 }

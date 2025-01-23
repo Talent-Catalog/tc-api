@@ -31,7 +31,7 @@ import org.tctalent.anonymization.entity.common.enums.AvailImmediateReason;
 @Document(collection = "candidates")
 public class CandidateDocument {
 
-  private UUID uuid;
+  private UUID publicId;
 
   private String candidateNumber;
   private String additionalInfo;
@@ -230,8 +230,8 @@ public class CandidateDocument {
 
   @Override
   public int hashCode() {
-    if (uuid != null) {
-      return uuid.hashCode();
+    if (publicId != null) {
+      return publicId.hashCode();
     } else {
       return super.hashCode();
     }
@@ -247,17 +247,17 @@ public class CandidateDocument {
     CandidateDocument other = (CandidateDocument) obj;
 
     //If id is missing assume that it is not equal to other instance.
-    if (uuid == null) return false;
+    if (publicId == null) return false;
 
     //Equivalence by id
-    return uuid.equals(other.uuid);
+    return publicId.equals(other.publicId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Candidate {\n");
-    sb.append("    uuid: ").append(toIndentedString(uuid)).append("\n");
+    sb.append("    publicId: ").append(toIndentedString(publicId)).append("\n");
     sb.append("    additionalInfo: ").append(toIndentedString(additionalInfo)).append("\n");
     sb.append("    asylumYear: ").append(toIndentedString(asylumYear)).append("\n");
     sb.append("    arrestImprison: ").append(toIndentedString(arrestImprison)).append("\n");
