@@ -37,8 +37,8 @@ public class CandidateController implements V1Api {
    * {@inheritDoc}
    */
   @Override
-  public ResponseEntity<Candidate> getCandidateById(UUID candidateId) {
-    Candidate candidate = candidateService.findById(candidateId);
+  public ResponseEntity<Candidate> getCandidateByPublicId(UUID publicId) {
+    Candidate candidate = candidateService.findByPublicId(publicId);
     return ResponseEntity.ok(candidate);
   }
 

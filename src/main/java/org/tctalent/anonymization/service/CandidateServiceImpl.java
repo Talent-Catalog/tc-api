@@ -27,7 +27,7 @@ public class CandidateServiceImpl implements CandidateService {
   }
 
   @Override
-  public Candidate findById(UUID publicId) {
+  public Candidate findByPublicId(UUID publicId) {
     return candidateMongoRepository
         .findByPublicId(publicId)
         .map(candidateMapper::toCandidateModel)
