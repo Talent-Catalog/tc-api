@@ -15,7 +15,6 @@ import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.Country;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.model.Status;
-import org.tctalent.anonymization.model.User;
 
 /**
  * Test
@@ -39,12 +38,6 @@ class AnonymizationServiceImplTest {
         UUID uuid = UUID.randomUUID();
         String id = "123456";
 
-        User user = User.builder()
-            .firstName("John")
-            .lastName("Doe")
-            .email("johndoe@example.com")
-            .build();
-
         Country nationality = Country.builder()
             .isoCode("GB")
             .name("United Kingdon")
@@ -54,7 +47,6 @@ class AnonymizationServiceImplTest {
         IdentifiableCandidate identifiableCandidate = IdentifiableCandidate.builder()
             .id(id)
             .uuid(uuid)
-            .user(user)
             .phone("+1-234-567-890")
             .address1("123 Main St, Springfield, IL")
             .dob(LocalDate.parse("1985-06-15"))
