@@ -94,7 +94,7 @@ public class CandidateDocument {
   private String city;
   private YesNo conflict;
   private String conflictNotes;
-  private Boolean contactConsentPartners;
+  private Boolean contactConsentTcPartners;
   private Boolean contactConsentRegistration;
   private Country country;
   private YesNo covidVaccinated;
@@ -286,7 +286,7 @@ public class CandidateDocument {
     sb.append("    city: ").append(toIndentedString(city)).append("\n");
     sb.append("    conflict: ").append(toIndentedString(conflict)).append("\n");
     sb.append("    conflictNotes: ").append(toIndentedString(conflictNotes)).append("\n");
-    sb.append("    contactConsentPartners: ").append(toIndentedString(contactConsentPartners)).append("\n");
+    sb.append("    contactConsentTcPartners: ").append(toIndentedString(contactConsentTcPartners)).append("\n");
     sb.append("    contactConsentRegistration: ").append(toIndentedString(contactConsentRegistration)).append("\n");
     sb.append("    country: ").append(toIndentedString(country)).append("\n");
     sb.append("    covidVaccinated: ").append(toIndentedString(covidVaccinated)).append("\n");
