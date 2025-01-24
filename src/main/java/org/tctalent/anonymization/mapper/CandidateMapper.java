@@ -48,5 +48,6 @@ public interface CandidateMapper {
    * @return the corresponding anonymised mongo document
    */
   @Mapping(source = "contactConsentPartners", target = "contactConsentTcPartners")
+  @Mapping(source = "partnerCandidate.publicId", target = "partnerPublicId")
   CandidateDocument anonymize(IdentifiableCandidate model);
 }

@@ -166,18 +166,17 @@ public class CandidateDocument {
   private Country nationality;
   private Long numberDependants;
   private YesNoUnsure partnerRegistered;
+  private UUID partnerPublicId;
 
   @Valid
   private List<Long> partnerCitizenship;
   private EducationLevel partnerEduLevel;
-  private String partnerEduLevelNotes;
   private YesNo partnerEnglish;
   private LanguageLevel partnerEnglishLevel;
   private IeltsStatus partnerIelts;
   private String partnerIeltsScore;
   private Long partnerIeltsYr;
   private Occupation partnerOccupation;
-  private String partnerOccupationNotes;
   private ResidenceStatus residenceStatus;
   private String residenceStatusNotes;
   private YesNoUnsure returnedHome;
@@ -342,16 +341,15 @@ public class CandidateDocument {
     sb.append("    nationality: ").append(toIndentedString(nationality)).append("\n");
     sb.append("    numberDependants: ").append(toIndentedString(numberDependants)).append("\n");
     sb.append("    partnerRegistered: ").append(toIndentedString(partnerRegistered)).append("\n");
+    sb.append("    partnerPublicId: ").append(toIndentedString(partnerPublicId)).append("\n");
     sb.append("    partnerCitizenship: ").append(toIndentedString(partnerCitizenship)).append("\n");
     sb.append("    partnerEduLevel: ").append(toIndentedString(partnerEduLevel)).append("\n");
-    sb.append("    partnerEduLevelNotes: ").append(toIndentedString(partnerEduLevelNotes)).append("\n");
     sb.append("    partnerEnglish: ").append(toIndentedString(partnerEnglish)).append("\n");
     sb.append("    partnerEnglishLevel: ").append(toIndentedString(partnerEnglishLevel)).append("\n");
     sb.append("    partnerIelts: ").append(toIndentedString(partnerIelts)).append("\n");
     sb.append("    partnerIeltsScore: ").append(toIndentedString(partnerIeltsScore)).append("\n");
     sb.append("    partnerIeltsYr: ").append(toIndentedString(partnerIeltsYr)).append("\n");
     sb.append("    partnerOccupation: ").append(toIndentedString(partnerOccupation)).append("\n");
-    sb.append("    partnerOccupationNotes: ").append(toIndentedString(partnerOccupationNotes)).append("\n");
     sb.append("    residenceStatus: ").append(toIndentedString(residenceStatus)).append("\n");
     sb.append("    residenceStatusNotes: ").append(toIndentedString(residenceStatusNotes)).append("\n");
     sb.append("    returnedHome: ").append(toIndentedString(returnedHome)).append("\n");
