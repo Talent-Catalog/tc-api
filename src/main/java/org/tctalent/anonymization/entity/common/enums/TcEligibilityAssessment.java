@@ -16,7 +16,7 @@
 
 package org.tctalent.anonymization.entity.common.enums;
 
-public enum TBBEligibilityAssessment {
+public enum TcEligibilityAssessment {
     NoResponse,
     Proceed,
     Discuss,

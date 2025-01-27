@@ -27,7 +27,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.tctalent.anonymization.entity.common.enums.OtherVisas;
-import org.tctalent.anonymization.entity.common.enums.TBBEligibilityAssessment;
+import org.tctalent.anonymization.entity.common.enums.TcEligibilityAssessment;
 import org.tctalent.anonymization.entity.common.enums.VisaEligibility;
 import org.tctalent.anonymization.entity.common.enums.YesNo;
 
@@ -88,7 +88,7 @@ public class CandidateVisaJobCheckBase extends AbstractDomainObject<Long> {
     private VisaEligibility putForward;
 
     @Enumerated(EnumType.STRING)
-    private TBBEligibilityAssessment tbbEligibility;
+    private TcEligibilityAssessment tbbEligibility;
 
     private String notes;
 

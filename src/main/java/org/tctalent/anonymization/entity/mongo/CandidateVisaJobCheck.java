@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.tctalent.anonymization.entity.common.enums.OtherVisas;
-import org.tctalent.anonymization.entity.common.enums.TBBEligibilityAssessment;
+import org.tctalent.anonymization.entity.common.enums.TcEligibilityAssessment;
 import org.tctalent.anonymization.entity.common.enums.VisaEligibility;
 import org.tctalent.anonymization.entity.common.enums.YesNo;
 
@@ -28,7 +28,7 @@ public class CandidateVisaJobCheck {
   private OtherVisas eligibleOther;
   private String eligibleOtherNotes;
   private VisaEligibility putForward;
-  private TBBEligibilityAssessment tbbEligibility;
+  private TcEligibilityAssessment tcEligibility;
   private String notes;
   private String relevantWorkExp;
   private String ageRequirement;
@@ -64,7 +64,7 @@ public class CandidateVisaJobCheck {
     sb.append("    eligibleOther: ").append(toIndentedString(eligibleOther)).append("\n");
     sb.append("    eligibleOtherNotes: ").append(toIndentedString(eligibleOtherNotes)).append("\n");
     sb.append("    putForward: ").append(toIndentedString(putForward)).append("\n");
-    sb.append("    tbbEligibility: ").append(toIndentedString(tbbEligibility)).append("\n");
+    sb.append("    tcEligibility: ").append(toIndentedString(tcEligibility)).append("\n");
     sb.append("    notes: ").append(toIndentedString(notes)).append("\n");
     sb.append("    relevantWorkExp: ").append(toIndentedString(relevantWorkExp)).append("\n");
     sb.append("    ageRequirement: ").append(toIndentedString(ageRequirement)).append("\n");
