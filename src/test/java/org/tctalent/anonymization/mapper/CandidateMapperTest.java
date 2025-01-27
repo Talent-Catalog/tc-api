@@ -17,9 +17,12 @@ import org.tctalent.anonymization.entity.mongo.Dependant;
 import org.tctalent.anonymization.model.DependantRelations;
 import org.tctalent.anonymization.model.Gender;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
+import org.tctalent.anonymization.model.IdentifiableCandidateVisaCheck;
+import org.tctalent.anonymization.model.IdentifiableCandidateVisaJobCheck;
 import org.tctalent.anonymization.model.IdentifiableDependant;
 import org.tctalent.anonymization.model.IdentifiablePartner;
 import org.tctalent.anonymization.model.Registration;
+import org.tctalent.anonymization.model.TcEligibilityAssessment;
 import org.tctalent.anonymization.model.YesNo;
 
 @SpringBootTest
@@ -175,6 +178,92 @@ public class CandidateMapperTest {
     Dependant mappedDependant = result.getCandidateDependants().get(0);
     assertThat(mappedDependant.getYearOfBirth()).isNull();
     assertThat(mappedDependant.getRelation().name()).isEqualTo(DependantRelations.Child.name());
+  }
+
+  @Test
+  void shouldMapCandidateVisaJobCheckTcEligibility() {
+    // Arrange
+    IdentifiableCandidateVisaJobCheck visaJobCheck = new IdentifiableCandidateVisaJobCheck();
+    visaJobCheck.setTbbEligibility(TcEligibilityAssessment.Proceed);
+    visaJobCheck.setAgeRequirement("Age requirement");
+    visaJobCheck.eligible186(YesNo.Yes);
+
+    IdentifiableCandidateVisaCheck visaCheck = new IdentifiableCandidateVisaCheck();
+    visaCheck.setCandidateVisaJobChecks(List.of(visaJobCheck));
+
+    IdentifiableCandidate source = new IdentifiableCandidate();
+    source.setCandidateVisaChecks(List.of(visaCheck));
+
+    // Act
+    CandidateDocument result = mapper.anonymize(source);
+
+    // Assert
+    assertThat(result.getCandidateVisaChecks()).hasSize(1);
+    assertThat(result.getCandidateVisaChecks().get(0)).isNotNull();
+    assertThat(result.getCandidateVisaChecks().get(0).getCandidateVisaJobChecks()).hasSize(1);
+
+    assertThat(result.getCandidateVisaChecks().get(0).getCandidateVisaJobChecks()
+        .get(0).getTcEligibility().name())
+        .isEqualTo(TcEligibilityAssessment.Proceed.name());
+
+    assertThat(result.getCandidateVisaChecks().get(0).getCandidateVisaJobChecks()
+        .get(0).getAgeRequirement())
+        .isEqualTo("Age requirement");
+
+    assertThat(result.getCandidateVisaChecks().get(0).getCandidateVisaJobChecks()
+        .get(0).getEligible186().name())
+        .isEqualTo(YesNo.Yes.name());
+  }
+
+  @Test
+  void shouldHandleNullVisaJobChecks() {
+    // Arrange
+    IdentifiableCandidate source = new IdentifiableCandidate();
+    source.setCandidateVisaChecks(null);
+
+    // Act
+    CandidateDocument result = mapper.anonymize(source);
+
+    // Assert
+    assertThat(result.getCandidateVisaChecks()).isNull();
+  }
+
+  @Test
+  void shouldHandleNullCandidateVisaJobCheck() {
+    // Arrange
+    IdentifiableCandidate source = new IdentifiableCandidate();
+    IdentifiableCandidateVisaCheck visaCheck = new IdentifiableCandidateVisaCheck();
+    visaCheck.setCandidateVisaJobChecks(null);
+    source.setCandidateVisaChecks(List.of(visaCheck));
+
+    // Act
+    CandidateDocument result = mapper.anonymize(source);
+
+    // Assert
+    assertThat(result.getCandidateVisaChecks()).hasSize(1);
+    assertThat(result.getCandidateVisaChecks().get(0)).isNotNull();
+    assertThat(result.getCandidateVisaChecks().get(0).getCandidateVisaJobChecks()).isNull();
+  }
+
+  @Test
+  void shouldHandleNullTbbEligibilityInVsaJobCheck() {
+    // Arrange
+    IdentifiableCandidate source = new IdentifiableCandidate();
+    IdentifiableCandidateVisaCheck visaCheck = new IdentifiableCandidateVisaCheck();
+    IdentifiableCandidateVisaJobCheck visaJobCheck = new IdentifiableCandidateVisaJobCheck();
+    visaJobCheck.setTbbEligibility(null);
+    visaCheck.setCandidateVisaJobChecks(List.of(visaJobCheck));
+    source.setCandidateVisaChecks(List.of(visaCheck));
+
+    // Act
+    CandidateDocument result = mapper.anonymize(source);
+
+    // Assert
+    assertThat(result.getCandidateVisaChecks()).hasSize(1);
+    assertThat(result.getCandidateVisaChecks().get(0)).isNotNull();
+    assertThat(result.getCandidateVisaChecks().get(0).getCandidateVisaJobChecks()).hasSize(1);
+    assertThat(result.getCandidateVisaChecks().get(0).getCandidateVisaJobChecks().get(0)
+        .getTcEligibility()).isNull();
   }
 
 }
