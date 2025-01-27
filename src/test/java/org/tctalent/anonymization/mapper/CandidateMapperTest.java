@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +66,34 @@ public class CandidateMapperTest {
     assertThat(result.getPartnerPublicId())
         .isNotNull()
         .isEqualTo(partnerPublicId);
+  }
+
+  @Test
+  void shouldMapDobToYearOfBirth() {
+    // Arrange
+    IdentifiableCandidate source = new IdentifiableCandidate();
+    source.setDob(LocalDate.of(1985, 6, 15));
+
+    // Act
+    CandidateDocument result = mapper.anonymize(source);
+
+    // Assert
+    assertThat(result.getYearOfBirth())
+        .isNotNull()
+        .isEqualTo(1985);
+  }
+
+  @Test
+  void shouldHandleNullDob() {
+    // Arrange
+    IdentifiableCandidate source = new IdentifiableCandidate();
+    source.setDob(null);
+
+    // Act
+    CandidateDocument result = mapper.anonymize(source);
+
+    // Assert
+    assertThat(result.getYearOfBirth()).isNull();
   }
 
 }
