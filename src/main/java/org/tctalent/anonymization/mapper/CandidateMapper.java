@@ -1,16 +1,16 @@
 package org.tctalent.anonymization.mapper;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
+import org.tctalent.anonymization.entity.mongo.Dependant;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.entity.mongo.CandidateDocument;
+import org.tctalent.anonymization.model.IdentifiableDependant;
 
 @Mapper(uses = {
     IdMapper.class,
@@ -56,9 +56,11 @@ public interface CandidateMapper {
   @Mapping(source = "dob", target = "yearOfBirth", qualifiedByName = "extractYearFromLocalDate")
   CandidateDocument anonymize(IdentifiableCandidate model);
 
+  @Mapping(source = "dob", target = "yearOfBirth", qualifiedByName = "extractYearFromLocalDate")
+  Dependant mapDependant(IdentifiableDependant identifiableDependant);
+
   @Named("extractYearFromLocalDate")
   default Integer extractYearFromLocalDate(LocalDate dob) {
-    // todo confirm exception handling - try/catch - yes?
     return dob != null ? dob.getYear() : null;
   }
 
