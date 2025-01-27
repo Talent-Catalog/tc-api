@@ -5,11 +5,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
+import org.tctalent.anonymization.entity.mongo.CandidateVisaJobCheck;
 import org.tctalent.anonymization.entity.mongo.Dependant;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.entity.mongo.CandidateDocument;
+import org.tctalent.anonymization.model.IdentifiableCandidateVisaJobCheck;
 import org.tctalent.anonymization.model.IdentifiableDependant;
 
 @Mapper(uses = {
@@ -58,6 +60,9 @@ public interface CandidateMapper {
 
   @Mapping(source = "dob", target = "yearOfBirth", qualifiedByName = "extractYearFromLocalDate")
   Dependant mapDependant(IdentifiableDependant identifiableDependant);
+
+  @Mapping(source = "tbbEligibility", target = "tcEligibility")
+  CandidateVisaJobCheck mapVisaJobCheck(IdentifiableCandidateVisaJobCheck identifiableDependant);
 
   @Named("extractYearFromLocalDate")
   default Integer extractYearFromLocalDate(LocalDate dob) {
