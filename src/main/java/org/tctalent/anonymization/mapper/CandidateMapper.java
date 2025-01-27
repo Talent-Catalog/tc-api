@@ -1,7 +1,11 @@
 package org.tctalent.anonymization.mapper;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
@@ -49,5 +53,13 @@ public interface CandidateMapper {
    */
   @Mapping(source = "contactConsentPartners", target = "contactConsentTcPartners")
   @Mapping(source = "partnerCandidate.publicId", target = "partnerPublicId")
+  @Mapping(source = "dob", target = "yearOfBirth", qualifiedByName = "extractYearFromLocalDate")
   CandidateDocument anonymize(IdentifiableCandidate model);
+
+  @Named("extractYearFromLocalDate")
+  default Integer extractYearFromLocalDate(LocalDate dob) {
+    // todo confirm exception handling - try/catch - yes?
+    return dob != null ? dob.getYear() : null;
+  }
+
 }
