@@ -72,7 +72,7 @@ class TalentCatalogServiceImplTest {
       assertNotNull(anonCandidates);
       String collect = anonCandidates
           .stream()
-          .map(ca -> ca.getUuid().toString())
+          .map(ca -> ca.getPublicId().toString())
           .collect(Collectors.joining(","));
       System.out.println("Received numbers: " + collect);
 
@@ -107,7 +107,7 @@ class TalentCatalogServiceImplTest {
         assertNotNull(anonCandidates);
         String collect = anonCandidates
             .stream()
-            .map(ca -> ca.getUuid().toString())
+            .map(ca -> ca.getPublicId().toString())
             .collect(Collectors.joining(","));
         System.out.println("Received numbers: " + collect);
 

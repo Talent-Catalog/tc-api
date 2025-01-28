@@ -31,7 +31,7 @@ import org.tctalent.anonymization.entity.common.enums.AvailImmediateReason;
 @Document(collection = "candidates")
 public class CandidateDocument {
 
-  private UUID uuid;
+  private UUID publicId;
 
   private String candidateNumber;
   private String additionalInfo;
@@ -94,7 +94,7 @@ public class CandidateDocument {
   private String city;
   private YesNo conflict;
   private String conflictNotes;
-  private Boolean contactConsentPartners;
+  private Boolean contactConsentTcPartners;
   private Boolean contactConsentRegistration;
   private Country country;
   private YesNo covidVaccinated;
@@ -166,18 +166,17 @@ public class CandidateDocument {
   private Country nationality;
   private Long numberDependants;
   private YesNoUnsure partnerRegistered;
+  private UUID partnerPublicId;
 
   @Valid
   private List<Long> partnerCitizenship;
   private EducationLevel partnerEduLevel;
-  private String partnerEduLevelNotes;
   private YesNo partnerEnglish;
   private LanguageLevel partnerEnglishLevel;
   private IeltsStatus partnerIelts;
   private String partnerIeltsScore;
   private Long partnerIeltsYr;
   private Occupation partnerOccupation;
-  private String partnerOccupationNotes;
   private ResidenceStatus residenceStatus;
   private String residenceStatusNotes;
   private YesNoUnsure returnedHome;
@@ -230,8 +229,8 @@ public class CandidateDocument {
 
   @Override
   public int hashCode() {
-    if (uuid != null) {
-      return uuid.hashCode();
+    if (publicId != null) {
+      return publicId.hashCode();
     } else {
       return super.hashCode();
     }
@@ -247,17 +246,17 @@ public class CandidateDocument {
     CandidateDocument other = (CandidateDocument) obj;
 
     //If id is missing assume that it is not equal to other instance.
-    if (uuid == null) return false;
+    if (publicId == null) return false;
 
     //Equivalence by id
-    return uuid.equals(other.uuid);
+    return publicId.equals(other.publicId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Candidate {\n");
-    sb.append("    uuid: ").append(toIndentedString(uuid)).append("\n");
+    sb.append("    publicId: ").append(toIndentedString(publicId)).append("\n");
     sb.append("    additionalInfo: ").append(toIndentedString(additionalInfo)).append("\n");
     sb.append("    asylumYear: ").append(toIndentedString(asylumYear)).append("\n");
     sb.append("    arrestImprison: ").append(toIndentedString(arrestImprison)).append("\n");
@@ -286,7 +285,7 @@ public class CandidateDocument {
     sb.append("    city: ").append(toIndentedString(city)).append("\n");
     sb.append("    conflict: ").append(toIndentedString(conflict)).append("\n");
     sb.append("    conflictNotes: ").append(toIndentedString(conflictNotes)).append("\n");
-    sb.append("    contactConsentPartners: ").append(toIndentedString(contactConsentPartners)).append("\n");
+    sb.append("    contactConsentTcPartners: ").append(toIndentedString(contactConsentTcPartners)).append("\n");
     sb.append("    contactConsentRegistration: ").append(toIndentedString(contactConsentRegistration)).append("\n");
     sb.append("    country: ").append(toIndentedString(country)).append("\n");
     sb.append("    covidVaccinated: ").append(toIndentedString(covidVaccinated)).append("\n");
@@ -342,16 +341,15 @@ public class CandidateDocument {
     sb.append("    nationality: ").append(toIndentedString(nationality)).append("\n");
     sb.append("    numberDependants: ").append(toIndentedString(numberDependants)).append("\n");
     sb.append("    partnerRegistered: ").append(toIndentedString(partnerRegistered)).append("\n");
+    sb.append("    partnerPublicId: ").append(toIndentedString(partnerPublicId)).append("\n");
     sb.append("    partnerCitizenship: ").append(toIndentedString(partnerCitizenship)).append("\n");
     sb.append("    partnerEduLevel: ").append(toIndentedString(partnerEduLevel)).append("\n");
-    sb.append("    partnerEduLevelNotes: ").append(toIndentedString(partnerEduLevelNotes)).append("\n");
     sb.append("    partnerEnglish: ").append(toIndentedString(partnerEnglish)).append("\n");
     sb.append("    partnerEnglishLevel: ").append(toIndentedString(partnerEnglishLevel)).append("\n");
     sb.append("    partnerIelts: ").append(toIndentedString(partnerIelts)).append("\n");
     sb.append("    partnerIeltsScore: ").append(toIndentedString(partnerIeltsScore)).append("\n");
     sb.append("    partnerIeltsYr: ").append(toIndentedString(partnerIeltsYr)).append("\n");
     sb.append("    partnerOccupation: ").append(toIndentedString(partnerOccupation)).append("\n");
-    sb.append("    partnerOccupationNotes: ").append(toIndentedString(partnerOccupationNotes)).append("\n");
     sb.append("    residenceStatus: ").append(toIndentedString(residenceStatus)).append("\n");
     sb.append("    residenceStatusNotes: ").append(toIndentedString(residenceStatusNotes)).append("\n");
     sb.append("    returnedHome: ").append(toIndentedString(returnedHome)).append("\n");
