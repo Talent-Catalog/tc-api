@@ -31,7 +31,7 @@ import org.tctalent.anonymization.entity.common.enums.AvailImmediateReason;
 @Document(collection = "candidates")
 public class CandidateDocument {
 
-  private UUID publicId;
+  private String publicId;
 
   private String candidateNumber;
   private String additionalInfo;
