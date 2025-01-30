@@ -5,7 +5,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +63,7 @@ class CandidateServiceImplTest {
   @Test
   @DisplayName("Test find candidate by id")
   void testFindById() {
-    UUID publicId = UUID.randomUUID();
+    String publicId = "base-64-encoded-uuid";
     CandidateDocument candidateDocument = new CandidateDocument();
     Candidate candidate = new Candidate();
 
@@ -85,7 +84,7 @@ class CandidateServiceImplTest {
   @Test
   @DisplayName("Test find candidate by id not found")
   void testFindById_NotFound() {
-    UUID publicId = UUID.randomUUID();
+    String publicId = "base-64-encoded-uuid";
 
     when(candidateMongoRepository
         .findByPublicId(publicId))
