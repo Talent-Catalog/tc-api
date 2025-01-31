@@ -17,7 +17,7 @@ import org.tctalent.anonymization.logging.LogBuilder;
  */
 @Slf4j
 @Component
-public class JobCompletionNotificationListener implements JobExecutionListener {
+public class LoggingJobExecutionListener implements JobExecutionListener {
 
   @Override
   public void afterJob(JobExecution jobExecution) {
