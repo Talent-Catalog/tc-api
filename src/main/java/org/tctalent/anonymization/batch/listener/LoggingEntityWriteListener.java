@@ -25,8 +25,8 @@ public class LoggingEntityWriteListener implements ItemWriteListener<AnonymousCa
         .collect(Collectors.joining(", "));
 
     LogBuilder.builder(log)
-        .action("Writing items")
-        .message("Items to write:" + itemDetails)
+        .action("Writing entity items")
+        .message("Entity items to write:" + itemDetails)
         .logInfo();
   }
 
@@ -37,8 +37,8 @@ public class LoggingEntityWriteListener implements ItemWriteListener<AnonymousCa
         .collect(Collectors.joining(", "));
 
     LogBuilder.builder(log)
-        .action("Items written successfully")
-        .message("Items written:" + itemDetails)
+        .action("Entity items written successfully")
+        .message("Entity items written:" + itemDetails)
         .logInfo();
   }
 
@@ -49,8 +49,8 @@ public class LoggingEntityWriteListener implements ItemWriteListener<AnonymousCa
         .collect(Collectors.joining(", "));
 
     LogBuilder.builder(log)
-        .action("Error writing items")
-        .message("Failed to write items:" + itemDetails)
+        .action("Error writing entity items")
+        .message("Failed to write entity items:" + itemDetails)
         .logError(exception);
   }
 

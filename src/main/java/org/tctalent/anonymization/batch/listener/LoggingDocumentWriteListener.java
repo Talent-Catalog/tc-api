@@ -25,8 +25,8 @@ public class LoggingDocumentWriteListener implements ItemWriteListener<Candidate
         .collect(Collectors.joining(", "));
 
     LogBuilder.builder(log)
-        .action("Writing items")
-        .message("Items to write:" + itemDetails)
+        .action("Writing document items")
+        .message("Document items to write:" + itemDetails)
         .logInfo();
   }
 
@@ -37,8 +37,8 @@ public class LoggingDocumentWriteListener implements ItemWriteListener<Candidate
         .collect(Collectors.joining(", "));
 
     LogBuilder.builder(log)
-        .action("Items written successfully")
-        .message("Items written:" + itemDetails)
+        .action("Document items written successfully")
+        .message("Document items written:" + itemDetails)
         .logInfo();
   }
 
@@ -49,8 +49,8 @@ public class LoggingDocumentWriteListener implements ItemWriteListener<Candidate
         .collect(Collectors.joining(", "));
 
     LogBuilder.builder(log)
-        .action("Error writing items")
-        .message("Failed to write items:" + itemDetails)
+        .action("Error writing document items")
+        .message("Failed to write document items:" + itemDetails)
         .logError(exception);
   }
 
