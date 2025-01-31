@@ -1,4 +1,4 @@
-package org.tctalent.anonymization.batch;
+package org.tctalent.anonymization.batch.processor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

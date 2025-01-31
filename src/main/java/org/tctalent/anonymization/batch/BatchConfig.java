@@ -18,9 +18,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.tctalent.anonymization.domain.entity.AnonymousCandidate;
 import org.tctalent.anonymization.entity.db.Candidate;
 import org.tctalent.anonymization.entity.mongo.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
+import org.tctalent.anonymization.repository.CandidateAuroraRepository;
 import org.tctalent.anonymization.repository.CandidateMongoRepository;
 import org.tctalent.anonymization.repository.CandidateRepository;
 
@@ -65,47 +69,6 @@ public class BatchConfig {
   }
 
   /**
-   * Configures a candidate migration step to read candidates from JPA, process them to anonymised
-   * equivalent documents, and write them to MongoDB.
-   *
-   * @param jobRepository the repository for storing step metadata
-   * @param transactionManager the transaction manager for the step
-   * @param jpaItemReader the reader to fetch candidates from the database
-   * @param itemProcessor the processor to transform candidates into candidate documents
-   * @param mongoItemWriter the writer to save candidate documents to MongoDB
-   * @param loggingChunkListener the listener for chunk-level logging
-   * @param loggingItemReaderListener the listener for item read-level logging
-   * @param loggingItemProcessListener the listener for item process-level logging
-   * @param loggingItemWriterListener the listener for item write-level logging
-   * @return the configured candidate migration step
-   */
-  @Bean
-  @Qualifier("candidateJpaMigrationStep")
-  public Step candidateJpaMigrationStep(JobRepository jobRepository,
-      DataSourceTransactionManager transactionManager,
-      ItemReader<Candidate> jpaItemReader,
-      ItemProcessor<Candidate, CandidateDocument> itemProcessor,
-      ItemWriter<CandidateDocument> mongoItemWriter,
-      LoggingChunkListener loggingChunkListener,
-      LoggingItemReaderListener loggingItemReaderListener,
-      LoggingItemProcessListener loggingItemProcessListener,
-      LoggingItemWriterListener loggingItemWriterListener) {
-
-    return new StepBuilder("candidateJpaMigrationStep", jobRepository)
-        .<Candidate, CandidateDocument>chunk(batchProperties.getChunkSize(), transactionManager)
-        .reader(jpaItemReader)
-        .processor(itemProcessor)
-        .writer(mongoItemWriter)
-        .listener(loggingChunkListener)
-        .listener(loggingItemReaderListener)
-        .listener(loggingItemProcessListener)
-        .listener(loggingItemWriterListener)
-        .faultTolerant()
-        .skipPolicy(new AlwaysSkipItemSkipPolicy())
-        .build();
-  }
-
-  /**
    * Configures a candidate migration step to read candidates from the
    * {@link org.tctalent.anonymization.service.TalentCatalogService}, process them to anonymised
    * equivalent documents, and write them to MongoDB.
@@ -115,6 +78,7 @@ public class BatchConfig {
    * @param tcItemReader the reader to fetch candidates from the talent catalog service
    * @param itemProcessor the processor to transform candidates into candidate documents
    * @param mongoItemWriter the writer to save candidate documents to MongoDB
+   * @param jpaItemWriter the writer to save candidate entities to AuroraDB
    * @param loggingChunkListener the listener for chunk-level logging
    * @param loggingItemReaderListener the listener for item read-level logging
    * @param loggingItemProcessListener the listener for item process-level logging
@@ -123,21 +87,26 @@ public class BatchConfig {
    */
   @Bean
   @Qualifier("candidateRestMigrationStep")
+  // todo batch to both aurora and mongo
   public Step candidateRestMigrationStep(JobRepository jobRepository,
-      DataSourceTransactionManager transactionManager,
+      PlatformTransactionManager transactionManager, // Use JPA transaction manager
       ItemReader<IdentifiableCandidate> tcItemReader,
-      ItemProcessor<IdentifiableCandidate, CandidateDocument> itemProcessor,
+//      ItemProcessor<IdentifiableCandidate, CandidateDocument> itemProcessor,
+      ItemProcessor<IdentifiableCandidate, AnonymousCandidate> itemProcessor,
       ItemWriter<CandidateDocument> mongoItemWriter,
+      ItemWriter<AnonymousCandidate> jpaItemWriter,
       LoggingChunkListener loggingChunkListener,
       LoggingItemReaderListener loggingItemReaderListener,
       LoggingItemProcessListener loggingItemProcessListener,
       LoggingItemWriterListener loggingItemWriterListener) {
 
     return new StepBuilder("candidateRestMigrationStep", jobRepository)
-        .<IdentifiableCandidate, CandidateDocument>chunk(batchProperties.getChunkSize(), transactionManager)
+//        .<IdentifiableCandidate, CandidateDocument>chunk(batchProperties.getChunkSize(), transactionManager)
+        .<IdentifiableCandidate, AnonymousCandidate>chunk(batchProperties.getChunkSize(), transactionManager)
         .reader(tcItemReader)
         .processor(itemProcessor)
-        .writer(mongoItemWriter)
+//        .writer(mongoItemWriter)
+        .writer(jpaItemWriter)
         .listener(loggingChunkListener)
         .listener(loggingItemReaderListener)
         .listener(loggingItemProcessListener)
@@ -176,6 +145,16 @@ public class BatchConfig {
     return new RepositoryItemWriterBuilder<CandidateDocument>()
         .repository(candidateRepository)
         .methodName("save") // Implicitly throttles the batch, which is preferred. Use "saveAll" if performance is an issue.
+        .build();
+  }
+
+  // todo javadoc
+  @Bean
+  public ItemWriter<AnonymousCandidate> jpaItemWriter(
+      CandidateAuroraRepository candidateAuroraRepository) {
+    return new RepositoryItemWriterBuilder<AnonymousCandidate>()
+        .repository(candidateAuroraRepository)
+        .methodName("save")
         .build();
   }
 

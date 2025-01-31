@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.tctalent.anonymization.batch.processor.CandidateJpaItemProcessor;
 import org.tctalent.anonymization.entity.db.Candidate;
 import org.tctalent.anonymization.entity.mongo.CandidateDocument;
 import org.tctalent.anonymization.mapper.CandidateMapper;
