@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,7 @@ public class CandidateMapperTest {
   @Test
   void shouldMapPartnerCandidatePublicIdToPartnerPublicId() {
     // Arrange
-    UUID partnerPublicId = UUID.randomUUID();
+    String partnerPublicId = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
     IdentifiableCandidate source = new IdentifiableCandidate();
     IdentifiablePartner partnerCandidate = new IdentifiablePartner();
     partnerCandidate.setPublicId(partnerPublicId);

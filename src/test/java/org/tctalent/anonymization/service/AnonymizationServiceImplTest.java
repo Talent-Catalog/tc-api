@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Base64;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ class AnonymizationServiceImplTest {
     @Test
     void anonymize() throws JsonProcessingException {
 
-        UUID publicId = UUID.randomUUID();
+        String publicId = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
         String id = "123456";
 
         Country nationality = Country.builder()
