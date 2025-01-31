@@ -1,4 +1,4 @@
-package org.tctalent.anonymization.batch;
+package org.tctalent.anonymization.batch.config;
 
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,6 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -17,9 +16,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.tctalent.anonymization.batch.JobCompletionNotificationListener;
+import org.tctalent.anonymization.batch.LoggingChunkListener;
+import org.tctalent.anonymization.batch.LoggingItemProcessListener;
+import org.tctalent.anonymization.batch.LoggingItemReaderListener;
+import org.tctalent.anonymization.batch.LoggingItemWriterListener;
 import org.tctalent.anonymization.domain.entity.AnonymousCandidate;
 import org.tctalent.anonymization.entity.db.Candidate;
 import org.tctalent.anonymization.entity.mongo.CandidateDocument;

@@ -1,4 +1,4 @@
-package org.tctalent.anonymization.batch;
+package org.tctalent.anonymization.batch.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.step.skip.SkipPolicy;

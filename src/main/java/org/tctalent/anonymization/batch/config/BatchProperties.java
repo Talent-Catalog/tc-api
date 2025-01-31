@@ -1,4 +1,4 @@
-package org.tctalent.anonymization.batch;
+package org.tctalent.anonymization.batch.config;
 
 import lombok.Getter;
 import lombok.Setter;
