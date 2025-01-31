@@ -1,6 +1,5 @@
 package org.tctalent.anonymization.batch.config;
 
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -10,25 +9,23 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.tctalent.anonymization.batch.listener.LoggingDocumentWriteListener;
 import org.tctalent.anonymization.batch.listener.LoggingJobExecutionListener;
 import org.tctalent.anonymization.batch.listener.LoggingChunkListener;
+import org.tctalent.anonymization.batch.listener.LoggingRestToDocumentProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
 import org.tctalent.anonymization.batch.listener.LoggingEntityWriteListener;
 import org.tctalent.anonymization.domain.entity.AnonymousCandidate;
-import org.tctalent.anonymization.entity.db.Candidate;
 import org.tctalent.anonymization.entity.mongo.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.repository.CandidateAuroraRepository;
 import org.tctalent.anonymization.repository.CandidateMongoRepository;
-import org.tctalent.anonymization.repository.CandidateRepository;
 
 /**
  * Batch configuration class for setting up the candidate migration job, including its steps,
@@ -55,18 +52,21 @@ public class BatchConfig {
    * Configures the candidate migration job with its steps and completion listener.
    *
    * @param jobRepository the repository for storing job metadata
-   * @param candidateMigrationStep the step to execute the candidate migration process
+   * @param candidateRestToAuroraStep the step to execute the aurora db migration process
+   * @param candidateRestToMongoStep the step to execute the mongo db migration process
    * @param listener the listener to handle job completion events
    * @return the configured candidate migration job
    */
   @Bean
   public Job candidateMigrationJob(JobRepository jobRepository,
-      @Qualifier("candidateRestMigrationStep") Step candidateMigrationStep,
+      @Qualifier("candidateRestToAuroraStep") Step candidateRestToAuroraStep,
+      @Qualifier("candidateRestToMongoStep") Step candidateRestToMongoStep,
       LoggingJobExecutionListener listener) {
 
     return new JobBuilder("candidateMigrationJob", jobRepository)
         .listener(listener)
-        .start(candidateMigrationStep)
+        .start(candidateRestToAuroraStep) // First create the aurora anon db
+        .next(candidateRestToMongoStep) // Then create the mongo anon db
         .build();
   }
 
@@ -78,8 +78,7 @@ public class BatchConfig {
    * @param jobRepository the repository for storing step metadata
    * @param transactionManager the transaction manager for the step
    * @param tcItemReader the reader to fetch candidates from the talent catalog service
-   * @param itemProcessor the processor to transform candidates into candidate documents
-   * @param mongoItemWriter the writer to save candidate documents to MongoDB
+   * @param anonymousCandidateProcessor the processor to transform candidates into candidate entities
    * @param jpaItemWriter the writer to save candidate entities to AuroraDB
    * @param loggingChunkListener the listener for chunk-level logging
    * @param loggingRestReadListener the listener for item read-level logging
@@ -88,26 +87,21 @@ public class BatchConfig {
    * @return the configured candidate migration step
    */
   @Bean
-  @Qualifier("candidateRestMigrationStep")
-  // todo batch to both aurora and mongo
-  public Step candidateRestMigrationStep(JobRepository jobRepository,
-      PlatformTransactionManager transactionManager, // Use JPA transaction manager
+  @Qualifier("candidateRestToAuroraStep")
+  public Step candidateRestToAuroraStep(JobRepository jobRepository,
+      PlatformTransactionManager transactionManager,
       ItemReader<IdentifiableCandidate> tcItemReader,
-//      ItemProcessor<IdentifiableCandidate, CandidateDocument> itemProcessor,
-      ItemProcessor<IdentifiableCandidate, AnonymousCandidate> itemProcessor,
-      ItemWriter<CandidateDocument> mongoItemWriter,
+      ItemProcessor<IdentifiableCandidate, AnonymousCandidate> anonymousCandidateProcessor,
       ItemWriter<AnonymousCandidate> jpaItemWriter,
       LoggingChunkListener loggingChunkListener,
       LoggingRestReadListener loggingRestReadListener,
       LoggingRestToEntityProcessListener loggingRestToEntityProcessListener,
       LoggingEntityWriteListener loggingEntityWriteListener) {
 
-    return new StepBuilder("candidateRestMigrationStep", jobRepository)
-//        .<IdentifiableCandidate, CandidateDocument>chunk(batchProperties.getChunkSize(), transactionManager)
+    return new StepBuilder("candidateRestToAuroraStep", jobRepository)
         .<IdentifiableCandidate, AnonymousCandidate>chunk(batchProperties.getChunkSize(), transactionManager)
         .reader(tcItemReader)
-        .processor(itemProcessor)
-//        .writer(mongoItemWriter)
+        .processor(anonymousCandidateProcessor)
         .writer(jpaItemWriter)
         .listener(loggingChunkListener)
         .listener(loggingRestReadListener)
@@ -115,6 +109,43 @@ public class BatchConfig {
         .listener(loggingEntityWriteListener)
         .faultTolerant()
         .skipPolicy(new ConditionalSkipPolicy(batchProperties.getMaxReadSkips()))
+        .build();
+  }
+
+  // todo java doc
+  @Bean
+  @Qualifier("candidateRestToMongoStep")
+  public Step candidateRestToMongoStep(JobRepository jobRepository,
+      PlatformTransactionManager transactionManager,
+      ItemReader<IdentifiableCandidate> tcItemReader,
+      ItemProcessor<IdentifiableCandidate, CandidateDocument> candidateDocumentProcessor,
+      ItemWriter<CandidateDocument> mongoItemWriter,
+      LoggingChunkListener loggingChunkListener,
+      LoggingRestReadListener loggingRestReadListener,
+      LoggingRestToDocumentProcessListener loggingRestToDocumentProcessListener,
+      LoggingDocumentWriteListener loggingDocumentWriteListener) {
+
+    return new StepBuilder("candidateRestToMongoStep", jobRepository)
+        .<IdentifiableCandidate, CandidateDocument>chunk(batchProperties.getChunkSize(), transactionManager)
+        .reader(tcItemReader)
+        .processor(candidateDocumentProcessor)
+        .writer(mongoItemWriter)
+        .listener(loggingChunkListener)
+        .listener(loggingRestReadListener)
+        .listener(loggingRestToDocumentProcessListener)
+        .listener(loggingDocumentWriteListener)
+        .faultTolerant()
+        .skipPolicy(new ConditionalSkipPolicy(batchProperties.getMaxReadSkips()))
+        .build();
+  }
+
+  // todo javadoc
+  @Bean
+  public ItemWriter<AnonymousCandidate> jpaItemWriter(
+      CandidateAuroraRepository candidateAuroraRepository) {
+    return new RepositoryItemWriterBuilder<AnonymousCandidate>()
+        .repository(candidateAuroraRepository)
+        .methodName("save")
         .build();
   }
 
@@ -129,16 +160,6 @@ public class BatchConfig {
     return new RepositoryItemWriterBuilder<CandidateDocument>()
         .repository(candidateRepository)
         .methodName("save") // Implicitly throttles the batch, which is preferred. Use "saveAll" if performance is an issue.
-        .build();
-  }
-
-  // todo javadoc
-  @Bean
-  public ItemWriter<AnonymousCandidate> jpaItemWriter(
-      CandidateAuroraRepository candidateAuroraRepository) {
-    return new RepositoryItemWriterBuilder<AnonymousCandidate>()
-        .repository(candidateAuroraRepository)
-        .methodName("save")
         .build();
   }
 
