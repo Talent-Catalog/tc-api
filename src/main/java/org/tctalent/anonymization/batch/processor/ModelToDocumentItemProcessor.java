@@ -22,7 +22,7 @@ import org.tctalent.anonymization.model.IdentifiableCandidate;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class CandidateRestItemProcessor implements
+public class ModelToDocumentItemProcessor implements
     ItemProcessor<IdentifiableCandidate, CandidateDocument> {
 
   private final CandidateMapper candidateMapper;
