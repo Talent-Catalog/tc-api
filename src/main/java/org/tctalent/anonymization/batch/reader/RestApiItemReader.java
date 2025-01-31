@@ -3,11 +3,15 @@ package org.tctalent.anonymization.batch.reader;
 import java.util.Iterator;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.tctalent.anonymization.batch.config.BatchProperties;
 import org.tctalent.anonymization.exception.RestApiReaderException;
+import org.tctalent.anonymization.logging.LogBuilder;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
 import org.tctalent.anonymization.service.TalentCatalogService;
@@ -18,12 +22,13 @@ import org.tctalent.anonymization.service.TalentCatalogService;
  * </p>
  * Rate limiting is applied to avoid hitting the API too frequently.
  *
+ * todo document StepExecutionListener interface usage
  * @author sadatmalik
  */
 @Slf4j
 @Component
 @Qualifier("restApiItemReader")
-public class RestApiItemReader implements ItemReader<IdentifiableCandidate> {
+public class RestApiItemReader implements ItemReader<IdentifiableCandidate>, StepExecutionListener {
 
   private final BatchProperties batchProperties;
   private final TalentCatalogService talentCatalogService;
@@ -95,4 +100,23 @@ public class RestApiItemReader implements ItemReader<IdentifiableCandidate> {
       }
     }
   }
+
+  /** Resets the reader state before a step starts */
+  @Override
+  public void beforeStep(StepExecution stepExecution) {
+    LogBuilder.builder(log)
+        .action("Resetting RestApiItemReader before step execution")
+        .logInfo();
+
+    this.currentPage = 0;
+    this.totalPages = 1;
+    this.batchIterator = null;
+    this.lastFetchTime = 0;
+  }
+
+  @Override
+  public ExitStatus afterStep(StepExecution stepExecution) {
+    return ExitStatus.COMPLETED;
+  }
+
 }
