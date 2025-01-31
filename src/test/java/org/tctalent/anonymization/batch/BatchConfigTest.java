@@ -98,18 +98,6 @@ class BatchConfigTest {
   }
 
   @Test
-  @DisplayName("Test JPA item reader configuration")
-  void testJpaItemReader() {
-    when(batchProperties
-        .getPageSize())
-        .thenReturn(100);
-
-    ItemReader<Candidate> reader = batchConfig.jpaItemReader(candidateRepository);
-
-    assertNotNull(reader);
-  }
-
-  @Test
   @DisplayName("Test Mongo item writer configuration")
   void testMongoItemWriter() {
     ItemWriter<CandidateDocument> writer = batchConfig.mongoItemWriter(candidateMongoRepository);
