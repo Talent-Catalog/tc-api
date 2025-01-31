@@ -119,24 +119,6 @@ public class BatchConfig {
   }
 
   /**
-   * Configures an ItemReader to fetch paginated candidates from the JPA repository.
-   *
-   * @param candidateRepository the repository used to retrieve candidates
-   * @return an ItemReader for reading candidates from the JPA repository
-   */
-  @Bean
-  public ItemReader<Candidate> jpaItemReader(CandidateRepository candidateRepository) {
-    return new RepositoryItemReaderBuilder<Candidate>()
-        .name("candidateJpaRepositoryReader")
-        .repository(candidateRepository)
-        .methodName("findAll")
-        .pageSize(batchProperties.getPageSize())
-        .arguments(Collections.emptyList())
-        .sorts(Collections.singletonMap("id", Sort.Direction.ASC))
-        .build();
-  }
-
-  /**
    * Configures an ItemWriter to save CandidateDocument objects to the MongoDB repository.
    *
    * @param candidateRepository the repository used to persist CandidateDocument objects
