@@ -41,18 +41,6 @@ spring:
       minimum-idle: 10
       max-lifetime: 1800000 # 30 minutes
 
-  # Postgres
-#  todo sm - this can be removed once we are using Aurora
-#  datasource:
-#    driverClassName: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/tctalent
-#    username: tctalent
-#    password: tctalent
-#    hikari:
-#      maximum-pool-size: 10
-#      minimum-idle: 10
-#      max-lifetime: 1800000 # 30 minutes
-
   # Mongo
   data:
     mongodb:
