@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.tctalent.anonymization.batch.config.BatchProperties;
 import org.tctalent.anonymization.exception.RestApiReaderException;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
