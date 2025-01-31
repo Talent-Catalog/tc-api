@@ -9,13 +9,13 @@ import org.tctalent.anonymization.logging.LogBuilder;
 
 /**
  * Listener that implements {@link ItemProcessListener} to provide logging for errors that occur
- * while processing individual items.
+ * while processing individual rest to document items.
  *
  * @author sadatmalik
  */
 @Slf4j
 @Component
-public class LoggingItemProcessListener implements ItemProcessListener<Candidate, CandidateDocument> {
+public class LoggingRestToDocumentProcessListener implements ItemProcessListener<Candidate, CandidateDocument> {
 
   @Override
   public void onProcessError(Candidate item, Exception e) {

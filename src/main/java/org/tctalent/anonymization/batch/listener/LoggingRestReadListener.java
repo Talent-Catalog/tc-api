@@ -14,7 +14,7 @@ import org.tctalent.anonymization.model.IdentifiableCandidate;
  */
 @Slf4j
 @Component
-public class LoggingItemReaderListener implements ItemReadListener<IdentifiableCandidate> {
+public class LoggingRestReadListener implements ItemReadListener<IdentifiableCandidate> {
 
   @Override
   public void onReadError(Exception exception) {

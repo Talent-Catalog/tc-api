@@ -17,11 +17,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.tctalent.anonymization.batch.listener.JobCompletionNotificationListener;
+import org.tctalent.anonymization.batch.listener.LoggingJobExecutionListener;
 import org.tctalent.anonymization.batch.listener.LoggingChunkListener;
-import org.tctalent.anonymization.batch.listener.LoggingItemProcessListener;
-import org.tctalent.anonymization.batch.listener.LoggingItemReaderListener;
-import org.tctalent.anonymization.batch.listener.LoggingItemWriterListener;
+import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
+import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
+import org.tctalent.anonymization.batch.listener.LoggingEntityWriteListener;
 import org.tctalent.anonymization.domain.entity.AnonymousCandidate;
 import org.tctalent.anonymization.entity.db.Candidate;
 import org.tctalent.anonymization.entity.mongo.CandidateDocument;
@@ -62,7 +62,7 @@ public class BatchConfig {
   @Bean
   public Job candidateMigrationJob(JobRepository jobRepository,
       @Qualifier("candidateRestMigrationStep") Step candidateMigrationStep,
-      JobCompletionNotificationListener listener) {
+      LoggingJobExecutionListener listener) {
 
     return new JobBuilder("candidateMigrationJob", jobRepository)
         .listener(listener)
@@ -82,9 +82,9 @@ public class BatchConfig {
    * @param mongoItemWriter the writer to save candidate documents to MongoDB
    * @param jpaItemWriter the writer to save candidate entities to AuroraDB
    * @param loggingChunkListener the listener for chunk-level logging
-   * @param loggingItemReaderListener the listener for item read-level logging
-   * @param loggingItemProcessListener the listener for item process-level logging
-   * @param loggingItemWriterListener the listener for item write-level logging
+   * @param loggingRestReadListener the listener for item read-level logging
+   * @param loggingRestToEntityProcessListener the listener for item process-level logging
+   * @param loggingEntityWriteListener the listener for item write-level logging
    * @return the configured candidate migration step
    */
   @Bean
@@ -98,9 +98,9 @@ public class BatchConfig {
       ItemWriter<CandidateDocument> mongoItemWriter,
       ItemWriter<AnonymousCandidate> jpaItemWriter,
       LoggingChunkListener loggingChunkListener,
-      LoggingItemReaderListener loggingItemReaderListener,
-      LoggingItemProcessListener loggingItemProcessListener,
-      LoggingItemWriterListener loggingItemWriterListener) {
+      LoggingRestReadListener loggingRestReadListener,
+      LoggingRestToEntityProcessListener loggingRestToEntityProcessListener,
+      LoggingEntityWriteListener loggingEntityWriteListener) {
 
     return new StepBuilder("candidateRestMigrationStep", jobRepository)
 //        .<IdentifiableCandidate, CandidateDocument>chunk(batchProperties.getChunkSize(), transactionManager)
@@ -110,9 +110,9 @@ public class BatchConfig {
 //        .writer(mongoItemWriter)
         .writer(jpaItemWriter)
         .listener(loggingChunkListener)
-        .listener(loggingItemReaderListener)
-        .listener(loggingItemProcessListener)
-        .listener(loggingItemWriterListener)
+        .listener(loggingRestReadListener)
+        .listener(loggingRestToEntityProcessListener)
+        .listener(loggingEntityWriteListener)
         .faultTolerant()
         .skipPolicy(new ConditionalSkipPolicy(batchProperties.getMaxReadSkips()))
         .build();

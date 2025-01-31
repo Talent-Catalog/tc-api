@@ -16,7 +16,7 @@ import org.tctalent.anonymization.logging.LogBuilder;
  */
 @Slf4j
 @Component
-public class LoggingDocumentWriterListener implements ItemWriteListener<CandidateDocument> {
+public class LoggingDocumentWriteListener implements ItemWriteListener<CandidateDocument> {
 
   @Override
   public void beforeWrite(Chunk<? extends CandidateDocument> items) {
