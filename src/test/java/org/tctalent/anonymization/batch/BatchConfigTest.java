@@ -23,6 +23,7 @@ import org.tctalent.anonymization.batch.listener.LoggingJobExecutionListener;
 import org.tctalent.anonymization.batch.listener.LoggingChunkListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
+import org.tctalent.anonymization.batch.reader.RestApiItemReader;
 import org.tctalent.anonymization.domain.entity.AnonymousCandidate;
 import org.tctalent.anonymization.entity.db.Candidate;
 import org.tctalent.anonymization.entity.mongo.CandidateDocument;

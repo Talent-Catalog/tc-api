@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.tctalent.anonymization.batch.config.BatchProperties;
+import org.tctalent.anonymization.batch.reader.RestApiItemReader;
 import org.tctalent.anonymization.exception.RestApiReaderException;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;

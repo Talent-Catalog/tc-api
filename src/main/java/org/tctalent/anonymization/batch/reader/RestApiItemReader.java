@@ -1,4 +1,4 @@
-package org.tctalent.anonymization.batch;
+package org.tctalent.anonymization.batch.reader;
 
 import java.util.Iterator;
 import java.util.List;
