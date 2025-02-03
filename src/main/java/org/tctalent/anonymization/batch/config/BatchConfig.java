@@ -22,8 +22,8 @@ import org.tctalent.anonymization.batch.listener.LoggingRestToDocumentProcessLis
 import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
 import org.tctalent.anonymization.batch.listener.LoggingEntityWriteListener;
-import org.tctalent.anonymization.domain.entity.AnonymousCandidate;
-import org.tctalent.anonymization.entity.mongo.CandidateDocument;
+import org.tctalent.anonymization.domain.entity.CandidateEntity;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.repository.CandidateAuroraRepository;
 import org.tctalent.anonymization.repository.CandidateMongoRepository;
@@ -92,15 +92,15 @@ public class BatchConfig {
   public Step candidateRestToAuroraStep(JobRepository jobRepository,
       PlatformTransactionManager transactionManager,
       ItemReader<IdentifiableCandidate> tcItemReader,
-      ItemProcessor<IdentifiableCandidate, AnonymousCandidate> anonymousCandidateProcessor,
-      ItemWriter<AnonymousCandidate> jpaItemWriter,
+      ItemProcessor<IdentifiableCandidate, CandidateEntity> anonymousCandidateProcessor,
+      ItemWriter<CandidateEntity> jpaItemWriter,
       LoggingChunkListener loggingChunkListener,
       LoggingRestReadListener loggingRestReadListener,
       LoggingRestToEntityProcessListener loggingRestToEntityProcessListener,
       LoggingEntityWriteListener loggingEntityWriteListener) {
 
     return new StepBuilder("candidateRestToAuroraStep", jobRepository)
-        .<IdentifiableCandidate, AnonymousCandidate>chunk(batchProperties.getChunkSize(), transactionManager)
+        .<IdentifiableCandidate, CandidateEntity>chunk(batchProperties.getChunkSize(), transactionManager)
         .reader(tcItemReader)
         .processor(anonymousCandidateProcessor)
         .writer(jpaItemWriter)
@@ -141,9 +141,9 @@ public class BatchConfig {
 
   // todo javadoc
   @Bean
-  public ItemWriter<AnonymousCandidate> jpaItemWriter(
+  public ItemWriter<CandidateEntity> jpaItemWriter(
       CandidateAuroraRepository candidateAuroraRepository) {
-    return new RepositoryItemWriterBuilder<AnonymousCandidate>()
+    return new RepositoryItemWriterBuilder<CandidateEntity>()
         .repository(candidateAuroraRepository)
         .methodName("save")
         .build();

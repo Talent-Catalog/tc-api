@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ItemWriteListener;
 import org.springframework.batch.item.Chunk;
 import org.springframework.stereotype.Component;
-import org.tctalent.anonymization.domain.entity.AnonymousCandidate;
+import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.logging.LogBuilder;
 
 /**
@@ -16,10 +16,10 @@ import org.tctalent.anonymization.logging.LogBuilder;
  */
 @Slf4j
 @Component
-public class LoggingEntityWriteListener implements ItemWriteListener<AnonymousCandidate> {
+public class LoggingEntityWriteListener implements ItemWriteListener<CandidateEntity> {
 
   @Override
-  public void beforeWrite(Chunk<? extends AnonymousCandidate> items) {
+  public void beforeWrite(Chunk<? extends CandidateEntity> items) {
     String itemDetails = items.getItems().stream()
         .map(Object::toString)
         .collect(Collectors.joining(", "));
@@ -31,7 +31,7 @@ public class LoggingEntityWriteListener implements ItemWriteListener<AnonymousCa
   }
 
   @Override
-  public void afterWrite(Chunk<? extends AnonymousCandidate> items) {
+  public void afterWrite(Chunk<? extends CandidateEntity> items) {
     String itemDetails = items.getItems().stream()
         .map(Object::toString)
         .collect(Collectors.joining(", "));
@@ -43,7 +43,7 @@ public class LoggingEntityWriteListener implements ItemWriteListener<AnonymousCa
   }
 
   @Override
-  public void onWriteError(Exception exception, Chunk<? extends AnonymousCandidate> items) {
+  public void onWriteError(Exception exception, Chunk<? extends CandidateEntity> items) {
     String itemDetails = items.getItems().stream()
         .map(Object::toString)
         .collect(Collectors.joining(", "));

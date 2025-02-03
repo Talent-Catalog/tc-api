@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
-import org.tctalent.anonymization.entity.mongo.CandidateDocument;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.mapper.CandidateMapper;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
 import org.tctalent.anonymization.repository.CandidateMongoRepository;

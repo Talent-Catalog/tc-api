@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.tctalent.anonymization.batch.processor.ModelToDocumentItemProcessor;
-import org.tctalent.anonymization.entity.mongo.CandidateDocument;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.mapper.CandidateMapper;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 

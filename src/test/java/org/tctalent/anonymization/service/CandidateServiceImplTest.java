@@ -15,7 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.tctalent.anonymization.entity.mongo.CandidateDocument;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.mapper.CandidateMapper;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;

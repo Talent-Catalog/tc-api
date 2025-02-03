@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ItemWriteListener;
 import org.springframework.batch.item.Chunk;
 import org.springframework.stereotype.Component;
-import org.tctalent.anonymization.entity.mongo.CandidateDocument;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.logging.LogBuilder;
 
 /**

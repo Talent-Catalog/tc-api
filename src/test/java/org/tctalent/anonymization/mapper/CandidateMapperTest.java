@@ -1,7 +1,5 @@
 package org.tctalent.anonymization.mapper;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
@@ -13,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.tctalent.anonymization.entity.mongo.CandidateDocument;
-import org.tctalent.anonymization.entity.mongo.Dependant;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
+import org.tctalent.anonymization.domain.document.Dependant;
 import org.tctalent.anonymization.model.DependantRelations;
 import org.tctalent.anonymization.model.Gender;
 import org.tctalent.anonymization.model.IdentifiableCandidate;

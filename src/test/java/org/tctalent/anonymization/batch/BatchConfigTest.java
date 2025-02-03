@@ -26,8 +26,8 @@ import org.tctalent.anonymization.batch.listener.LoggingRestToDocumentProcessLis
 import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
 import org.tctalent.anonymization.batch.reader.RestApiItemReader;
-import org.tctalent.anonymization.domain.entity.AnonymousCandidate;
-import org.tctalent.anonymization.entity.mongo.CandidateDocument;
+import org.tctalent.anonymization.domain.entity.CandidateEntity;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.repository.CandidateAuroraRepository;
 import org.tctalent.anonymization.repository.CandidateMongoRepository;
@@ -43,9 +43,9 @@ class BatchConfigTest {
   @Mock private JobRepository jobRepository;
   @Mock private DataSourceTransactionManager transactionManager;
   @Mock private ItemProcessor<IdentifiableCandidate, CandidateDocument> mongoItemProcessor;
-  @Mock private ItemProcessor<IdentifiableCandidate, AnonymousCandidate> auroraItemProcessor;
+  @Mock private ItemProcessor<IdentifiableCandidate, CandidateEntity> auroraItemProcessor;
   @Mock private ItemWriter<CandidateDocument> mongoItemWriter;
-  @Mock private ItemWriter<AnonymousCandidate> auroraItemWriter;
+  @Mock private ItemWriter<CandidateEntity> auroraItemWriter;
   @Mock private LoggingChunkListener loggingChunkListener;
   @Mock private LoggingRestReadListener loggingRestReadListener;
   @Mock private LoggingRestToEntityProcessListener loggingRestToEntityProcessListener;
@@ -136,7 +136,7 @@ class BatchConfigTest {
   @Test
   @DisplayName("Test Aurora item writer configuration")
   void testAuroraItemWriter() {
-    ItemWriter<AnonymousCandidate> writer = batchConfig.jpaItemWriter(candidateAuroraRepository);
+    ItemWriter<CandidateEntity> writer = batchConfig.jpaItemWriter(candidateAuroraRepository);
 
     assertNotNull(writer);
   }

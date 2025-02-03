@@ -5,48 +5,30 @@ import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.tctalent.anonymization.domain.common.AvailImmediateReason;
+import org.tctalent.anonymization.domain.common.CandidateStatus;
+import org.tctalent.anonymization.domain.common.DocumentStatus;
+import org.tctalent.anonymization.domain.common.Gender;
+import org.tctalent.anonymization.domain.common.IeltsStatus;
+import org.tctalent.anonymization.domain.common.IntRecruitReason;
+import org.tctalent.anonymization.domain.common.LeftHomeReason;
+import org.tctalent.anonymization.domain.common.MaritalStatus;
+import org.tctalent.anonymization.domain.common.NotRegisteredStatus;
+import org.tctalent.anonymization.domain.common.ResidenceStatus;
+import org.tctalent.anonymization.domain.common.UnhcrStatus;
+import org.tctalent.anonymization.domain.common.VaccinationStatus;
+import org.tctalent.anonymization.domain.common.WorkPermit;
+import org.tctalent.anonymization.domain.common.YesNo;
+import org.tctalent.anonymization.domain.common.YesNoUnsure;
 import org.tctalent.anonymization.domain.entity.converter.IntRecruitReasonConverter;
 import org.tctalent.anonymization.domain.entity.converter.LeftHomeReasonsConverter;
-import org.tctalent.anonymization.model.AvailImmediateReason;
-import org.tctalent.anonymization.model.CandidateCertification;
-import org.tctalent.anonymization.model.CandidateCitizenship;
-import org.tctalent.anonymization.model.CandidateEducation;
-import org.tctalent.anonymization.model.CandidateExam;
-import org.tctalent.anonymization.model.CandidateJobExperience;
-import org.tctalent.anonymization.model.CandidateLanguage;
-import org.tctalent.anonymization.model.CandidateNote;
-import org.tctalent.anonymization.model.CandidateOccupation;
-import org.tctalent.anonymization.model.CandidateSkill;
-import org.tctalent.anonymization.model.CandidateStatus;
-import org.tctalent.anonymization.model.CandidateVisaCheck;
-import org.tctalent.anonymization.model.Country;
-import org.tctalent.anonymization.model.Dependant;
-import org.tctalent.anonymization.model.Destination;
-import org.tctalent.anonymization.model.DocumentStatus;
-import org.tctalent.anonymization.model.EducationLevel;
-import org.tctalent.anonymization.model.EducationMajor;
-import org.tctalent.anonymization.model.Gender;
-import org.tctalent.anonymization.model.IeltsStatus;
-import org.tctalent.anonymization.model.IntRecruitReason;
-import org.tctalent.anonymization.model.LanguageLevel;
-import org.tctalent.anonymization.model.LeftHomeReason;
-import org.tctalent.anonymization.model.MaritalStatus;
-import org.tctalent.anonymization.model.NotRegisteredStatus;
-import org.tctalent.anonymization.model.Occupation;
-import org.tctalent.anonymization.model.ResidenceStatus;
-import org.tctalent.anonymization.model.SurveyType;
-import org.tctalent.anonymization.model.UnhcrStatus;
-import org.tctalent.anonymization.model.VaccinationStatus;
-import org.tctalent.anonymization.model.WorkPermit;
-import org.tctalent.anonymization.model.YesNo;
-import org.tctalent.anonymization.model.YesNoUnsure;
+
 
 @Getter
 @Setter
@@ -90,10 +72,10 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   private List<CandidateCitizenship> candidateCitizenships;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
-  private List<Dependant> candidateDependants;
+  private List<CandidateDependant> candidateDependants;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
-  private List<Destination> candidateDestinations;
+  private List<CandidateDestination> candidateDestinations;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
   @OrderBy("yearCompleted DESC")
@@ -270,8 +252,9 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private String partnerPublicId;
 
-  @Valid
-  private List<Long> partnerCitizenship = new ArrayList<>();
+//  @Valid
+//  // todo - sm - this is actually stored as a CSV string and will need to be mapped from the rest model
+//  private List<Long> partnerCitizenship = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "partner_edu_level_id")
