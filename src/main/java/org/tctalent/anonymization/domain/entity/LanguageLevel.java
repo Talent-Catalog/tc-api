@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -24,7 +24,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.Status;
+import org.tctalent.anonymization.domain.common.Status;
+import org.tctalent.anonymization.model.CefrLevels;
 
 @Getter
 @Setter
@@ -39,10 +40,6 @@ public class LanguageLevel extends AbstractTranslatableDomainObject<Long> {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public LanguageLevel(String name, Status status, int level) {
-        setName(name);
-        this.status = status;
-        this.level = level;
-    }
-
+    @Enumerated(EnumType.STRING)
+    private CefrLevels cefrLevel;
 }
