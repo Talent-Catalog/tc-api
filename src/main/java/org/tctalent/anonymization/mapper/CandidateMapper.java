@@ -37,16 +37,6 @@ public interface CandidateMapper {
   CandidatePage toCandidateModelPage(Page<Candidate> page);
 
   /**
-   * Maps a TC database {@link org.tctalent.anonymization.entity.db.Candidate} entity to an
-   * anonymised Mongo {@link CandidateDocument}.
-   *
-   * @param entity the database candidate entity
-   * @return the corresponding anonymised mongo document
-   */
-  @Mapping(source = "createdDate", target = "createdDate")
-  CandidateDocument anonymize(org.tctalent.anonymization.entity.db.Candidate entity);
-
-  /**
    * Maps from an {@link IdentifiableCandidate} model to an anonymised Mongo
    * {@link CandidateDocument}.
    *
