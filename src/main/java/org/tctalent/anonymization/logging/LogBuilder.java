@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
-import org.tctalent.anonymization.entity.db.User;
 
 /**
  * The {@code LogBuilder} class is used to construct log messages with standardised fields
@@ -79,13 +78,14 @@ public class LogBuilder {
    * @param loggedInUser an {@link Optional} containing the logged-in user
    * @return the current {@code LogBuilder} instance for chaining
    */
-  public LogBuilder user(Optional<User> loggedInUser) {
-    loggedInUser
-        .map(User::getId)
-        .map(Object::toString)
-        .ifPresent(userId -> addField(LogField.USER_ID, userId));
-    return this;
-  }
+  // todo - sm - this will eventually be the api user id - add this after api security is implemented
+//  public LogBuilder user(Optional<User> loggedInUser) {
+//    loggedInUser
+//        .map(User::getId)
+//        .map(Object::toString)
+//        .ifPresent(userId -> addField(LogField.USER_ID, userId));
+//    return this;
+//  }
 
   /**
    * Adds the candidate ID to the log fields if the candidate ID is not null.
