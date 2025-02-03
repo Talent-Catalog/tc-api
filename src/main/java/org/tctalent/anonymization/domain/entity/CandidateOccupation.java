@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -28,6 +28,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tctalent.anonymization.entity.db.AbstractAuditableDomainObject;
+import org.tctalent.anonymization.entity.db.Candidate;
+import org.tctalent.anonymization.entity.db.Occupation;
 
 @Getter
 @Setter
@@ -35,7 +38,7 @@ import lombok.Setter;
 @Table(name = "candidate_occupation")
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_occupation_id_seq", allocationSize = 1)
 @NoArgsConstructor
-public class CandidateOccupation extends AbstractAuditableDomainObject<Long> {
+public class CandidateOccupation extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
@@ -47,19 +50,8 @@ public class CandidateOccupation extends AbstractAuditableDomainObject<Long> {
 
     private Long yearsExperience;
 
-    private Boolean topCandidate;
-
-    private String migrationOccupation;
-
-    //Todo Figure out why Cascade = MERGE doesn't work. Why do we need ALL. What does this mean?
+    //todo - sm - add this to the API schema and document definitions?
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidateOccupation", cascade = CascadeType.ALL)
     private List<CandidateJobExperience> candidateJobExperiences;
-
-
-    public CandidateOccupation(Candidate candidate, Occupation occupation, Long yearsExperience) {
-        this.candidate = candidate;
-        this.occupation = occupation;
-        this.yearsExperience = yearsExperience;
-    }
 
 }
