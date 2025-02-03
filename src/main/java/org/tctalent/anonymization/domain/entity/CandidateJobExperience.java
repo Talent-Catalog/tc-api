@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,6 +26,9 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tctalent.anonymization.entity.db.AbstractDomainObject;
+import org.tctalent.anonymization.entity.db.Candidate;
+import org.tctalent.anonymization.entity.db.CandidateOccupation;
 
 @Getter
 @Setter
@@ -33,7 +36,7 @@ import lombok.Setter;
 @Table(name = "candidate_job_experience")
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_job_experience_id_seq", allocationSize = 1)
 @NoArgsConstructor
-public class CandidateJobExperience extends AbstractDomainObject<Long> {
+public class CandidateJobExperience extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
@@ -45,7 +48,7 @@ public class CandidateJobExperience extends AbstractDomainObject<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_occupation_id")
-    private CandidateOccupation candidateOccupation;
+    private CandidateOccupation candidateOccupation; // todo - sm - confirm this field mapping - it's named "occupation" in the API schema
 
     private String companyName;
     private String role;
@@ -54,19 +57,5 @@ public class CandidateJobExperience extends AbstractDomainObject<Long> {
     private Boolean fullTime;
     private Boolean paid;
     private String description;
-
-    public CandidateJobExperience(Candidate candidate, Country country, CandidateOccupation candidateOccupation,
-                                  String companyName, String role, LocalDate startDate, LocalDate endDate,
-                                  String description) {
-
-        this.candidate = candidate;
-        this.country = country;
-        this.candidateOccupation = candidateOccupation;
-        this.companyName = companyName;
-        this.role = role;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.description = description;
-    }
 
 }
