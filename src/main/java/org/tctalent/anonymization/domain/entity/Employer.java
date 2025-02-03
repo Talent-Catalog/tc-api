@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,19 +25,14 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
+import org.tctalent.anonymization.entity.db.AbstractSalesforceObject;
 
-/**
- * This is an employer who can be associated with job opportunities .
- * It is backed up by a corresponding Salesforce Account object.
- *
- * @author John Cameron
- */
 @Getter
 @Setter
 @Entity
 @Table(name = "employer")
 @SequenceGenerator(name = "seq_gen", sequenceName = "employer_id_seq", allocationSize = 1)
-public class Employer extends AbstractSalesforceObject {
+public class Employer extends AbstractDomainEntity<Long> {
 
     /**
      * References country object on database
@@ -46,19 +41,11 @@ public class Employer extends AbstractSalesforceObject {
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @Nullable
-    private String description;
-
     /**
      * Indicates whether the employer has hired internationally or not.
      * Null if we don't know
      */
     @Nullable
     private Boolean hasHiredInternationally;
-
-    @Nullable
-    private String website;
-
-    //TODO JC Enums matching SF Office size and Geography
 
 }
