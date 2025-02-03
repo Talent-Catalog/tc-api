@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,15 +29,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.NonNull;
 import org.tctalent.anonymization.entity.common.enums.YesNoUnsure;
+import org.tctalent.anonymization.entity.db.AbstractDomainObject;
+import org.tctalent.anonymization.entity.db.Candidate;
 import org.tctalent.anonymization.request.candidate.CandidateIntakeDataUpdate;
 
+// todo - sm - check this - it's called Destination in the API schema
 @Getter
 @Setter
 @Entity
 @Table(name = "candidate_destination")
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_destination_id_seq", allocationSize = 1)
 @NoArgsConstructor
-public class CandidateDestination extends AbstractDomainObject<Long>
+public class CandidateDestination extends AbstractDomainEntity<Long>
         implements Comparable<CandidateDestination> {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -59,18 +62,5 @@ public class CandidateDestination extends AbstractDomainObject<Long>
             return o.country == null ? 0 : -1;
         }
         return country.compareTo(o.country);
-    }
-
-    public void populateIntakeData(
-            @NonNull Candidate candidate, @NonNull Country country,
-            CandidateIntakeDataUpdate data) {
-        setCandidate(candidate);
-        setCountry(country);
-        if (data.getDestinationInterest() != null) {
-            setInterest(data.getDestinationInterest());
-        }
-        if (data.getDestinationNotes() != null) {
-            setNotes(data.getDestinationNotes());
-        }
     }
 }
