@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
@@ -22,6 +22,8 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.tctalent.anonymization.entity.db.AbstractDomainObject;
+import org.tctalent.anonymization.entity.db.Translatable;
 
 @Getter
 @Setter
