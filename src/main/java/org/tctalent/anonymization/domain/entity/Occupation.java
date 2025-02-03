@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +25,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.Status;
+import org.tctalent.anonymization.domain.common.Status;
 
 @Getter
 @Setter
