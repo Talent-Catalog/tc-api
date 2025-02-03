@@ -24,6 +24,9 @@ import java.util.concurrent.ScheduledFuture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.tctalent.anonymization.util.background.BackProcessor;
+import org.tctalent.anonymization.util.background.BackRunner;
+import org.tctalent.anonymization.util.background.IdContext;
 
 class BackRunnerTest {
 
