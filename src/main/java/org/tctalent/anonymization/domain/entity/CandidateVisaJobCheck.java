@@ -14,27 +14,34 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.tctalent.anonymization.domain.entity.converter.DelimitedIdConverter;
 import org.tctalent.anonymization.entity.common.enums.OtherVisas;
 import org.tctalent.anonymization.entity.common.enums.TcEligibilityAssessment;
 import org.tctalent.anonymization.entity.common.enums.VisaEligibility;
 import org.tctalent.anonymization.entity.common.enums.YesNo;
+import org.tctalent.anonymization.entity.db.Occupation;
+import org.tctalent.anonymization.entity.db.SalesforceJobOpp;
 
 @Getter
 @Setter
-@MappedSuperclass
-public class CandidateVisaJobCheckBase extends AbstractDomainObject<Long> {
+@Entity
+@Table(name = "candidate_visa_job_check")
+@SequenceGenerator(name = "seq_gen", sequenceName = "candidate_visa_job_check_id_seq", allocationSize = 1)
+public class CandidateVisaJobCheck extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_visa_check_id")
@@ -50,18 +57,12 @@ public class CandidateVisaJobCheckBase extends AbstractDomainObject<Long> {
     @Enumerated(EnumType.STRING)
     private YesNo interest;
 
-    private String interestNotes;
-
     @Enumerated(EnumType.STRING)
     private YesNo qualification;
-
-    private String qualificationNotes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "occupation_id")
     private Occupation occupation;
-
-    private String occupationNotes;
 
     @Enumerated(EnumType.STRING)
     private YesNo salaryTsmit;
@@ -72,43 +73,19 @@ public class CandidateVisaJobCheckBase extends AbstractDomainObject<Long> {
     @Enumerated(EnumType.STRING)
     private YesNo eligible_494;
 
-    private String eligible_494_Notes;
-
     @Enumerated(EnumType.STRING)
     private YesNo eligible_186;
 
-    private String eligible_186_Notes;
-
     @Enumerated(EnumType.STRING)
     private OtherVisas eligibleOther;
-
-    private String eligibleOtherNotes;
 
     @Enumerated(EnumType.STRING)
     private VisaEligibility putForward;
 
     @Enumerated(EnumType.STRING)
-    private TcEligibilityAssessment tbbEligibility;
-
-    private String notes;
-
-    private String relevantWorkExp;
+    private TcEligibilityAssessment tcEligibility;
 
     private String ageRequirement;
-
-    private String preferredPathways;
-
-    private String ineligiblePathways;
-
-    private String eligiblePathways;
-
-    private String occupationCategory;
-
-    private String occupationSubCategory;
-
-    //todo remove english threshold field, replaced with languagesThresholdMet field
-    @Enumerated(EnumType.STRING)
-    private YesNo englishThreshold;
 
     @Convert(converter = DelimitedIdConverter.class)
     private List<Long> languagesRequired;
@@ -116,15 +93,4 @@ public class CandidateVisaJobCheckBase extends AbstractDomainObject<Long> {
     @Enumerated(EnumType.STRING)
     private YesNo languagesThresholdMet;
 
-    private String languagesThresholdNotes;
-
-    /**
-     * Gets the candidate to whom the given instance of candidate job visa assessment refers, by
-     * querying the parent candidate visa check.
-     * @return candidate associated with given candidate job visa check
-     */
-    public Candidate getCandidate() {
-        Candidate candidate = this.getCandidateVisaCheck().getCandidate();
-        return candidate;
-    }
 }
