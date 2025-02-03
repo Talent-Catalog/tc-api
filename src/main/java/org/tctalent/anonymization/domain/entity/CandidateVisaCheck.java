@@ -14,16 +14,18 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -33,11 +35,15 @@ import org.tctalent.anonymization.entity.common.enums.FamilyRelations;
 import org.tctalent.anonymization.entity.common.enums.RiskLevel;
 import org.tctalent.anonymization.entity.common.enums.YesNo;
 import org.tctalent.anonymization.entity.common.enums.YesNoUnsure;
+import org.tctalent.anonymization.entity.db.Candidate;
+import org.tctalent.anonymization.entity.db.CandidateVisaJobCheck;
 
 @Getter
 @Setter
-@MappedSuperclass
-public class CandidateVisaCheckBase extends AbstractAuditableDomainObject<Long> implements Comparable<CandidateVisaCheck> {
+@Entity
+@Table(name = "candidate_visa_check")
+@SequenceGenerator(name = "seq_gen", sequenceName = "candidate_visa_check_id_seq", allocationSize = 1)
+public class CandidateVisaCheck extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
@@ -50,55 +56,31 @@ public class CandidateVisaCheckBase extends AbstractAuditableDomainObject<Long> 
     @Enumerated(EnumType.STRING)
     private YesNo protection;
 
-    private String protectionGrounds;
-
     @Enumerated(EnumType.STRING)
     private YesNo englishThreshold;
-
-    private String englishThresholdNotes;
 
     @Enumerated(EnumType.STRING)
     private YesNo healthAssessment;
 
-    private String healthAssessmentNotes;
-
     @Enumerated(EnumType.STRING)
     private YesNo characterAssessment;
-
-    private String characterAssessmentNotes;
 
     @Enumerated(EnumType.STRING)
     private YesNo securityRisk;
 
-    private String securityRiskNotes;
-
     @Enumerated(EnumType.STRING)
     private RiskLevel overallRisk;
-
-    private String overallRiskNotes;
 
     @Enumerated(EnumType.STRING)
     private DocumentStatus validTravelDocs;
 
-    private String validTravelDocsNotes;
-
     @Enumerated(EnumType.STRING)
     private YesNoUnsure pathwayAssessment;
-
-    private String pathwayAssessmentNotes;
 
     @Enumerated(EnumType.STRING)
     private FamilyRelations destinationFamily;
 
-    private String destinationFamilyLocation;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidateVisaCheck", cascade = CascadeType.MERGE)
     private Set<CandidateVisaJobCheck> candidateVisaJobChecks = new HashSet<>();
 
-    public int compareTo(CandidateVisaCheck o) {
-        if (country == null) {
-            return o.getCountry() == null ? 0 : -1;
-        }
-        return country.compareTo(o.getCountry());
-    }
 }
