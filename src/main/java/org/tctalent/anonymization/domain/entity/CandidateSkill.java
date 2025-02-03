@@ -24,8 +24,6 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.db.AbstractDomainObject;
-import org.tctalent.anonymization.entity.db.Candidate;
 
 @Getter
 @Setter
@@ -36,7 +34,7 @@ public class CandidateSkill extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+    private CandidateEntity candidate;
 
     private String skill;
     private String timePeriod;

@@ -18,8 +18,9 @@ package org.tctalent.anonymization.domain.entity.converter;
 
 import jakarta.persistence.AttributeConverter;
 import java.util.List;
-import org.tctalent.anonymization.entity.common.enums.IntRecruitReason;
-import org.tctalent.anonymization.util.EnumHelper;
+import org.tctalent.anonymization.domain.common.EnumHelper;
+import org.tctalent.anonymization.domain.common.IntRecruitReason;
+
 
 public class IntRecruitReasonConverter
         implements AttributeConverter<List<IntRecruitReason>, String> {

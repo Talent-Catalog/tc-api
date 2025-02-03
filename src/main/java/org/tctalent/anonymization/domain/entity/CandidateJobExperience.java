@@ -26,9 +26,6 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.db.AbstractDomainObject;
-import org.tctalent.anonymization.entity.db.Candidate;
-import org.tctalent.anonymization.entity.db.CandidateOccupation;
 
 @Getter
 @Setter
@@ -40,7 +37,7 @@ public class CandidateJobExperience extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+    private CandidateEntity candidate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")

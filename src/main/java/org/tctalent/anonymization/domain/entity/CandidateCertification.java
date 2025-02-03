@@ -27,8 +27,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.db.AbstractDomainObject;
-import org.tctalent.anonymization.entity.db.Candidate;
 
 @Getter
 @Setter
@@ -37,11 +35,11 @@ import org.tctalent.anonymization.entity.db.Candidate;
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_certification_id_seq", allocationSize = 1)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CandidateCertification extends AbstractDomainObject<Long> {
+public class CandidateCertification extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+    private CandidateEntity candidate;
 
     private String name;
     private String institution;

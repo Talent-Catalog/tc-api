@@ -33,9 +33,10 @@ import org.tctalent.anonymization.model.CefrLevels;
 @Table(name = "language_level")
 @SequenceGenerator(name = "language_level_gen", sequenceName = "language_level_id_seq", allocationSize = 1)
 @NoArgsConstructor
-public class LanguageLevel extends AbstractTranslatableDomainObject<Long> {
+public class LanguageLevel extends AbstractDomainEntity<Long> {
 
     private int level;
+    private String name;
 
     @Enumerated(EnumType.STRING)
     private Status status;

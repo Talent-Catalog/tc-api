@@ -24,8 +24,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.EducationType;
-import org.tctalent.anonymization.entity.common.enums.Status;
+import org.tctalent.anonymization.domain.common.EducationType;
+import org.tctalent.anonymization.domain.common.Status;
 
 @Getter
 @Setter
@@ -33,9 +33,10 @@ import org.tctalent.anonymization.entity.common.enums.Status;
 @NoArgsConstructor
 @Table(name = "education_level")
 @SequenceGenerator(name = "seq_gen", sequenceName = "education_level_id_seq", allocationSize = 1)
-public class EducationLevel extends AbstractTranslatableDomainObject<Long> {
+public class EducationLevel extends AbstractDomainEntity<Long> {
 
     private int level;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 

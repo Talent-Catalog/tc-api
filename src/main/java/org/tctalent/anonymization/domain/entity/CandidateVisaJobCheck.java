@@ -29,12 +29,10 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.tctalent.anonymization.domain.entity.converter.DelimitedIdConverter;
-import org.tctalent.anonymization.entity.common.enums.OtherVisas;
-import org.tctalent.anonymization.entity.common.enums.TcEligibilityAssessment;
-import org.tctalent.anonymization.entity.common.enums.VisaEligibility;
-import org.tctalent.anonymization.entity.common.enums.YesNo;
-import org.tctalent.anonymization.entity.db.Occupation;
-import org.tctalent.anonymization.entity.db.SalesforceJobOpp;
+import org.tctalent.anonymization.domain.common.OtherVisas;
+import org.tctalent.anonymization.domain.common.TcEligibilityAssessment;
+import org.tctalent.anonymization.domain.common.VisaEligibility;
+import org.tctalent.anonymization.domain.common.YesNo;
 
 @Getter
 @Setter

@@ -24,18 +24,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.lang.NonNull;
-import org.tctalent.anonymization.entity.common.enums.DependantRelations;
-import org.tctalent.anonymization.entity.common.enums.Gender;
-import org.tctalent.anonymization.entity.common.enums.Registration;
-import org.tctalent.anonymization.entity.common.enums.YesNo;
-import org.tctalent.anonymization.entity.db.AbstractDomainObject;
-import org.tctalent.anonymization.entity.db.Candidate;
-import org.tctalent.anonymization.request.candidate.CandidateIntakeDataUpdate;
+import org.tctalent.anonymization.domain.common.DependantRelations;
+import org.tctalent.anonymization.domain.common.Gender;
+import org.tctalent.anonymization.domain.common.Registration;
+import org.tctalent.anonymization.domain.common.YesNo;
 
 
 // todo - sm - check this - it is called Dependant in the API schema
@@ -49,7 +44,7 @@ public class CandidateDependant extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+    private CandidateEntity candidate;
 
     @Enumerated(EnumType.STRING)
     private DependantRelations relation;

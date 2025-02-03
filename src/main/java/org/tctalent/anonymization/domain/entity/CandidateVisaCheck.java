@@ -30,12 +30,11 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.DocumentStatus;
-import org.tctalent.anonymization.entity.common.enums.FamilyRelations;
-import org.tctalent.anonymization.entity.common.enums.RiskLevel;
-import org.tctalent.anonymization.entity.common.enums.YesNo;
-import org.tctalent.anonymization.entity.common.enums.YesNoUnsure;
-import org.tctalent.anonymization.entity.db.Candidate;
+import org.tctalent.anonymization.domain.common.DocumentStatus;
+import org.tctalent.anonymization.domain.common.FamilyRelations;
+import org.tctalent.anonymization.domain.common.RiskLevel;
+import org.tctalent.anonymization.domain.common.YesNo;
+import org.tctalent.anonymization.domain.common.YesNoUnsure;
 
 @Getter
 @Setter
@@ -46,7 +45,7 @@ public class CandidateVisaCheck extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+    private CandidateEntity candidate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")

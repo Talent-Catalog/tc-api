@@ -32,20 +32,13 @@ import org.tctalent.anonymization.domain.common.Status;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Language extends AbstractTranslatableDomainObject<Long> {
+public class Language extends AbstractDomainEntity<Long> {
 
-    /**
-     * ISO code for this language
-     */
     private String isoCode;
+    private String name;
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    public Language(String name, Status status) {
-        setName(name);
-        this.status = status;
-    }
 
     @Override
     public String toString() {

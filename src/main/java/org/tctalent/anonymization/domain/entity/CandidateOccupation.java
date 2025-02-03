@@ -28,9 +28,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.db.AbstractAuditableDomainObject;
-import org.tctalent.anonymization.entity.db.Candidate;
-import org.tctalent.anonymization.entity.db.Occupation;
 
 @Getter
 @Setter
@@ -42,7 +39,7 @@ public class CandidateOccupation extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+    private CandidateEntity candidate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "occupation_id")

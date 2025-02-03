@@ -27,9 +27,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.Exam;
-import org.tctalent.anonymization.entity.db.AbstractDomainObject;
-import org.tctalent.anonymization.entity.db.Candidate;
+import org.tctalent.anonymization.domain.common.Exam;
 
 @Getter
 @Setter
@@ -41,7 +39,7 @@ public class CandidateExam extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+    private CandidateEntity candidate;
 
     @Enumerated(EnumType.STRING)
     private Exam exam;

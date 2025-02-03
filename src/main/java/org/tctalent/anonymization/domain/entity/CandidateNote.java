@@ -27,9 +27,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.NoteType;
-import org.tctalent.anonymization.entity.db.AbstractAuditableDomainObject;
-import org.tctalent.anonymization.entity.db.Candidate;
+import org.tctalent.anonymization.domain.common.NoteType;
 
 
 // todo - sm - remove notes from anon db - data leak possible
@@ -43,7 +41,7 @@ public class CandidateNote extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+    private CandidateEntity candidate;
 
     private String title;
     private String comment;

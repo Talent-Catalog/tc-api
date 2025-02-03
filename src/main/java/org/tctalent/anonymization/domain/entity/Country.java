@@ -28,8 +28,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.Status;
-import org.tctalent.anonymization.entity.db.User;
+import org.tctalent.anonymization.domain.common.Status;
 
 @Entity
 @Table(name = "country")
@@ -37,22 +36,29 @@ import org.tctalent.anonymization.entity.db.User;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Country extends AbstractTranslatableDomainObject<Long> {
+public class Country extends AbstractDomainEntity<Long> implements Comparable<Country>{
 
     /**
      * ISO code for this country
      */
     private String isoCode;
 
+    private String name;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "sourceCountries")
-    Set<User> users = new HashSet<>();
+    @Override
+    public int compareTo(Country other) {
+        if (this.name == null) {
+            return other.getName() == null ? 0 : -1;
+        }
 
-    public Country(String name, Status status) {
-        setName(name);
-        this.status = status;
+        if (other.getName() == null) {
+            return 1;
+        }
+
+        return this.name.compareTo(other.getName());
     }
 
     @Override

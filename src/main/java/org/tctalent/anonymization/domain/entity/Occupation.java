@@ -33,17 +33,14 @@ import org.tctalent.anonymization.domain.common.Status;
 @Table(name = "occupation")
 @SequenceGenerator(name = "seq_gen", sequenceName = "occupation_id_seq", allocationSize = 1)
 @NoArgsConstructor
-public class Occupation extends AbstractTranslatableDomainObject<Long> {
+public class Occupation extends AbstractDomainEntity<Long> {
 
     @Column(name = "isco08_code")
     private String isco08Code;
 
+    private String name;
+
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    public Occupation(String name, Status status) {
-        setName(name);
-        this.status = status;
-    }
 
 }

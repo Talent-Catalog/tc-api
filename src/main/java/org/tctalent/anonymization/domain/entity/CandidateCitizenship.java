@@ -29,8 +29,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
-import org.tctalent.anonymization.entity.common.enums.HasPassport;
-import org.tctalent.anonymization.entity.db.Candidate;
+import org.tctalent.anonymization.domain.common.HasPassport;
 
 @Getter
 @Setter
@@ -42,7 +41,7 @@ public class CandidateCitizenship extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
-    private Candidate candidate;
+    private CandidateEntity candidate;
 
     @Enumerated(EnumType.STRING)
     private HasPassport hasPassport;
