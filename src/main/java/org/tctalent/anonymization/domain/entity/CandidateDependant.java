@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -33,15 +33,19 @@ import org.tctalent.anonymization.entity.common.enums.DependantRelations;
 import org.tctalent.anonymization.entity.common.enums.Gender;
 import org.tctalent.anonymization.entity.common.enums.Registration;
 import org.tctalent.anonymization.entity.common.enums.YesNo;
+import org.tctalent.anonymization.entity.db.AbstractDomainObject;
+import org.tctalent.anonymization.entity.db.Candidate;
 import org.tctalent.anonymization.request.candidate.CandidateIntakeDataUpdate;
 
+
+// todo - sm - check this - it is called Dependant in the API schema
 @Getter
 @Setter
 @Entity
 @Table(name = "candidate_dependant")
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_dependant_id_seq", allocationSize = 1)
 @NoArgsConstructor
-public class CandidateDependant extends AbstractDomainObject<Long> {
+public class CandidateDependant extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
@@ -52,58 +56,14 @@ public class CandidateDependant extends AbstractDomainObject<Long> {
 
     private String relationOther;
 
-    private LocalDate dob;
+    private Integer yearOfBirth;
 
     private Gender gender;
-
-    private String name;
 
     @Enumerated(EnumType.STRING)
     private Registration registered;
 
-    private String registeredNumber;
-
-    private String registeredNotes;
-
     @Enumerated(EnumType.STRING)
     private YesNo healthConcern;
-
-    private String healthNotes;
-
-    public void populateIntakeData(
-            @NonNull Candidate candidate,
-            CandidateIntakeDataUpdate data) {
-        setCandidate(candidate);
-        if (data.getDependantRelation() != null) {
-            setRelation(data.getDependantRelation());
-        }
-        if (data.getDependantRelationOther() != null) {
-            setRelationOther(data.getDependantRelationOther());
-        }
-        if (data.getDependantDob() != null) {
-            setDob(data.getDependantDob());
-        }
-        if (data.getDependantGender() != null) {
-            setGender(data.getDependantGender());
-        }
-        if (data.getDependantName() != null) {
-            setName(data.getDependantName());
-        }
-        if (data.getDependantRegistered() != null) {
-            setRegistered(data.getDependantRegistered());
-        }
-        if (data.getDependantRegisteredNumber() != null) {
-            setRegisteredNumber(data.getDependantRegisteredNumber());
-        }
-        if (data.getDependantRegisteredNotes() != null) {
-            setRegisteredNotes(data.getDependantRegisteredNotes());
-        }
-        if (data.getDependantHealthConcerns() != null) {
-            setHealthConcern(data.getDependantHealthConcerns());
-        }
-        if (data.getDependantHealthNotes() != null) {
-            setHealthNotes(data.getDependantHealthNotes());
-        }
-    }
 
 }
