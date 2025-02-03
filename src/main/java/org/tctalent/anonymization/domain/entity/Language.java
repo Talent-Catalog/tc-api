@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -24,7 +24,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.Status;
+import org.tctalent.anonymization.domain.common.Status;
 
 @Entity
 @Table(name = "language")
@@ -32,7 +32,7 @@ import org.tctalent.anonymization.entity.common.enums.Status;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Language  extends AbstractTranslatableDomainObject<Long> {
+public class Language extends AbstractTranslatableDomainObject<Long> {
 
     /**
      * ISO code for this language
