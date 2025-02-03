@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,6 +36,8 @@ public class EducationMajor extends AbstractTranslatableDomainObject<Long> {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    private String iscedCode;
 
     public EducationMajor(String name, Status status) {
         setName(name);
