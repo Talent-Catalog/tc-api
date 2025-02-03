@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,6 +29,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.tctalent.anonymization.entity.common.enums.EducationType;
+import org.tctalent.anonymization.entity.db.Candidate;
+import org.tctalent.anonymization.entity.db.EducationMajor;
 
 @Getter
 @Setter
@@ -37,7 +39,7 @@ import org.tctalent.anonymization.entity.common.enums.EducationType;
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_education_id_seq", allocationSize = 1)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CandidateEducation extends AbstractDomainObject<Long> {
+public class CandidateEducation extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
