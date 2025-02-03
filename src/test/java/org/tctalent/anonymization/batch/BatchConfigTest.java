@@ -27,12 +27,10 @@ import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListe
 import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
 import org.tctalent.anonymization.batch.reader.RestApiItemReader;
 import org.tctalent.anonymization.domain.entity.AnonymousCandidate;
-import org.tctalent.anonymization.entity.db.Candidate;
 import org.tctalent.anonymization.entity.mongo.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.repository.CandidateAuroraRepository;
 import org.tctalent.anonymization.repository.CandidateMongoRepository;
-import org.tctalent.anonymization.repository.CandidateRepository;
 
 /**
  * Unit tests for the {@link BatchConfig} class.
@@ -114,7 +112,6 @@ class BatchConfigTest {
 
     Step step = batchConfig.candidateRestToMongoStep(
         jobRepository,
-        transactionManager,
         tcItemReader,
         mongoItemProcessor,
         mongoItemWriter,
