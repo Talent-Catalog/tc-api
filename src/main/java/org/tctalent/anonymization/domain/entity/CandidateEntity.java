@@ -1,0 +1,382 @@
+package org.tctalent.anonymization.domain.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.tctalent.anonymization.domain.entity.converter.IntRecruitReasonConverter;
+import org.tctalent.anonymization.domain.entity.converter.LeftHomeReasonsConverter;
+import org.tctalent.anonymization.model.AvailImmediateReason;
+import org.tctalent.anonymization.model.CandidateCertification;
+import org.tctalent.anonymization.model.CandidateCitizenship;
+import org.tctalent.anonymization.model.CandidateEducation;
+import org.tctalent.anonymization.model.CandidateExam;
+import org.tctalent.anonymization.model.CandidateJobExperience;
+import org.tctalent.anonymization.model.CandidateLanguage;
+import org.tctalent.anonymization.model.CandidateNote;
+import org.tctalent.anonymization.model.CandidateOccupation;
+import org.tctalent.anonymization.model.CandidateSkill;
+import org.tctalent.anonymization.model.CandidateStatus;
+import org.tctalent.anonymization.model.CandidateVisaCheck;
+import org.tctalent.anonymization.model.Country;
+import org.tctalent.anonymization.model.Dependant;
+import org.tctalent.anonymization.model.Destination;
+import org.tctalent.anonymization.model.DocumentStatus;
+import org.tctalent.anonymization.model.EducationLevel;
+import org.tctalent.anonymization.model.EducationMajor;
+import org.tctalent.anonymization.model.Gender;
+import org.tctalent.anonymization.model.IeltsStatus;
+import org.tctalent.anonymization.model.IntRecruitReason;
+import org.tctalent.anonymization.model.LanguageLevel;
+import org.tctalent.anonymization.model.LeftHomeReason;
+import org.tctalent.anonymization.model.MaritalStatus;
+import org.tctalent.anonymization.model.NotRegisteredStatus;
+import org.tctalent.anonymization.model.Occupation;
+import org.tctalent.anonymization.model.ResidenceStatus;
+import org.tctalent.anonymization.model.SurveyType;
+import org.tctalent.anonymization.model.UnhcrStatus;
+import org.tctalent.anonymization.model.VaccinationStatus;
+import org.tctalent.anonymization.model.WorkPermit;
+import org.tctalent.anonymization.model.YesNo;
+import org.tctalent.anonymization.model.YesNoUnsure;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "candidate")
+@SequenceGenerator(name = "seq_gen", sequenceName = "candidate_id_seq", allocationSize = 1)
+@Slf4j
+public class CandidateEntity extends AbstractDomainEntity<Long> {
+
+  @Column(nullable = false, unique = true)
+  private String publicId;
+
+  private LocalDate asylumYear;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure arrestImprison;
+
+  private String arrestImprisonNotes;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate availDate;
+
+  private YesNo availImmediate;
+
+  private String availImmediateJobOps;
+
+  @Enumerated(EnumType.STRING)
+  private AvailImmediateReason availImmediateReason;
+
+  private String availImmediateNotes;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "birth_country_id")
+  private Country birthCountry;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  @OrderBy("dateCompleted DESC")
+  private List<CandidateCertification> candidateCertifications;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  private List<CandidateCitizenship> candidateCitizenships;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  private List<Dependant> candidateDependants;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  private List<Destination> candidateDestinations;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  @OrderBy("yearCompleted DESC")
+  private List<CandidateEducation> candidateEducations;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  private List<@Valid CandidateExam> candidateExams;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  @OrderBy("startDate DESC")
+  private List<CandidateJobExperience> candidateJobExperiences;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  private List<CandidateLanguage> candidateLanguages;
+
+  private String candidateMessage;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  private List<CandidateNote> candidateNotes;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  private List<CandidateOccupation> candidateOccupations;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  private List<CandidateSkill> candidateSkills;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  private List<CandidateVisaCheck> candidateVisaChecks;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo canDrive;
+
+  private String city;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo conflict;
+
+  private String conflictNotes;
+
+  private Boolean contactConsentTcPartners;
+
+  private Boolean contactConsentRegistration;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "country_id")
+  private Country country;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo covidVaccinated;
+
+  private LocalDate covidVaccinatedDate;
+
+  private String covidVaccineName;
+
+  private String covidVaccineNotes;
+
+  @Enumerated(EnumType.STRING)
+  private VaccinationStatus covidVaccinatedStatus;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure crimeConvict;
+
+  private String crimeConvictNotes;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo destLimit;
+
+  private String destLimitNotes;
+
+  @Enumerated(EnumType.STRING)
+  private DocumentStatus drivingLicense;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "driving_license_country_id")
+  private Country drivingLicenseCountry;
+
+  private LocalDate drivingLicenseExp;
+
+  private String englishAssessment;
+
+  private String englishAssessmentScoreIelts;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo familyMove;
+
+  private String familyMoveNotes;
+
+  private String frenchAssessment;
+
+  private Long frenchAssessmentScoreNclc;
+
+  @Column(name = "full_intake_completed_date")
+  private OffsetDateTime fullIntakeCompletedDate;
+
+  @Enumerated(EnumType.STRING)
+  private Gender gender;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo healthIssues;
+
+  private String healthIssuesNotes;
+
+  private String homeLocation;
+
+  private String hostChallenges;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo hostEntryLegally;
+
+  private String hostEntryLegallyNotes;
+
+  private Integer hostEntryYear;
+
+  private String hostEntryYearNotes;
+
+  private BigDecimal ieltsScore;
+
+  @Convert(converter = IntRecruitReasonConverter.class)
+  private List<IntRecruitReason> intRecruitReasons;
+
+  private String intRecruitOther;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure intRecruitRural;
+
+  private String intRecruitRuralNotes;
+
+  private String leftHomeNotes;
+
+  @Convert(converter = LeftHomeReasonsConverter.class)
+  private List<LeftHomeReason> leftHomeReasons;
+
+  @Enumerated(EnumType.STRING)
+  private MaritalStatus maritalStatus;
+
+  private String maritalStatusNotes;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "max_education_level_id")
+  private EducationLevel maxEducationLevel;
+
+  private String mediaWillingness;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "migration_education_major_id")
+  private EducationMajor migrationEducationMajor;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo militaryService;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure militaryWanted;
+
+  private LocalDate militaryStart;
+
+  private LocalDate militaryEnd;
+
+  private String militaryNotes;
+
+  @Column(name = "mini_intake_completed_date")
+  private OffsetDateTime miniIntakeCompletedDate;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo monitoringEvaluationConsent;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "nationality_id")
+  private Country nationality;
+
+  private Long numberDependants;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure partnerRegistered;
+
+  private String partnerPublicId;
+
+  @Valid
+  private List<Long> partnerCitizenship = new ArrayList<>();
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "partner_edu_level_id")
+  private EducationLevel partnerEduLevel;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo partnerEnglish;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "partner_english_level_id")
+  private LanguageLevel partnerEnglishLevel;
+
+  @Enumerated(EnumType.STRING)
+  private IeltsStatus partnerIelts;
+
+  private String partnerIeltsScore;
+
+  private Long partnerIeltsYr;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "partner_occupation_id")
+  private Occupation partnerOccupation;
+
+  @Enumerated(EnumType.STRING)
+  private ResidenceStatus residenceStatus;
+
+  private String residenceStatusNotes;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure returnedHome;
+
+  private String returnedHomeReason;
+
+  private String returnedHomeReasonNo;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure returnHomeSafe;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure returnHomeFuture;
+
+  private LocalDate returnHomeWhen; // todo - sm - check this type because it is a String type in the TC entity definition
+
+  @Enumerated(EnumType.STRING)
+  private YesNo resettleThird;
+
+  private String resettleThirdStatus;
+
+  private String state;
+
+  @Enumerated(EnumType.STRING)
+  private CandidateStatus status;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "survey_type_id")
+  private SurveyType surveyType;
+
+  private String surveyComment;
+
+  private YesNo unhcrConsent;
+
+  private String unhcrNotes;
+
+  @Enumerated(EnumType.STRING)
+  private NotRegisteredStatus unhcrNotRegStatus;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure unhcrRegistered;
+
+  @Enumerated(EnumType.STRING)
+  private UnhcrStatus unhcrStatus;
+
+  private String unrwaNotes;
+
+  @Enumerated(EnumType.STRING)
+  private NotRegisteredStatus unrwaNotRegStatus;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure unrwaRegistered;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure visaIssues;
+
+  private String visaIssuesNotes;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure visaReject;
+
+  private String visaRejectNotes;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo workAbroad;
+
+  private String workAbroadNotes;
+
+  @Enumerated(EnumType.STRING)
+  private WorkPermit workPermit;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure workPermitDesired;
+
+  private String workPermitDesiredNotes;
+
+  private Integer yearOfArrival;
+
+  private Integer yearOfBirth;
+
+}
