@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.common.enums;
+package org.tctalent.anonymization.domain.common;
 
 public enum AvailImmediateReason {
     Family,
