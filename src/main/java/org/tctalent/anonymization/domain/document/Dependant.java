@@ -2,10 +2,10 @@ package org.tctalent.anonymization.domain.document;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.Gender;
-import org.tctalent.anonymization.entity.common.enums.Registration;
-import org.tctalent.anonymization.entity.common.enums.YesNo;
-import org.tctalent.anonymization.entity.common.enums.DependantRelations;
+import org.tctalent.anonymization.domain.common.Gender;
+import org.tctalent.anonymization.domain.common.Registration;
+import org.tctalent.anonymization.domain.common.YesNo;
+import org.tctalent.anonymization.domain.common.DependantRelations;
 
 @Getter
 @Setter

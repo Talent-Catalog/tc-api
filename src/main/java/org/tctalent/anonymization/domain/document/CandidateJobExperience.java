@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.tctalent.anonymization.entity.mongo.CandidateOccupation;
 
 @Getter
 @Setter

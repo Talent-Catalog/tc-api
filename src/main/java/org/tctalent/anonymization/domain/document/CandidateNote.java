@@ -2,7 +2,7 @@ package org.tctalent.anonymization.domain.document;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.NoteType;
+import org.tctalent.anonymization.domain.common.NoteType;
 
 
 // todo - sm - remove all candidate notes - potential data leak

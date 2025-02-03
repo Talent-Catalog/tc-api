@@ -1,15 +1,11 @@
-package org.tctalent.anonymization.entity.mongo;
+package org.tctalent.anonymization.domain.document;
 
-import jakarta.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.tctalent.anonymization.domain.document.Country;
 import org.tctalent.anonymization.domain.common.JobOpportunityStage;
-import org.tctalent.anonymization.domain.document.Employer;
 
 @Getter
 @Setter

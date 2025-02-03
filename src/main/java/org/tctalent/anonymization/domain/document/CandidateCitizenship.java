@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.tctalent.anonymization.entity.common.enums.HasPassport;
+import org.tctalent.anonymization.domain.common.HasPassport;
 
 @Getter
 @Setter

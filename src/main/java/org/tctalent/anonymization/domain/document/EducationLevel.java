@@ -2,8 +2,8 @@ package org.tctalent.anonymization.domain.document;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.common.enums.EducationType;
-import org.tctalent.anonymization.entity.common.enums.Status;
+import org.tctalent.anonymization.domain.common.EducationType;
+import org.tctalent.anonymization.domain.common.Status;
 
 @Getter
 @Setter

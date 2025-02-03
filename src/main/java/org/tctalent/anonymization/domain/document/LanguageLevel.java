@@ -9,5 +9,6 @@ import org.tctalent.anonymization.model.CefrLevels;
 public class LanguageLevel {
   private Integer level;
   private String name;
+  // todo - sm - add status - it's on the entity but check if it's on the API schema
   private CefrLevels cefrLevel;
 }
