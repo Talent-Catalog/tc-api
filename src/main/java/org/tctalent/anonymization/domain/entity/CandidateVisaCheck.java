@@ -36,7 +36,6 @@ import org.tctalent.anonymization.entity.common.enums.RiskLevel;
 import org.tctalent.anonymization.entity.common.enums.YesNo;
 import org.tctalent.anonymization.entity.common.enums.YesNoUnsure;
 import org.tctalent.anonymization.entity.db.Candidate;
-import org.tctalent.anonymization.entity.db.CandidateVisaJobCheck;
 
 @Getter
 @Setter
