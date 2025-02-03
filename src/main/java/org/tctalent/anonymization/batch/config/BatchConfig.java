@@ -10,6 +10,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
+import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -116,7 +117,6 @@ public class BatchConfig {
   @Bean
   @Qualifier("candidateRestToMongoStep")
   public Step candidateRestToMongoStep(JobRepository jobRepository,
-      PlatformTransactionManager transactionManager,
       ItemReader<IdentifiableCandidate> tcItemReader,
       ItemProcessor<IdentifiableCandidate, CandidateDocument> candidateDocumentProcessor,
       ItemWriter<CandidateDocument> mongoItemWriter,
@@ -126,7 +126,7 @@ public class BatchConfig {
       LoggingDocumentWriteListener loggingDocumentWriteListener) {
 
     return new StepBuilder("candidateRestToMongoStep", jobRepository)
-        .<IdentifiableCandidate, CandidateDocument>chunk(batchProperties.getChunkSize(), transactionManager)
+        .<IdentifiableCandidate, CandidateDocument>chunk(batchProperties.getChunkSize(), new ResourcelessTransactionManager())
         .reader(tcItemReader)
         .processor(candidateDocumentProcessor)
         .writer(mongoItemWriter)
