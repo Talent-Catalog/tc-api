@@ -5,7 +5,7 @@ import org.springframework.batch.core.ItemProcessListener;
 import org.springframework.stereotype.Component;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.logging.LogBuilder;
-import org.tctalent.anonymization.model.Candidate;
+import org.tctalent.anonymization.model.IdentifiableCandidate;
 
 /**
  * Listener that implements {@link ItemProcessListener} to provide logging for errors that occur
@@ -15,10 +15,10 @@ import org.tctalent.anonymization.model.Candidate;
  */
 @Slf4j
 @Component
-public class LoggingRestToEntityProcessListener implements ItemProcessListener<Candidate, CandidateEntity> {
+public class LoggingRestToEntityProcessListener implements ItemProcessListener<IdentifiableCandidate, CandidateEntity> {
 
   @Override
-  public void onProcessError(Candidate item, Exception e) {
+  public void onProcessError(IdentifiableCandidate item, Exception e) {
     LogBuilder.builder(log)
         .action("Error processing item")
         .message("Item details:" + item.toString())
