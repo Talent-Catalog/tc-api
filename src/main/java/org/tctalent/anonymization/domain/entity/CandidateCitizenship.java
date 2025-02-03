@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,10 +28,9 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.tctalent.anonymization.entity.common.enums.HasPassport;
-import org.tctalent.anonymization.request.candidate.CandidateIntakeDataUpdate;
+import org.tctalent.anonymization.entity.db.Candidate;
 
 @Getter
 @Setter
@@ -39,7 +38,7 @@ import org.tctalent.anonymization.request.candidate.CandidateIntakeDataUpdate;
 @Table(name = "candidate_citizenship")
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_citizenship_id_seq", allocationSize = 1)
 @NoArgsConstructor
-public class CandidateCitizenship extends AbstractDomainObject<Long> {
+public class CandidateCitizenship extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
@@ -56,21 +55,5 @@ public class CandidateCitizenship extends AbstractDomainObject<Long> {
     private Country nationality;
 
     private String notes;
-
-    public void populateIntakeData(
-            @NonNull Candidate candidate, @NonNull Country nationality,
-            CandidateIntakeDataUpdate data) {
-        setCandidate(candidate);
-        setNationality(nationality);
-        if (data.getCitizenNotes() != null) {
-            setNotes(data.getCitizenNotes());
-        }
-        if (data.getCitizenHasPassport() != null) {
-            setHasPassport(data.getCitizenHasPassport());
-        }
-        if (data.getCitizenPassportExp() != null) {
-            setPassportExp(data.getCitizenPassportExp());
-        }
-    }
 
 }
