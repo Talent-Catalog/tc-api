@@ -14,7 +14,7 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.entity.db;
+package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,6 +27,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.tctalent.anonymization.entity.db.AbstractDomainObject;
+import org.tctalent.anonymization.entity.db.Candidate;
 
 @Getter
 @Setter
@@ -35,7 +37,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_certification_id_seq", allocationSize = 1)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CandidateCertification extends AbstractDomainObject<Long>  {
+public class CandidateCertification extends AbstractDomainObject<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
