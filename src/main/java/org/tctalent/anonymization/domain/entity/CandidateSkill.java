@@ -32,7 +32,7 @@ import org.tctalent.anonymization.entity.db.Candidate;
 @Entity
 @Table(name = "candidate_skill")
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_skill_id_seq", allocationSize = 1)
-public class CandidateSkill extends AbstractDomainObject<Long> {
+public class CandidateSkill extends AbstractDomainEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
