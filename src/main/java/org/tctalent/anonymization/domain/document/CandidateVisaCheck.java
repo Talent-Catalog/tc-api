@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.tctalent.anonymization.entity.mongo.CandidateVisaJobCheck;
 import org.tctalent.anonymization.model.Country;
 import org.tctalent.anonymization.model.DocumentStatus;
 import org.tctalent.anonymization.model.FamilyRelations;

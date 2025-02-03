@@ -1,4 +1,4 @@
-package org.tctalent.anonymization.entity.mongo;
+package org.tctalent.anonymization.domain.document;
 
 import jakarta.validation.Valid;
 import java.util.ArrayList;
