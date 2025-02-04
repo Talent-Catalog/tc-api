@@ -17,11 +17,14 @@ spring:
   application:
     name: tc-anonymization-service
 
+  flyway:
+    enabled: true
+
   jpa:
     show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none # Disable DDL execution
+      ddl-auto: validate # Validate entities match DB but does not modify schema
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect # Set the Hibernate dialect to Postgres
@@ -47,10 +50,9 @@ spring:
       uri: mongodb://tctalent:tctalent@localhost:27017/tctalent?authSource=admin
 
   # Batch
-  # todo sm not for prod as it creates tables on startup - will create via a flyways instead
   batch:
     jdbc:
-      initialize-schema: always # see todo above
+      initialize-schema: never # batch schema are initialised by flyway
     job:
       enabled: true # disables auto-run of jobs
 
