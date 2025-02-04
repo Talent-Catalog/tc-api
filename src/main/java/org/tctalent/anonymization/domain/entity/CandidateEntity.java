@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,22 +65,52 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @JoinColumn(name = "birth_country_id")
   private Country birthCountry;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("dateCompleted DESC")
-  private List<CandidateCertification> candidateCertifications;
+  private List<CandidateCertification> candidateCertifications = new ArrayList<>();
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
-  private List<CandidateCitizenship> candidateCitizenships;
+  public void setCandidateCertifications(List<CandidateCertification> certifications) {
+    this.candidateCertifications.clear();
+    certifications.forEach(certification -> certification.setCandidate(this));
+    this.candidateCertifications.addAll(certifications);
+  }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
-  private List<CandidateDependant> candidateDependants;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateCitizenship> candidateCitizenships = new ArrayList<>();
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
-  private List<CandidateDestination> candidateDestinations;
+  public void setCandidateCitizenships(List<CandidateCitizenship> citizenships) {
+    this.candidateCitizenships.clear();
+    citizenships.forEach(citizenship -> citizenship.setCandidate(this));
+    this.candidateCitizenships.addAll(citizenships);
+  }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateDependant> candidateDependants = new ArrayList<>();
+
+  public void setCandidateDependants(List<CandidateDependant> dependants) {
+    this.candidateDependants.clear();
+    dependants.forEach(dependant -> dependant.setCandidate(this));
+    this.candidateDependants.addAll(dependants);
+  }
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateDestination> candidateDestinations = new ArrayList<>();
+
+  public void setCandidateDestinations(List<CandidateDestination> destinations) {
+    this.candidateDestinations.clear();
+    destinations.forEach(destination -> destination.setCandidate(this));
+    this.candidateDestinations.addAll(destinations);
+  }
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("yearCompleted DESC")
-  private List<CandidateEducation> candidateEducations;
+  private List<CandidateEducation> candidateEducations = new ArrayList<>();
+
+  public void setCandidateEducations(List<CandidateEducation> educations) {
+    this.candidateEducations.clear();
+    educations.forEach(education -> education.setCandidate(this));
+    this.candidateEducations.addAll(educations);
+  }
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
   private List<@Valid CandidateExam> candidateExams;
