@@ -142,7 +142,8 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setLeftHomeNotes("Left home notes");
       candidate.setLeftHomeReasons(List.of(LeftHomeReason.Safety, LeftHomeReason.Job));
       candidate.setMaritalStatus(MaritalStatus.Married);
-//      candidate.setMaxEducationLevel(createEducationLevel(8714L, "0112", "Major 2", Status.active));
+      candidate.setMaxEducationLevel(createEducationLevel());
+      candidate.setMediaWillingness("Media willingness");
 
 
       candidate.setStatus(CandidateStatus.active);
@@ -154,14 +155,14 @@ public class BootstrapCandidate implements CommandLineRunner {
 
     }
 
-//  private EducationLevel createEducationLevel(long l, String number, String s, Status status) {
-//      EducationLevel educationLevel = new EducationLevel();
-//      educationLevel.setId(l);
-//      educationLevel.setEducationType(EducationType.Bachelor);
-//      educationLevel.setLevel(100);
-//      educationLevel.setStatus(status);
-//      return educationLevel;
-//  }
+  private EducationLevel createEducationLevel() {
+      EducationLevel educationLevel = new EducationLevel();
+      educationLevel.setId(8138L);
+      educationLevel.setEducationType(EducationType.Bachelor);
+      educationLevel.setLevel(100);
+      educationLevel.setStatus(Status.active);
+      return educationLevel;
+  }
 
   private Country createCountry(Long id, String name, String isoCode, Status status) {
       Country country = new Country();
