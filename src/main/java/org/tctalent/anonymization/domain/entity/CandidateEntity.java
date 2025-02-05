@@ -142,8 +142,14 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateJobExperiences.addAll(jobExperiences);
   }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
-  private List<CandidateLanguage> candidateLanguages;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateLanguage> candidateLanguages = new ArrayList<>();
+
+  public void setCandidateLanguages(List<CandidateLanguage> languages) {
+    this.candidateLanguages.clear();
+    languages.forEach(language -> language.setCandidate(this));
+    this.candidateLanguages.addAll(languages);
+  }
 
   private String candidateMessage;
 

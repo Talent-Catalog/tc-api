@@ -24,9 +24,12 @@ import org.tctalent.anonymization.domain.entity.CandidateEducation;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.entity.CandidateExam;
 import org.tctalent.anonymization.domain.entity.CandidateJobExperience;
+import org.tctalent.anonymization.domain.entity.CandidateLanguage;
 import org.tctalent.anonymization.domain.entity.CandidateOccupation;
 import org.tctalent.anonymization.domain.entity.Country;
 import org.tctalent.anonymization.domain.entity.EducationMajor;
+import org.tctalent.anonymization.domain.entity.Language;
+import org.tctalent.anonymization.domain.entity.LanguageLevel;
 import org.tctalent.anonymization.domain.entity.Occupation;
 import org.tctalent.anonymization.repository.CandidateAuroraRepository;
 
@@ -65,6 +68,10 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setCandidateEducations(createEducations());
       candidate.setCandidateExams(createExams());
       candidate.setCandidateJobExperiences(createJobExperiences());
+      candidate.setCandidateLanguages(List.of(
+          createCandidateLanguage(342L, "en", "English"),
+          createCandidateLanguage(346L, "es", "Spanish")));
+
 
       candidate.setGender(Gender.male);
       candidate.setStatus(CandidateStatus.active);
@@ -240,5 +247,30 @@ public class BootstrapCandidate implements CommandLineRunner {
       return occupation;
   }
 
+  private CandidateLanguage createCandidateLanguage(long id, String isoCode, String name) {
+      CandidateLanguage candidateLanguage = new CandidateLanguage();
+      candidateLanguage.setLanguage(createLanguage(id, isoCode, name));
+      candidateLanguage.setWrittenLevel(createLanguageLevel());
+      candidateLanguage.setSpokenLevel(createLanguageLevel());
+      return candidateLanguage;
+  }
+
+  private Language createLanguage(long id, String isoCode, String name) {
+      Language language = new Language();
+      language.setId(id);
+      language.setIsoCode(isoCode);
+      language.setName(name);
+      language.setStatus(Status.active);
+      return language;
+  }
+
+  private LanguageLevel createLanguageLevel() {
+      LanguageLevel languageLevel = new LanguageLevel();
+      languageLevel.setId(351L);
+      languageLevel.setLevel(30);
+      languageLevel.setName("Full Professional Proficiency");
+      languageLevel.setStatus(Status.active);
+      return languageLevel;
+  }
 
 }
