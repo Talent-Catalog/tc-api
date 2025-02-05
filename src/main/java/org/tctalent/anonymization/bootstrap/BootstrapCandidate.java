@@ -1,20 +1,29 @@
 package org.tctalent.anonymization.bootstrap;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.tctalent.anonymization.domain.common.AvailImmediateReason;
 import org.tctalent.anonymization.domain.common.CandidateStatus;
 import org.tctalent.anonymization.domain.common.DependantRelations;
+import org.tctalent.anonymization.domain.common.DocumentStatus;
 import org.tctalent.anonymization.domain.common.EducationType;
 import org.tctalent.anonymization.domain.common.Exam;
+import org.tctalent.anonymization.domain.common.FamilyRelations;
 import org.tctalent.anonymization.domain.common.Gender;
 import org.tctalent.anonymization.domain.common.HasPassport;
+import org.tctalent.anonymization.domain.common.JobOpportunityStage;
 import org.tctalent.anonymization.domain.common.NoteType;
+import org.tctalent.anonymization.domain.common.OtherVisas;
 import org.tctalent.anonymization.domain.common.Registration;
+import org.tctalent.anonymization.domain.common.RiskLevel;
 import org.tctalent.anonymization.domain.common.Status;
+import org.tctalent.anonymization.domain.common.TcEligibilityAssessment;
+import org.tctalent.anonymization.domain.common.VisaEligibility;
 import org.tctalent.anonymization.domain.common.YesNo;
 import org.tctalent.anonymization.domain.common.YesNoUnsure;
 import org.tctalent.anonymization.domain.entity.CandidateCertification;
@@ -29,11 +38,15 @@ import org.tctalent.anonymization.domain.entity.CandidateLanguage;
 import org.tctalent.anonymization.domain.entity.CandidateNote;
 import org.tctalent.anonymization.domain.entity.CandidateOccupation;
 import org.tctalent.anonymization.domain.entity.CandidateSkill;
+import org.tctalent.anonymization.domain.entity.CandidateVisaCheck;
+import org.tctalent.anonymization.domain.entity.CandidateVisaJobCheck;
 import org.tctalent.anonymization.domain.entity.Country;
 import org.tctalent.anonymization.domain.entity.EducationMajor;
+import org.tctalent.anonymization.domain.entity.Employer;
 import org.tctalent.anonymization.domain.entity.Language;
 import org.tctalent.anonymization.domain.entity.LanguageLevel;
 import org.tctalent.anonymization.domain.entity.Occupation;
+import org.tctalent.anonymization.domain.entity.SalesforceJobOpp;
 import org.tctalent.anonymization.repository.CandidateAuroraRepository;
 
 @Component
@@ -81,6 +94,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setCandidateSkills(List.of(
           createCandidateSkill("Skill 1", "1 year"),
           createCandidateSkill("Skill 2", "2 years")));
+      candidate.setCandidateVisaChecks(candidateVisaChecks());
 
       candidate.setGender(Gender.male);
       candidate.setStatus(CandidateStatus.active);
@@ -303,4 +317,90 @@ public class BootstrapCandidate implements CommandLineRunner {
     return candidateSkill;
   }
 
+  private List<CandidateVisaCheck> candidateVisaChecks() {
+      CandidateVisaCheck visaCheck1 = new CandidateVisaCheck();
+      visaCheck1.setCountry(createCountry(6180L, "Afghanistan", "AF", Status.active));
+      visaCheck1.setProtection(YesNo.Yes);
+      visaCheck1.setEnglishThreshold(YesNo.Yes);
+      visaCheck1.setHealthAssessment(YesNo.Yes);
+      visaCheck1.setCharacterAssessment(YesNo.Yes);
+      visaCheck1.setSecurityRisk(YesNo.Yes);
+      visaCheck1.setOverallRisk(RiskLevel.High);
+      visaCheck1.setValidTravelDocs(DocumentStatus.Valid);
+      visaCheck1.setPathwayAssessment(YesNoUnsure.Yes);
+      visaCheck1.setDestinationFamily(FamilyRelations.AuntUncle);
+      visaCheck1.setCandidateVisaJobChecks(createCandidateVisaJobChecks());
+
+      CandidateVisaCheck visaCheck2 = new CandidateVisaCheck();
+      visaCheck2.setCountry(createCountry(6178L, "United States", "US", Status.active));
+      visaCheck2.setProtection(YesNo.No);
+      visaCheck2.setEnglishThreshold(YesNo.No);
+      visaCheck2.setHealthAssessment(YesNo.No);
+      visaCheck2.setCharacterAssessment(YesNo.No);
+      visaCheck2.setSecurityRisk(YesNo.No);
+      visaCheck2.setOverallRisk(RiskLevel.Low);
+      visaCheck2.setValidTravelDocs(DocumentStatus.Expired);
+      visaCheck2.setPathwayAssessment(YesNoUnsure.No);
+      visaCheck2.setDestinationFamily(FamilyRelations.Cousin);
+      visaCheck2.setCandidateVisaJobChecks(createCandidateVisaJobChecks());
+
+      return List.of(visaCheck1, visaCheck2);
+  }
+
+  private Set<CandidateVisaJobCheck> createCandidateVisaJobChecks() {
+      CandidateVisaJobCheck visaJobCheck1 = new CandidateVisaJobCheck();
+      visaJobCheck1.setJobOpp(createJobOpp());
+      visaJobCheck1.setInterest(YesNo.Yes);
+      visaJobCheck1.setQualification(YesNo.Yes);
+      visaJobCheck1.setOccupation(createOccupation(8577L, "2411", "Accountant"));
+      visaJobCheck1.setSalaryTsmit(YesNo.Yes);
+      visaJobCheck1.setRegional(YesNo.Yes);
+      visaJobCheck1.setEligible_494(YesNo.Yes);
+      visaJobCheck1.setEligible_186(YesNo.Yes);
+      visaJobCheck1.setEligibleOther(OtherVisas.OtherHum);
+      visaJobCheck1.setPutForward(VisaEligibility.Yes);
+      visaJobCheck1.setTcEligibility(TcEligibilityAssessment.Proceed);
+      visaJobCheck1.setAgeRequirement("18-45");
+      visaJobCheck1.setLanguagesRequired(List.of(342L, 346L));
+      visaJobCheck1.setLanguagesThresholdMet(YesNo.Yes);
+
+      CandidateVisaJobCheck visaJobCheck2 = new CandidateVisaJobCheck();
+      visaJobCheck2.setJobOpp(createJobOpp());
+      visaJobCheck2.setInterest(YesNo.No);
+      visaJobCheck2.setQualification(YesNo.No);
+      visaJobCheck2.setOccupation(createOccupation(8484L, "3343", "Administrative assistant"));
+      visaJobCheck2.setSalaryTsmit(YesNo.No);
+      visaJobCheck2.setRegional(YesNo.No);
+      visaJobCheck2.setEligible_494(YesNo.No);
+      visaJobCheck2.setEligible_186(YesNo.No);
+      visaJobCheck2.setEligibleOther(OtherVisas.OtherHum);
+      visaJobCheck2.setPutForward(VisaEligibility.No);
+      visaJobCheck2.setTcEligibility(TcEligibilityAssessment.Discuss);
+      visaJobCheck2.setAgeRequirement("18-45");
+      visaJobCheck2.setLanguagesRequired(List.of(342L, 346L));
+      visaJobCheck2.setLanguagesThresholdMet(YesNo.No);
+
+      return Set.of(visaJobCheck1, visaJobCheck2);
+  }
+
+  private SalesforceJobOpp createJobOpp() {
+      SalesforceJobOpp jobOpp = new SalesforceJobOpp();
+      jobOpp.setCountry(createCountry(6180L, "Afghanistan", "AF", Status.active));
+      jobOpp.setEmployerEntity(createEmployerEntity());
+      jobOpp.setEvergreen(true);
+      jobOpp.setPublishedDate(OffsetDateTime.now());
+      jobOpp.setStage(JobOpportunityStage.jobOffer);
+      jobOpp.setSubmissionDueDate(LocalDate.of(2025, 1, 1));
+      jobOpp.setHiringCommitment(5L);
+      jobOpp.setEmployerHiredInternationally(true);
+
+      return jobOpp;
+  }
+
+  private Employer createEmployerEntity() {
+      Employer employer = new Employer();
+      employer.setCountry(createCountry(6180L, "Afghanistan", "AF", Status.active));
+      employer.setHasHiredInternationally(true);
+      return employer;
+  }
 }
