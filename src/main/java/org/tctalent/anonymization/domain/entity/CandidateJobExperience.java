@@ -16,6 +16,7 @@
 
 package org.tctalent.anonymization.domain.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -43,7 +44,7 @@ public class CandidateJobExperience extends AbstractDomainEntity<Long> {
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "candidate_occupation_id")
     private CandidateOccupation candidateOccupation; // todo - sm - confirm this field mapping - it's named "occupation" in the API schema
 

@@ -112,12 +112,35 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateEducations.addAll(educations);
   }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
-  private List<@Valid CandidateExam> candidateExams;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<@Valid CandidateExam> candidateExams = new ArrayList<>();
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
+  public void setCandidateExams(List<CandidateExam> exams) {
+    this.candidateExams.clear();
+    exams.forEach(exam -> exam.setCandidate(this));
+    this.candidateExams.addAll(exams);
+  }
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("startDate DESC")
-  private List<CandidateJobExperience> candidateJobExperiences;
+  private List<CandidateJobExperience> candidateJobExperiences = new ArrayList<>();
+
+  public void setCandidateJobExperiences(List<CandidateJobExperience> jobExperiences) {
+    this.candidateJobExperiences.clear();
+    jobExperiences.forEach(jobExperience -> {
+      jobExperience.setCandidate(this);
+
+      CandidateOccupation candidateOccupation = jobExperience.getCandidateOccupation();
+      if (candidateOccupation == null) {
+        log.warn("Candidate job experience {} has no occupation", jobExperience.getId());
+      } else {
+        candidateOccupation.setCandidate(this);
+        candidateOccupation.getCandidateJobExperiences().add(jobExperience);
+      }
+
+    });
+    this.candidateJobExperiences.addAll(jobExperiences);
+  }
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
   private List<CandidateLanguage> candidateLanguages;

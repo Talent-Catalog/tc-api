@@ -24,6 +24,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,8 +48,7 @@ public class CandidateOccupation extends AbstractDomainEntity<Long> {
 
     private Long yearsExperience;
 
-    //todo - sm - add this to the API schema and document definitions?
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidateOccupation", cascade = CascadeType.ALL)
-    private List<CandidateJobExperience> candidateJobExperiences;
+    private List<CandidateJobExperience> candidateJobExperiences = new ArrayList<>();
 
 }
