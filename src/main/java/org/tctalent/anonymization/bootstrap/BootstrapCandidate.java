@@ -23,8 +23,11 @@ import org.tctalent.anonymization.domain.entity.CandidateDestination;
 import org.tctalent.anonymization.domain.entity.CandidateEducation;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.entity.CandidateExam;
+import org.tctalent.anonymization.domain.entity.CandidateJobExperience;
+import org.tctalent.anonymization.domain.entity.CandidateOccupation;
 import org.tctalent.anonymization.domain.entity.Country;
 import org.tctalent.anonymization.domain.entity.EducationMajor;
+import org.tctalent.anonymization.domain.entity.Occupation;
 import org.tctalent.anonymization.repository.CandidateAuroraRepository;
 
 @Component
@@ -61,6 +64,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setCandidateDestinations(createDestinations());
       candidate.setCandidateEducations(createEducations());
       candidate.setCandidateExams(createExams());
+      candidate.setCandidateJobExperiences(createJobExperiences());
 
       candidate.setGender(Gender.male);
       candidate.setStatus(CandidateStatus.active);
@@ -69,6 +73,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       // Save to database
       CandidateEntity savedCandidate = candidateRepository.save(candidate);
       System.out.println("Candidate saved with id: " + savedCandidate.getId());
+
     }
 
     private Country createCountry(Long id, String name, String isoCode, Status status) {
@@ -193,4 +198,47 @@ public class BootstrapCandidate implements CommandLineRunner {
 
       return List.of(exam1, exam2);
     }
+
+    private List<CandidateJobExperience> createJobExperiences() {
+      CandidateJobExperience jobExperience1 = new CandidateJobExperience();
+      jobExperience1.setCountry(createCountry(6180L, "Afghanistan", "AF", Status.active));
+      jobExperience1.setCandidateOccupation(createCandidateOccupation(8577L,"2411", "Accountant", Status.active));
+      jobExperience1.setCompanyName("Company 1");
+      jobExperience1.setRole("Role 1");
+      jobExperience1.setStartDate(LocalDate.of(2010, 1, 1));
+      jobExperience1.setEndDate(LocalDate.of(2014, 1, 1));
+      jobExperience1.setFullTime(true);
+      jobExperience1.setPaid(true);
+      jobExperience1.setDescription("Description 1");
+
+      CandidateJobExperience jobExperience2 = new CandidateJobExperience();
+      jobExperience2.setCountry(createCountry(6178L, "United States", "US", Status.active));
+      jobExperience2.setCandidateOccupation(createCandidateOccupation(8484L, "3343", "Administrative assistant", Status.active));
+      jobExperience2.setCompanyName("Company 2");
+      jobExperience2.setRole("Role 2");
+      jobExperience2.setStartDate(LocalDate.of(2014, 1, 1));
+      jobExperience2.setEndDate(LocalDate.of(2018, 1, 1));
+      jobExperience2.setFullTime(true);
+      jobExperience2.setPaid(true);
+      jobExperience2.setDescription("Description 2");
+
+      return List.of(jobExperience1, jobExperience2);
+    }
+
+  private CandidateOccupation createCandidateOccupation(long id, String number, String s, Status status) {
+      CandidateOccupation candidateOccupation = new CandidateOccupation();
+      candidateOccupation.setOccupation(createOccupation(id, number, s));
+      candidateOccupation.setYearsExperience(5L);
+      return candidateOccupation;
+  }
+
+  private Occupation createOccupation(long id, String isoCode, String name) {
+      Occupation occupation = new Occupation();
+      occupation.setId(id);
+      occupation.setIsco08Code(isoCode);
+      occupation.setName(name);
+      return occupation;
+  }
+
+
 }
