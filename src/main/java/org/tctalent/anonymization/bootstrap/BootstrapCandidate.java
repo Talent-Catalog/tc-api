@@ -1,7 +1,9 @@
 package org.tctalent.anonymization.bootstrap;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +18,17 @@ import org.tctalent.anonymization.domain.common.Exam;
 import org.tctalent.anonymization.domain.common.FamilyRelations;
 import org.tctalent.anonymization.domain.common.Gender;
 import org.tctalent.anonymization.domain.common.HasPassport;
+import org.tctalent.anonymization.domain.common.IntRecruitReason;
 import org.tctalent.anonymization.domain.common.JobOpportunityStage;
+import org.tctalent.anonymization.domain.common.LeftHomeReason;
+import org.tctalent.anonymization.domain.common.MaritalStatus;
 import org.tctalent.anonymization.domain.common.NoteType;
 import org.tctalent.anonymization.domain.common.OtherVisas;
 import org.tctalent.anonymization.domain.common.Registration;
 import org.tctalent.anonymization.domain.common.RiskLevel;
 import org.tctalent.anonymization.domain.common.Status;
 import org.tctalent.anonymization.domain.common.TcEligibilityAssessment;
+import org.tctalent.anonymization.domain.common.VaccinationStatus;
 import org.tctalent.anonymization.domain.common.VisaEligibility;
 import org.tctalent.anonymization.domain.common.YesNo;
 import org.tctalent.anonymization.domain.common.YesNoUnsure;
@@ -41,6 +47,7 @@ import org.tctalent.anonymization.domain.entity.CandidateSkill;
 import org.tctalent.anonymization.domain.entity.CandidateVisaCheck;
 import org.tctalent.anonymization.domain.entity.CandidateVisaJobCheck;
 import org.tctalent.anonymization.domain.entity.Country;
+import org.tctalent.anonymization.domain.entity.EducationLevel;
 import org.tctalent.anonymization.domain.entity.EducationMajor;
 import org.tctalent.anonymization.domain.entity.Employer;
 import org.tctalent.anonymization.domain.entity.Language;
@@ -95,8 +102,49 @@ public class BootstrapCandidate implements CommandLineRunner {
           createCandidateSkill("Skill 1", "1 year"),
           createCandidateSkill("Skill 2", "2 years")));
       candidate.setCandidateVisaChecks(candidateVisaChecks());
-
+      candidate.setCanDrive(YesNo.Yes);
+      candidate.setCity("City 1");
+      candidate.setConflict(YesNo.No);
+      candidate.setConflictNotes("No conflict");
+      candidate.setContactConsentTcPartners(true);
+      candidate.setContactConsentRegistration(true);
+      candidate.setCountry(createCountry(6180L, "Afghanistan", "AF", Status.active));
+      candidate.setCovidVaccinated(YesNo.Yes);
+      candidate.setCovidVaccinatedDate(LocalDate.of(2021, 1, 1));
+      candidate.setCovidVaccineName("Vaccine 1");
+      candidate.setCovidVaccineNotes("Notes 1");
+      candidate.setCovidVaccinatedStatus(VaccinationStatus.Full);
+      candidate.setCrimeConvict(YesNoUnsure.No);
+      candidate.setCrimeConvictNotes("No crime or conviction");
+      candidate.setDestLimit(YesNo.No);
+      candidate.setDestLimitNotes("No destination limit");
+      candidate.setDrivingLicenseCountry(createCountry(6178L, "United States", "US", Status.active));
+      candidate.setDrivingLicenseExp(LocalDate.of(2025, 1, 1));
+      candidate.setEnglishAssessment("English assessment");
+      candidate.setEnglishAssessmentScoreIelts("7.5");
+      candidate.setFamilyMove(YesNo.Yes);
+      candidate.setFamilyMoveNotes("Family move notes");
+      candidate.setFrenchAssessment("French assessment");
+      candidate.setFrenchAssessmentScoreNclc(82L);
+      candidate.setFullIntakeCompletedDate(OffsetDateTime.of(2025, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC));
       candidate.setGender(Gender.male);
+      candidate.setHealthIssues(YesNo.No);
+      candidate.setHealthIssuesNotes("No health issues");
+      candidate.setHomeLocation("Home location");
+      candidate.setHostChallenges("Host challenges");
+      candidate.setHostEntryLegally(YesNo.Yes);
+      candidate.setHostEntryLegallyNotes("Host entry legally notes");
+      candidate.setIeltsScore(new BigDecimal("7.5"));
+      candidate.setIntRecruitReasons(List.of(IntRecruitReason.Experience, IntRecruitReason.Citizenship));
+      candidate.setIntRecruitOther("Other reason");
+      candidate.setIntRecruitRural(YesNoUnsure.Yes);
+      candidate.setIntRecruitRuralNotes("Rural notes");
+      candidate.setLeftHomeNotes("Left home notes");
+      candidate.setLeftHomeReasons(List.of(LeftHomeReason.Safety, LeftHomeReason.Job));
+      candidate.setMaritalStatus(MaritalStatus.Married);
+//      candidate.setMaxEducationLevel(createEducationLevel(8714L, "0112", "Major 2", Status.active));
+
+
       candidate.setStatus(CandidateStatus.active);
       candidate.setYearOfBirth(1990);
 
@@ -105,6 +153,15 @@ public class BootstrapCandidate implements CommandLineRunner {
       System.out.println("Candidate saved with id: " + savedCandidate.getId());
 
     }
+
+//  private EducationLevel createEducationLevel(long l, String number, String s, Status status) {
+//      EducationLevel educationLevel = new EducationLevel();
+//      educationLevel.setId(l);
+//      educationLevel.setEducationType(EducationType.Bachelor);
+//      educationLevel.setLevel(100);
+//      educationLevel.setStatus(status);
+//      return educationLevel;
+//  }
 
   private Country createCountry(Long id, String name, String isoCode, Status status) {
       Country country = new Country();
