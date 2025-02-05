@@ -12,6 +12,7 @@ import org.tctalent.anonymization.domain.common.EducationType;
 import org.tctalent.anonymization.domain.common.Exam;
 import org.tctalent.anonymization.domain.common.Gender;
 import org.tctalent.anonymization.domain.common.HasPassport;
+import org.tctalent.anonymization.domain.common.NoteType;
 import org.tctalent.anonymization.domain.common.Registration;
 import org.tctalent.anonymization.domain.common.Status;
 import org.tctalent.anonymization.domain.common.YesNo;
@@ -25,6 +26,7 @@ import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.entity.CandidateExam;
 import org.tctalent.anonymization.domain.entity.CandidateJobExperience;
 import org.tctalent.anonymization.domain.entity.CandidateLanguage;
+import org.tctalent.anonymization.domain.entity.CandidateNote;
 import org.tctalent.anonymization.domain.entity.CandidateOccupation;
 import org.tctalent.anonymization.domain.entity.Country;
 import org.tctalent.anonymization.domain.entity.EducationMajor;
@@ -71,6 +73,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setCandidateLanguages(List.of(
           createCandidateLanguage(342L, "en", "English"),
           createCandidateLanguage(346L, "es", "Spanish")));
+      candidate.setCandidateNotes(createCandidateNotes());
 
 
       candidate.setGender(Gender.male);
@@ -271,6 +274,20 @@ public class BootstrapCandidate implements CommandLineRunner {
       languageLevel.setName("Full Professional Proficiency");
       languageLevel.setStatus(Status.active);
       return languageLevel;
+  }
+
+  private List<CandidateNote> createCandidateNotes() {
+      CandidateNote note1 = new CandidateNote();
+      note1.setTitle("Note 1");
+      note1.setComment("Comment 1");
+      note1.setNoteType(NoteType.candidate);
+
+      CandidateNote note2 = new CandidateNote();
+      note2.setTitle("Note 2");
+      note2.setComment("Comment 2");
+      note2.setNoteType(NoteType.system);
+
+      return List.of(note1, note2);
   }
 
 }
