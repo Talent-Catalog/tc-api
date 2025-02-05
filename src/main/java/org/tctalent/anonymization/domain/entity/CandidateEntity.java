@@ -162,8 +162,14 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateNotes.addAll(notes);
   }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
-  private List<CandidateOccupation> candidateOccupations;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateOccupation> candidateOccupations = new ArrayList<>();
+
+  public void setCandidateOccupations(List<CandidateOccupation> occupations) {
+    this.candidateOccupations.clear();
+    occupations.forEach(occupation -> occupation.setCandidate(this));
+    this.candidateOccupations.addAll(occupations);
+  }
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
   private List<CandidateSkill> candidateSkills;

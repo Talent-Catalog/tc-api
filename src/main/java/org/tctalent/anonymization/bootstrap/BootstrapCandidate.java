@@ -74,6 +74,9 @@ public class BootstrapCandidate implements CommandLineRunner {
           createCandidateLanguage(342L, "en", "English"),
           createCandidateLanguage(346L, "es", "Spanish")));
       candidate.setCandidateNotes(createCandidateNotes());
+      candidate.setCandidateOccupations(List.of(
+          createCandidateOccupation(8577L, "2411", "Accountant", Status.active),
+          createCandidateOccupation(8484L, "3343", "Administrative assistant", Status.active)));
 
 
       candidate.setGender(Gender.male);
