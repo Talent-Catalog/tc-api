@@ -9,6 +9,7 @@ import org.tctalent.anonymization.domain.common.AvailImmediateReason;
 import org.tctalent.anonymization.domain.common.CandidateStatus;
 import org.tctalent.anonymization.domain.common.DependantRelations;
 import org.tctalent.anonymization.domain.common.EducationType;
+import org.tctalent.anonymization.domain.common.Exam;
 import org.tctalent.anonymization.domain.common.Gender;
 import org.tctalent.anonymization.domain.common.HasPassport;
 import org.tctalent.anonymization.domain.common.Registration;
@@ -21,6 +22,7 @@ import org.tctalent.anonymization.domain.entity.CandidateDependant;
 import org.tctalent.anonymization.domain.entity.CandidateDestination;
 import org.tctalent.anonymization.domain.entity.CandidateEducation;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
+import org.tctalent.anonymization.domain.entity.CandidateExam;
 import org.tctalent.anonymization.domain.entity.Country;
 import org.tctalent.anonymization.domain.entity.EducationMajor;
 import org.tctalent.anonymization.repository.CandidateAuroraRepository;
@@ -58,6 +60,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setCandidateDependants(createDependants());
       candidate.setCandidateDestinations(createDestinations());
       candidate.setCandidateEducations(createEducations());
+      candidate.setCandidateExams(createExams());
 
       candidate.setGender(Gender.male);
       candidate.setStatus(CandidateStatus.active);
@@ -144,7 +147,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       CandidateEducation education1 = new CandidateEducation();
       education1.setEducationType(EducationType.Associate);
       education1.setCountry(createCountry(6180L, "Afghanistan", "AF", Status.active));
-      education1.setEducationMajor(createEducationMajor(1L, "0111", "Major 1", Status.active));
+      education1.setEducationMajor(createEducationMajor(8713L, "0111", "Major 1", Status.active));
       education1.setLengthOfCourseYears(2);
       education1.setInstitution("Institution 1");
       education1.setCourseName("Course 1");
@@ -154,7 +157,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       CandidateEducation education2 = new CandidateEducation();
       education2.setEducationType(EducationType.Bachelor);
       education2.setCountry(createCountry(6178L, "United States", "US", Status.active));
-      education2.setEducationMajor(createEducationMajor(2L, "0112", "Major 2", Status.active));
+      education2.setEducationMajor(createEducationMajor(8714L, "0112", "Major 2", Status.active));
       education2.setLengthOfCourseYears(4);
       education2.setInstitution("Institution 2");
       education2.setCourseName("Course 2");
@@ -171,5 +174,23 @@ public class BootstrapCandidate implements CommandLineRunner {
       major.setName(name);
       major.setStatus(status);
       return major;
+    }
+
+    private List<CandidateExam> createExams() {
+      CandidateExam exam1 = new CandidateExam();
+      exam1.setExam(Exam.IELTSGen);
+      exam1.setOtherExam("Other exam 1");
+      exam1.setScore("7.5");
+      exam1.setYear(2010L);
+      exam1.setNotes("Notes 1");
+
+      CandidateExam exam2 = new CandidateExam();
+      exam2.setExam(Exam.TOEFL);
+      exam2.setOtherExam("Other exam 2");
+      exam2.setScore("100");
+      exam2.setYear(2014L);
+      exam2.setNotes("Notes 2");
+
+      return List.of(exam1, exam2);
     }
 }
