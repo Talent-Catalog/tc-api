@@ -28,6 +28,7 @@ import org.tctalent.anonymization.domain.entity.CandidateJobExperience;
 import org.tctalent.anonymization.domain.entity.CandidateLanguage;
 import org.tctalent.anonymization.domain.entity.CandidateNote;
 import org.tctalent.anonymization.domain.entity.CandidateOccupation;
+import org.tctalent.anonymization.domain.entity.CandidateSkill;
 import org.tctalent.anonymization.domain.entity.Country;
 import org.tctalent.anonymization.domain.entity.EducationMajor;
 import org.tctalent.anonymization.domain.entity.Language;
@@ -77,7 +78,9 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setCandidateOccupations(List.of(
           createCandidateOccupation(8577L, "2411", "Accountant", Status.active),
           createCandidateOccupation(8484L, "3343", "Administrative assistant", Status.active)));
-
+      candidate.setCandidateSkills(List.of(
+          createCandidateSkill("Skill 1", "1 year"),
+          createCandidateSkill("Skill 2", "2 years")));
 
       candidate.setGender(Gender.male);
       candidate.setStatus(CandidateStatus.active);
@@ -89,7 +92,7 @@ public class BootstrapCandidate implements CommandLineRunner {
 
     }
 
-    private Country createCountry(Long id, String name, String isoCode, Status status) {
+  private Country createCountry(Long id, String name, String isoCode, Status status) {
       Country country = new Country();
       country.setId(id);
       country.setName(name);
@@ -291,6 +294,13 @@ public class BootstrapCandidate implements CommandLineRunner {
       note2.setNoteType(NoteType.system);
 
       return List.of(note1, note2);
+  }
+
+  private CandidateSkill createCandidateSkill(String skill, String timePeriod) {
+    CandidateSkill candidateSkill = new CandidateSkill();
+    candidateSkill.setSkill(skill);
+    candidateSkill.setTimePeriod(timePeriod);
+    return candidateSkill;
   }
 
 }
