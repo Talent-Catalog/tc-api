@@ -16,6 +16,7 @@
 
 package org.tctalent.anonymization.domain.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -48,7 +49,7 @@ public class CandidateVisaJobCheck extends AbstractDomainEntity<Long> {
     /**
      * Associated job opportunity
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // todo - sm - see comment on SfJobOpp.employerEntity - in a similar fashion - use publicIds for job opps as well
     @JoinColumn(name = "job_opp_id")
     SalesforceJobOpp jobOpp;
 

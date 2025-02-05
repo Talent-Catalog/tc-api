@@ -78,7 +78,7 @@ public class CandidateVisaCheck extends AbstractDomainEntity<Long> {
     @Enumerated(EnumType.STRING)
     private FamilyRelations destinationFamily;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidateVisaCheck", cascade = CascadeType.MERGE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidateVisaCheck", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CandidateVisaJobCheck> candidateVisaJobChecks = new HashSet<>();
 
 }

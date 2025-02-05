@@ -16,6 +16,7 @@
 
 package org.tctalent.anonymization.domain.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -43,7 +44,7 @@ public class SalesforceJobOpp extends AbstractDomainEntity<Long> {
     @JoinColumn(name = "country_object_id")
     private Country country;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // todo - sm - cascade all to get things working, but I don't think we should do this for employer entities - instead give each employer a public_id and join on public_id key
     @JoinColumn(name = "employer_id")
     private Employer employerEntity;
 

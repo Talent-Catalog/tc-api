@@ -180,8 +180,19 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateSkills.addAll(skills);
   }
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.MERGE)
-  private List<CandidateVisaCheck> candidateVisaChecks;
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateVisaCheck> candidateVisaChecks = new ArrayList<>();
+
+  public void setCandidateVisaChecks(List<CandidateVisaCheck> visaChecks) {
+    this.candidateVisaChecks.clear();
+    visaChecks.forEach(visaCheck -> {
+      visaCheck.setCandidate(this);
+      visaCheck.getCandidateVisaJobChecks().forEach(jobCheck -> {
+        jobCheck.setCandidateVisaCheck(visaCheck);
+      });
+    });
+    this.candidateVisaChecks.addAll(visaChecks);
+  }
 
   @Enumerated(EnumType.STRING)
   private YesNo canDrive;
