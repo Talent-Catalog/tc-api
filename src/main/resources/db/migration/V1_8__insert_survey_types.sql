@@ -1,0 +1,13 @@
+INSERT INTO public.survey_type (id, name, status) VALUES (1, 'Information Session', 'active');
+INSERT INTO public.survey_type (id, name, status) VALUES (2, 'Community centre posting - flyers', 'active');
+INSERT INTO public.survey_type (id, name, status) VALUES (3, 'From a friend', 'active');
+INSERT INTO public.survey_type (id, name, status) VALUES (4, 'Facebook', 'active');
+INSERT INTO public.survey_type (id, name, status) VALUES (5, 'Facebook - through an organisation', 'active');
+INSERT INTO public.survey_type (id, name, status) VALUES (6, 'Outreach worker', 'active');
+INSERT INTO public.survey_type (id, name, status) VALUES (7, 'NGO', 'active');
+INSERT INTO public.survey_type (id, name, status) VALUES (8, 'Other', 'active');
+INSERT INTO public.survey_type (id, name, status) VALUES (9, 'UNHCR', 'active');
+INSERT INTO public.survey_type (id, name, status) VALUES (10, 'US-Afghan', 'inactive');
+INSERT INTO public.survey_type (id, name, status) VALUES (12, 'ULYP', 'inactive');
+INSERT INTO public.survey_type (id, name, status) VALUES (13, 'Techfugees', 'inactive');
+INSERT INTO public.survey_type (id, name, status) VALUES (11, 'Al Ghurair Foundation', 'inactive');
