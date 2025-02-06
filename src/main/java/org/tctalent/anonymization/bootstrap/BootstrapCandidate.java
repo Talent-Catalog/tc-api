@@ -23,6 +23,7 @@ import org.tctalent.anonymization.domain.common.IntRecruitReason;
 import org.tctalent.anonymization.domain.common.JobOpportunityStage;
 import org.tctalent.anonymization.domain.common.LeftHomeReason;
 import org.tctalent.anonymization.domain.common.MaritalStatus;
+import org.tctalent.anonymization.domain.common.NotRegisteredStatus;
 import org.tctalent.anonymization.domain.common.NoteType;
 import org.tctalent.anonymization.domain.common.OtherVisas;
 import org.tctalent.anonymization.domain.common.Registration;
@@ -30,8 +31,10 @@ import org.tctalent.anonymization.domain.common.ResidenceStatus;
 import org.tctalent.anonymization.domain.common.RiskLevel;
 import org.tctalent.anonymization.domain.common.Status;
 import org.tctalent.anonymization.domain.common.TcEligibilityAssessment;
+import org.tctalent.anonymization.domain.common.UnhcrStatus;
 import org.tctalent.anonymization.domain.common.VaccinationStatus;
 import org.tctalent.anonymization.domain.common.VisaEligibility;
+import org.tctalent.anonymization.domain.common.WorkPermit;
 import org.tctalent.anonymization.domain.common.YesNo;
 import org.tctalent.anonymization.domain.common.YesNoUnsure;
 import org.tctalent.anonymization.domain.entity.CandidateCertification;
@@ -56,6 +59,7 @@ import org.tctalent.anonymization.domain.entity.Language;
 import org.tctalent.anonymization.domain.entity.LanguageLevel;
 import org.tctalent.anonymization.domain.entity.Occupation;
 import org.tctalent.anonymization.domain.entity.SalesforceJobOpp;
+import org.tctalent.anonymization.domain.entity.SurveyType;
 import org.tctalent.anonymization.repository.CandidateAuroraRepository;
 
 @Component
@@ -177,10 +181,25 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setResettleThirdStatus("Residence status");
       candidate.setState("State 1");
       candidate.setStatus(CandidateStatus.active);
-
-
-
-      candidate.setStatus(CandidateStatus.active);
+      candidate.setSurveyType(createSurveyType());
+      candidate.setSurveyComment("Survey comment");
+      candidate.setUnhcrConsent(YesNo.Yes);
+      candidate.setUnhcrNotes("UNHCR notes");
+      candidate.setUnhcrNotRegStatus(NotRegisteredStatus.NA);
+      candidate.setUnhcrRegistered(YesNoUnsure.Unsure);
+      candidate.setUnhcrStatus(UnhcrStatus.NoResponse);
+      candidate.setUnrwaNotes("UNRWA notes");
+      candidate.setUnrwaRegistered(YesNoUnsure.Yes);
+      candidate.setVisaIssues(YesNoUnsure.No);
+      candidate.setVisaIssuesNotes("No visa issues");
+      candidate.setVisaReject(YesNoUnsure.No);
+      candidate.setVisaRejectNotes("No visa rejection");
+      candidate.setWorkAbroad(YesNo.Yes);
+      candidate.setWorkAbroadNotes("Work abroad notes");
+      candidate.setWorkPermit(WorkPermit.No);
+      candidate.setWorkPermitDesired(YesNoUnsure.Yes);
+      candidate.setWorkPermitDesiredNotes("Work permit notes");
+      candidate.setYearOfArrival(2010);
       candidate.setYearOfBirth(1990);
 
       // Save to database
@@ -189,16 +208,7 @@ public class BootstrapCandidate implements CommandLineRunner {
 
     }
 
-  private EducationLevel createEducationLevel() {
-      EducationLevel educationLevel = new EducationLevel();
-      educationLevel.setId(8138L);
-      educationLevel.setEducationType(EducationType.Bachelor);
-      educationLevel.setLevel(100);
-      educationLevel.setStatus(Status.active);
-      return educationLevel;
-  }
-
-  private Country createCountry(Long id, String name, String isoCode, Status status) {
+    private Country createCountry(Long id, String name, String isoCode, Status status) {
       Country country = new Country();
       country.setId(id);
       country.setName(name);
@@ -496,6 +506,15 @@ public class BootstrapCandidate implements CommandLineRunner {
       return employer;
   }
 
+  private EducationLevel createEducationLevel() {
+    EducationLevel educationLevel = new EducationLevel();
+    educationLevel.setId(8138L);
+    educationLevel.setEducationType(EducationType.Bachelor);
+    educationLevel.setLevel(100);
+    educationLevel.setStatus(Status.active);
+    return educationLevel;
+  }
+
   private EducationMajor createEducationMajor() {
       EducationMajor major = new EducationMajor();
       major.setId(8713L);
@@ -504,4 +523,13 @@ public class BootstrapCandidate implements CommandLineRunner {
       major.setStatus(Status.active);
       return major;
   }
+
+  private SurveyType createSurveyType() {
+      SurveyType surveyType = new SurveyType();
+      surveyType.setId(1L); // todo - sm - as with other ids - this (or a public id) should be sent on the rest dtp to setup the anon db relationship correctly
+      surveyType.setName("Information Session");
+      surveyType.setStatus(Status.active);
+      return surveyType;
+  }
+
 }
