@@ -19,12 +19,8 @@ package org.tctalent.anonymization.domain.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,15 +46,15 @@ public class Country extends AbstractDomainEntity<Long> implements Comparable<Co
 
     @Override
     public int compareTo(Country other) {
-        if (this.name == null) {
-            return other.getName() == null ? 0 : -1;
+        if (this.isoCode == null) {
+            return other.getIsoCode() == null ? 0 : -1;
         }
 
-        if (other.getName() == null) {
+        if (other.getIsoCode() == null) {
             return 1;
         }
 
-        return this.name.compareTo(other.getName());
+        return this.isoCode.compareTo(other.getIsoCode());
     }
 
     @Override
