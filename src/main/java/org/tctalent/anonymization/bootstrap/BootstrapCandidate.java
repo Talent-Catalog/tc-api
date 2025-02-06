@@ -18,6 +18,7 @@ import org.tctalent.anonymization.domain.common.Exam;
 import org.tctalent.anonymization.domain.common.FamilyRelations;
 import org.tctalent.anonymization.domain.common.Gender;
 import org.tctalent.anonymization.domain.common.HasPassport;
+import org.tctalent.anonymization.domain.common.IeltsStatus;
 import org.tctalent.anonymization.domain.common.IntRecruitReason;
 import org.tctalent.anonymization.domain.common.JobOpportunityStage;
 import org.tctalent.anonymization.domain.common.LeftHomeReason;
@@ -25,6 +26,7 @@ import org.tctalent.anonymization.domain.common.MaritalStatus;
 import org.tctalent.anonymization.domain.common.NoteType;
 import org.tctalent.anonymization.domain.common.OtherVisas;
 import org.tctalent.anonymization.domain.common.Registration;
+import org.tctalent.anonymization.domain.common.ResidenceStatus;
 import org.tctalent.anonymization.domain.common.RiskLevel;
 import org.tctalent.anonymization.domain.common.Status;
 import org.tctalent.anonymization.domain.common.TcEligibilityAssessment;
@@ -144,6 +146,38 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setMaritalStatus(MaritalStatus.Married);
       candidate.setMaxEducationLevel(createEducationLevel());
       candidate.setMediaWillingness("Media willingness");
+      candidate.setMigrationEducationMajor(createEducationMajor());
+      candidate.setMilitaryService(YesNo.Yes);
+      candidate.setMilitaryWanted(YesNoUnsure.Yes);
+      candidate.setMilitaryStart(LocalDate.of(2005, 1, 1));
+      candidate.setMilitaryEnd(LocalDate.of(2010, 1, 1));
+      candidate.setMilitaryNotes("Military notes");
+      candidate.setMiniIntakeCompletedDate(OffsetDateTime.of(2025, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC));
+      candidate.setMonitoringEvaluationConsent(YesNo.Yes);
+      candidate.setNationality(createCountry(6178L, "United States", "US", Status.active));
+      candidate.setNumberDependants(2L);
+      candidate.setPartnerRegistered(YesNoUnsure.Yes);
+      candidate.setPartnerPublicId("partner-public-id-123");
+      candidate.setPartnerEduLevel(createEducationLevel());
+      candidate.setPartnerEnglish(YesNo.Yes);
+      candidate.setPartnerEnglishLevel(createLanguageLevel());
+      candidate.setPartnerIelts(IeltsStatus.YesAcademic);
+      candidate.setPartnerIeltsScore("7.5");
+      candidate.setPartnerIeltsYr(2010L);
+      candidate.setPartnerOccupation(createOccupation(8577L, "2411", "Accountant"));
+      candidate.setResidenceStatus(ResidenceStatus.LegalRes);
+      candidate.setResidenceStatusNotes("Legal residence status notes");
+      candidate.setReturnedHome(YesNoUnsure.Yes);
+      candidate.setReturnedHomeReason("Returned home reason");
+      candidate.setReturnedHomeReasonNo("Returned home reason no");
+      candidate.setReturnHomeSafe(YesNoUnsure.NoResponse);
+      candidate.setReturnHomeFuture(YesNoUnsure.NoResponse);
+      candidate.setReturnHomeWhen(LocalDate.of(2025, 1, 1));
+      candidate.setResettleThird(YesNo.NoResponse);
+      candidate.setResettleThirdStatus("Residence status");
+      candidate.setState("State 1");
+      candidate.setStatus(CandidateStatus.active);
+
 
 
       candidate.setStatus(CandidateStatus.active);
@@ -460,5 +494,14 @@ public class BootstrapCandidate implements CommandLineRunner {
       employer.setCountry(createCountry(6180L, "Afghanistan", "AF", Status.active));
       employer.setHasHiredInternationally(true);
       return employer;
+  }
+
+  private EducationMajor createEducationMajor() {
+      EducationMajor major = new EducationMajor();
+      major.setId(8713L);
+      major.setIscedCode(null); // todo - sm - key by isced_code instead of id
+      major.setName("Accounting");
+      major.setStatus(Status.active);
+      return major;
   }
 }
