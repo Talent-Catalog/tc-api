@@ -17,7 +17,6 @@ import org.tctalent.anonymization.model.CandidateEducation;
 import org.tctalent.anonymization.model.CandidateExam;
 import org.tctalent.anonymization.model.CandidateJobExperience;
 import org.tctalent.anonymization.model.CandidateLanguage;
-import org.tctalent.anonymization.model.CandidateNote;
 import org.tctalent.anonymization.model.CandidateOccupation;
 import org.tctalent.anonymization.model.CandidateSkill;
 import org.tctalent.anonymization.model.CandidateStatus;
@@ -89,9 +88,6 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
   private List<@Valid CandidateLanguage> candidateLanguages = new ArrayList<>();
 
   private String candidateMessage;
-
-  @Valid
-  private List<@Valid CandidateNote> candidateNotes = new ArrayList<>();
 
   @Valid
   private List<@Valid CandidateOccupation> candidateOccupations = new ArrayList<>();
