@@ -16,6 +16,7 @@
 
 package org.tctalent.anonymization.domain.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -49,9 +50,9 @@ public class CandidateCitizenship extends AbstractDomainEntity<Long> {
     @Nullable
     private LocalDate passportExp;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nationality_id")
-    private Country nationality;
+    // Store the isoCode directly instead of a foreign key reference
+    @Column(name = "nationality_iso_code", nullable = false)
+    private String nationalityIsoCode;
 
     private String notes;
 

@@ -65,26 +65,25 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Column(name = "birth_country_iso_code", nullable = true)
   private String birthCountryIsoCode;
 
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OrderBy("dateCompleted DESC")
+  private List<CandidateCertification> candidateCertifications = new ArrayList<>();
 
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
-//  @OrderBy("dateCompleted DESC")
-//  private List<CandidateCertification> candidateCertifications = new ArrayList<>();
-//
-//  public void setCandidateCertifications(List<CandidateCertification> certifications) {
-//    this.candidateCertifications.clear();
-//    certifications.forEach(certification -> certification.setCandidate(this));
-//    this.candidateCertifications.addAll(certifications);
-//  }
-//
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
-//  private List<CandidateCitizenship> candidateCitizenships = new ArrayList<>();
-//
-//  public void setCandidateCitizenships(List<CandidateCitizenship> citizenships) {
-//    this.candidateCitizenships.clear();
-//    citizenships.forEach(citizenship -> citizenship.setCandidate(this));
-//    this.candidateCitizenships.addAll(citizenships);
-//  }
-//
+  public void setCandidateCertifications(List<CandidateCertification> certifications) {
+    this.candidateCertifications.clear();
+    certifications.forEach(certification -> certification.setCandidate(this));
+    this.candidateCertifications.addAll(certifications);
+  }
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateCitizenship> candidateCitizenships = new ArrayList<>();
+
+  public void setCandidateCitizenships(List<CandidateCitizenship> citizenships) {
+    this.candidateCitizenships.clear();
+    citizenships.forEach(citizenship -> citizenship.setCandidate(this));
+    this.candidateCitizenships.addAll(citizenships);
+  }
+
 //  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
 //  private List<CandidateDependant> candidateDependants = new ArrayList<>();
 //
