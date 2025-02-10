@@ -7,6 +7,7 @@ import org.mapstruct.Named;
 import org.tctalent.anonymization.domain.entity.CandidateCitizenship;
 import org.tctalent.anonymization.domain.entity.CandidateDependant;
 import org.tctalent.anonymization.domain.entity.CandidateDestination;
+import org.tctalent.anonymization.domain.entity.CandidateEducation;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.model.Country;
 import org.tctalent.anonymization.model.Destination;
@@ -31,6 +32,10 @@ public interface EntityMapper {
 
   @Mapping(source = "dob", target = "yearOfBirth", qualifiedByName = "extractYearFromLocalDate")
   CandidateDependant mapDependant(IdentifiableDependant dependant);
+
+  @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
+  CandidateEducation mapEducation(
+      org.tctalent.anonymization.model.CandidateEducation education);
 
   @Named("mapCountryToIsoCode")
   default String mapCountryToIsoCode(Country country) {

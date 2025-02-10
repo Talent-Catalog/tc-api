@@ -102,16 +102,16 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateDestinations.addAll(destinations);
   }
 
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
-//  @OrderBy("yearCompleted DESC")
-//  private List<CandidateEducation> candidateEducations = new ArrayList<>();
-//
-//  public void setCandidateEducations(List<CandidateEducation> educations) {
-//    this.candidateEducations.clear();
-//    educations.forEach(education -> education.setCandidate(this));
-//    this.candidateEducations.addAll(educations);
-//  }
-//
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OrderBy("yearCompleted DESC")
+  private List<CandidateEducation> candidateEducations = new ArrayList<>();
+
+  public void setCandidateEducations(List<CandidateEducation> educations) {
+    this.candidateEducations.clear();
+    educations.forEach(education -> education.setCandidate(this));
+    this.candidateEducations.addAll(educations);
+  }
+
 //  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
 //  private List<@Valid CandidateExam> candidateExams = new ArrayList<>();
 //
