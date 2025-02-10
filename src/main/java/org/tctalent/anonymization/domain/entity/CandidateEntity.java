@@ -84,15 +84,15 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateCitizenships.addAll(citizenships);
   }
 
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
-//  private List<CandidateDependant> candidateDependants = new ArrayList<>();
-//
-//  public void setCandidateDependants(List<CandidateDependant> dependants) {
-//    this.candidateDependants.clear();
-//    dependants.forEach(dependant -> dependant.setCandidate(this));
-//    this.candidateDependants.addAll(dependants);
-//  }
-//
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateDependant> candidateDependants = new ArrayList<>();
+
+  public void setCandidateDependants(List<CandidateDependant> dependants) {
+    this.candidateDependants.clear();
+    dependants.forEach(dependant -> dependant.setCandidate(this));
+    this.candidateDependants.addAll(dependants);
+  }
+
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CandidateDestination> candidateDestinations = new ArrayList<>();
 
