@@ -16,6 +16,7 @@
 
 package org.tctalent.anonymization.domain.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -43,9 +44,9 @@ public class CandidateDestination extends AbstractDomainEntity<Long>
     @JoinColumn(name = "candidate_id")
     private CandidateEntity candidate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
-    private Country country;
+    // Store the isoCode directly instead of a foreign key reference
+    @Column(name = "country_iso_code", nullable = false)
+    private String countryIsoCode;
 
     @Enumerated(EnumType.STRING)
     private YesNoUnsure interest;
@@ -54,9 +55,9 @@ public class CandidateDestination extends AbstractDomainEntity<Long>
 
     @Override
     public int compareTo(CandidateDestination o) {
-        if (country == null) {
-            return o.country == null ? 0 : -1;
+        if (countryIsoCode == null) {
+            return o.countryIsoCode == null ? 0 : -1;
         }
-        return country.compareTo(o.country);
+        return countryIsoCode.compareTo(o.countryIsoCode);
     }
 }

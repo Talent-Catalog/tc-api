@@ -3,8 +3,10 @@ package org.tctalent.anonymization.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.tctalent.anonymization.domain.entity.CandidateDestination;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.model.Country;
+import org.tctalent.anonymization.model.Destination;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 
 @Mapper(uses = {})
@@ -15,6 +17,9 @@ public interface EntityMapper {
   @Mapping(target = "nationalityIsoCode", source = "nationality", qualifiedByName = "mapCountryToIsoCode")
   @Mapping(target = "drivingLicenseCountryIsoCode", source = "drivingLicenseCountry", qualifiedByName = "mapCountryToIsoCode")
   CandidateEntity anonymize(IdentifiableCandidate candidate);
+
+  @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
+  CandidateDestination mapDestination(Destination destinations);
 
   @Named("mapCountryToIsoCode")
   default String mapCountryToIsoCode(Country country) {

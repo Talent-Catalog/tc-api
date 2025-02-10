@@ -94,15 +94,15 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 //    this.candidateDependants.addAll(dependants);
 //  }
 //
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
-//  private List<CandidateDestination> candidateDestinations = new ArrayList<>();
-//
-//  public void setCandidateDestinations(List<CandidateDestination> destinations) {
-//    this.candidateDestinations.clear();
-//    destinations.forEach(destination -> destination.setCandidate(this));
-//    this.candidateDestinations.addAll(destinations);
-//  }
-//
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateDestination> candidateDestinations = new ArrayList<>();
+
+  public void setCandidateDestinations(List<CandidateDestination> destinations) {
+    this.candidateDestinations.clear();
+    destinations.forEach(destination -> destination.setCandidate(this));
+    this.candidateDestinations.addAll(destinations);
+  }
+
 //  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
 //  @OrderBy("yearCompleted DESC")
 //  private List<CandidateEducation> candidateEducations = new ArrayList<>();
@@ -214,28 +214,28 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Column(name = "country_iso_code", nullable = false)
   private String countryIsoCode;
 
-//  @Enumerated(EnumType.STRING)
-//  private YesNo covidVaccinated;
-//
-//  private LocalDate covidVaccinatedDate;
-//
-//  private String covidVaccineName;
-//
-//  private String covidVaccineNotes;
-//
-//  @Enumerated(EnumType.STRING)
-//  private VaccinationStatus covidVaccinatedStatus;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure crimeConvict;
-//
-//  private String crimeConvictNotes;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNo destLimit;
-//
-//  private String destLimitNotes;
-//
+  @Enumerated(EnumType.STRING)
+  private YesNo covidVaccinated;
+
+  private LocalDate covidVaccinatedDate;
+
+  private String covidVaccineName;
+
+  private String covidVaccineNotes;
+
+  @Enumerated(EnumType.STRING)
+  private VaccinationStatus covidVaccinatedStatus;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure crimeConvict;
+
+  private String crimeConvictNotes;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo destLimit;
+
+  private String destLimitNotes;
+
 //  @Enumerated(EnumType.STRING)
 //  private DocumentStatus drivingLicense;
 //
