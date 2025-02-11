@@ -16,6 +16,7 @@
 
 package org.tctalent.anonymization.domain.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -38,17 +39,17 @@ public class CandidateLanguage  extends AbstractDomainEntity<Long> {
     @JoinColumn(name = "candidate_id")
     private CandidateEntity candidate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_id")
-    private Language language;
+    // Store the language name directly instead of a foreign key reference
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "written_level_id")
-    private LanguageLevel writtenLevel;
+    // Store the written_level directly instead of a foreign key reference
+    @Column(name = "written_level", nullable = true)
+    private String writtenLevelName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "spoken_level_id")
-    private LanguageLevel spokenLevel;
+    // Store the spoken_level directly instead of a foreign key reference
+    @Column(name = "spoken_level", nullable = true)
+    private String spokenLevelName;
 
     private String migrationLanguage;
 

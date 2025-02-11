@@ -10,11 +10,14 @@ import org.tctalent.anonymization.domain.entity.CandidateDestination;
 import org.tctalent.anonymization.domain.entity.CandidateEducation;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.entity.CandidateJobExperience;
+import org.tctalent.anonymization.domain.entity.CandidateLanguage;
 import org.tctalent.anonymization.domain.entity.CandidateOccupation;
 import org.tctalent.anonymization.model.Country;
 import org.tctalent.anonymization.model.Destination;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.model.IdentifiableDependant;
+import org.tctalent.anonymization.model.Language;
+import org.tctalent.anonymization.model.LanguageLevel;
 import org.tctalent.anonymization.model.Occupation;
 
 @Mapper(uses = {})
@@ -49,6 +52,12 @@ public interface EntityMapper {
   CandidateOccupation mapOccupation(
       org.tctalent.anonymization.model.CandidateOccupation occupation);
 
+  @Mapping(target = "name", source = "language", qualifiedByName = "mapLanguageToName")
+  @Mapping(target = "writtenLevelName", source = "writtenLevel", qualifiedByName = "mapLanguageLevelToName")
+  @Mapping(target = "spokenLevelName", source = "spokenLevel", qualifiedByName = "mapLanguageLevelToName")
+  CandidateLanguage mapLanguage(
+      org.tctalent.anonymization.model.CandidateLanguage language);
+
   @Named("mapCountryToIsoCode")
   default String mapCountryToIsoCode(Country country) {
     return (country != null) ? country.getIsoCode() : null;
@@ -67,6 +76,16 @@ public interface EntityMapper {
   @Named("mapOccupationToName")
   default String mapOccupationToName(Occupation occupation) {
     return (occupation != null) ? occupation.getName() : null;
+  }
+
+  @Named("mapLanguageToName")
+  default String mapLanguageToName(Language language) {
+    return (language != null) ? language.getName() : null;
+  }
+
+  @Named("mapLanguageLevelToName")
+  default String mapLanguageLevelToName(LanguageLevel level) {
+    return (level != null) ? level.getName() : null;
   }
 
 }

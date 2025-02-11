@@ -121,15 +121,15 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateExams.addAll(exams);
   }
 
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
-//  private List<CandidateLanguage> candidateLanguages = new ArrayList<>();
-//
-//  public void setCandidateLanguages(List<CandidateLanguage> languages) {
-//    this.candidateLanguages.clear();
-//    languages.forEach(language -> language.setCandidate(this));
-//    this.candidateLanguages.addAll(languages);
-//  }
-//
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateLanguage> candidateLanguages = new ArrayList<>();
+
+  public void setCandidateLanguages(List<CandidateLanguage> languages) {
+    this.candidateLanguages.clear();
+    languages.forEach(language -> language.setCandidate(this));
+    this.candidateLanguages.addAll(languages);
+  }
+
   private String candidateMessage;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -141,15 +141,15 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateOccupations.addAll(occupations);
   }
 
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
-//  private List<CandidateSkill> candidateSkills = new ArrayList<>();
-//
-//  public void setCandidateSkills(List<CandidateSkill> skills) {
-//    this.candidateSkills.clear();
-//    skills.forEach(skill -> skill.setCandidate(this));
-//    this.candidateSkills.addAll(skills);
-//  }
-//
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CandidateSkill> candidateSkills = new ArrayList<>();
+
+  public void setCandidateSkills(List<CandidateSkill> skills) {
+    this.candidateSkills.clear();
+    skills.forEach(skill -> skill.setCandidate(this));
+    this.candidateSkills.addAll(skills);
+  }
+
 //  @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
 //  private List<CandidateVisaCheck> candidateVisaChecks = new ArrayList<>();
 //
