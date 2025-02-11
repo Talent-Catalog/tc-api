@@ -16,7 +16,7 @@
 
 package org.tctalent.anonymization.domain.entity;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -40,13 +40,13 @@ public class CandidateJobExperience extends AbstractDomainEntity<Long> {
     @JoinColumn(name = "candidate_id")
     private CandidateEntity candidate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
-    private Country country;
+    // Store the isoCode directly instead of a foreign key reference
+    @Column(name = "country_iso_code", nullable = false)
+    private String countryIsoCode;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_occupation_id")
-    private CandidateOccupation candidateOccupation; // todo - sm - confirm this field mapping - it's named "occupation" in the API schema
+    private CandidateOccupation candidateOccupation;
 
     private String companyName;
     private String role;

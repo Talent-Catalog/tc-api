@@ -17,6 +17,7 @@
 package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -42,13 +43,26 @@ public class CandidateOccupation extends AbstractDomainEntity<Long> {
     @JoinColumn(name = "candidate_id")
     private CandidateEntity candidate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "occupation_id")
-    private Occupation occupation;
+    // Store the isco08Code directly instead of a foreign key reference
+    @Column(name = "isco08_code", nullable = true)
+    private String isco08Code;
+
+    // Store the occupation name directly instead of a foreign key reference
+    @Column(name = "name", nullable = true)
+    private String name;
 
     private Long yearsExperience;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidateOccupation", cascade = CascadeType.ALL)
     private List<CandidateJobExperience> candidateJobExperiences = new ArrayList<>();
+
+    public void setCandidateJobExperiences(List<CandidateJobExperience> experiences) {
+        this.candidateJobExperiences.clear();
+        experiences.forEach(experience -> {
+            experience.setCandidateOccupation(this);
+            experience.setCandidate(candidate);
+        });
+        this.candidateJobExperiences.addAll(experiences);
+    }
 
 }
