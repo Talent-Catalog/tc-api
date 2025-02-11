@@ -9,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Setter
 public class CandidateJobExperience {
   private Country country;
-  private CandidateOccupation occupation;
   private String companyName;
   private String role;
 

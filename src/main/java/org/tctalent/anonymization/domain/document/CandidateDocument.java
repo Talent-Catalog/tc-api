@@ -10,38 +10,21 @@ import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.tctalent.anonymization.model.AvailImmediateReason;
-import org.tctalent.anonymization.model.CandidateCertification;
-import org.tctalent.anonymization.model.CandidateCitizenship;
-import org.tctalent.anonymization.model.CandidateEducation;
-import org.tctalent.anonymization.model.CandidateExam;
-import org.tctalent.anonymization.model.CandidateJobExperience;
-import org.tctalent.anonymization.model.CandidateLanguage;
-import org.tctalent.anonymization.model.CandidateOccupation;
-import org.tctalent.anonymization.model.CandidateSkill;
-import org.tctalent.anonymization.model.CandidateStatus;
-import org.tctalent.anonymization.model.CandidateVisaCheck;
-import org.tctalent.anonymization.model.Country;
-import org.tctalent.anonymization.model.Dependant;
-import org.tctalent.anonymization.model.Destination;
-import org.tctalent.anonymization.model.DocumentStatus;
-import org.tctalent.anonymization.model.EducationLevel;
-import org.tctalent.anonymization.model.EducationMajor;
-import org.tctalent.anonymization.model.Gender;
-import org.tctalent.anonymization.model.IeltsStatus;
-import org.tctalent.anonymization.model.IntRecruitReason;
-import org.tctalent.anonymization.model.LanguageLevel;
-import org.tctalent.anonymization.model.LeftHomeReason;
-import org.tctalent.anonymization.model.MaritalStatus;
-import org.tctalent.anonymization.model.NotRegisteredStatus;
-import org.tctalent.anonymization.model.Occupation;
-import org.tctalent.anonymization.model.ResidenceStatus;
-import org.tctalent.anonymization.model.SurveyType;
-import org.tctalent.anonymization.model.UnhcrStatus;
-import org.tctalent.anonymization.model.VaccinationStatus;
-import org.tctalent.anonymization.model.WorkPermit;
-import org.tctalent.anonymization.model.YesNo;
-import org.tctalent.anonymization.model.YesNoUnsure;
+import org.tctalent.anonymization.domain.common.AvailImmediateReason;
+import org.tctalent.anonymization.domain.common.CandidateStatus;
+import org.tctalent.anonymization.domain.common.DocumentStatus;
+import org.tctalent.anonymization.domain.common.Gender;
+import org.tctalent.anonymization.domain.common.IeltsStatus;
+import org.tctalent.anonymization.domain.common.IntRecruitReason;
+import org.tctalent.anonymization.domain.common.LeftHomeReason;
+import org.tctalent.anonymization.domain.common.MaritalStatus;
+import org.tctalent.anonymization.domain.common.NotRegisteredStatus;
+import org.tctalent.anonymization.domain.common.ResidenceStatus;
+import org.tctalent.anonymization.domain.common.UnhcrStatus;
+import org.tctalent.anonymization.domain.common.VaccinationStatus;
+import org.tctalent.anonymization.domain.common.WorkPermit;
+import org.tctalent.anonymization.domain.common.YesNo;
+import org.tctalent.anonymization.domain.common.YesNoUnsure;
 
 @Getter
 @Setter
@@ -80,9 +63,6 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
 
   @Valid
   private List<@Valid CandidateExam> candidateExams = new ArrayList<>();
-
-  @Valid
-  private List<@Valid CandidateJobExperience> candidateJobExperiences = new ArrayList<>();
 
   @Valid
   private List<@Valid CandidateLanguage> candidateLanguages = new ArrayList<>();
