@@ -9,10 +9,13 @@ import org.tctalent.anonymization.domain.entity.CandidateDependant;
 import org.tctalent.anonymization.domain.entity.CandidateDestination;
 import org.tctalent.anonymization.domain.entity.CandidateEducation;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
+import org.tctalent.anonymization.domain.entity.CandidateJobExperience;
+import org.tctalent.anonymization.domain.entity.CandidateOccupation;
 import org.tctalent.anonymization.model.Country;
 import org.tctalent.anonymization.model.Destination;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.model.IdentifiableDependant;
+import org.tctalent.anonymization.model.Occupation;
 
 @Mapper(uses = {})
 public interface EntityMapper {
@@ -37,6 +40,15 @@ public interface EntityMapper {
   CandidateEducation mapEducation(
       org.tctalent.anonymization.model.CandidateEducation education);
 
+  @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
+  CandidateJobExperience mapJobExperience(
+      org.tctalent.anonymization.model.CandidateJobExperience jobExperience);
+
+  @Mapping(target = "isco08Code", source = "occupation", qualifiedByName = "mapOccupationToIscoCode")
+  @Mapping(target = "name", source = "occupation", qualifiedByName = "mapOccupationToName")
+  CandidateOccupation mapOccupation(
+      org.tctalent.anonymization.model.CandidateOccupation occupation);
+
   @Named("mapCountryToIsoCode")
   default String mapCountryToIsoCode(Country country) {
     return (country != null) ? country.getIsoCode() : null;
@@ -45,6 +57,16 @@ public interface EntityMapper {
   @Named("extractYearFromLocalDate")
   default Integer extractYearFromLocalDate(LocalDate dob) {
     return dob != null ? dob.getYear() : null;
+  }
+
+  @Named("mapOccupationToIscoCode")
+  default String mapOccupationToIscoCode(Occupation occupation) {
+    return (occupation != null) ? occupation.getIsco08Code() : null;
+  }
+
+  @Named("mapOccupationToName")
+  default String mapOccupationToName(Occupation occupation) {
+    return (occupation != null) ? occupation.getName() : null;
   }
 
 }
