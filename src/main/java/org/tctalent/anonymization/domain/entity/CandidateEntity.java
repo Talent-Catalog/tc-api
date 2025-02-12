@@ -267,8 +267,8 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private String maritalStatusNotes;
 
-  // Store the isoCode directly instead of a foreign key reference
-  @Column(name = "max_education_level", nullable = false)
+  // Store the education level directly instead of a foreign key reference
+  @Column(name = "max_education_level", nullable = true)
   private Integer maxEducationLevel;
 
   private String mediaWillingness;
@@ -305,11 +305,11 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 ////  @Valid
 ////  // todo - sm - this is actually stored as a CSV string and will need to be mapped from the rest model
 ////  private List<Long> partnerCitizenship = new ArrayList<>();
-//
-//  @ManyToOne(fetch = FetchType.LAZY)
-//  @JoinColumn(name = "partner_edu_level_id")
-//  private EducationLevel partnerEduLevel;
-//
+
+  // Store the education level directly instead of a foreign key reference
+  @Column(name = "partner_edu_level", nullable = true)
+  private Integer partnerEduLevel;
+
   @Enumerated(EnumType.STRING)
   private YesNo partnerEnglish;
 
