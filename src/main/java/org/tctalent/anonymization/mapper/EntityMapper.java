@@ -21,6 +21,7 @@ import org.tctalent.anonymization.model.Destination;
 import org.tctalent.anonymization.model.EducationLevel;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.model.IdentifiableDependant;
+import org.tctalent.anonymization.model.IdentifiablePartner;
 import org.tctalent.anonymization.model.Language;
 import org.tctalent.anonymization.model.LanguageLevel;
 import org.tctalent.anonymization.model.Occupation;
@@ -39,6 +40,7 @@ public interface EntityMapper {
   @Mapping(target = "partnerEnglishLevel", source = "partnerEnglishLevel", qualifiedByName = "mapLanguageLevelToName")
   @Mapping(target = "partnerOccupationIsco08Code", source = "partnerOccupation", qualifiedByName = "mapOccupationToIscoCode")
   @Mapping(target = "partnerOccupationName", source = "partnerOccupation", qualifiedByName = "mapOccupationToName")
+  @Mapping(target = "partnerPublicId", source = "partnerCandidate", qualifiedByName = "mapPartnerToPublicId")
   CandidateEntity anonymize(IdentifiableCandidate candidate);
 
   @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
@@ -121,5 +123,10 @@ public interface EntityMapper {
   @Named("mapEducationLevelToCode")
   default Integer mapEducationLevelToCode(EducationLevel level) {
     return (level != null) ? level.getLevel() : null;
+  }
+
+  @Named("mapPartnerToPublicId")
+  default String mapPartnerToPublicId(IdentifiablePartner partner) {
+    return (partner != null) ? partner.getPublicId() : null;
   }
 }
