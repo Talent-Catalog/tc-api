@@ -159,20 +159,19 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateVisaChecks.addAll(visaChecks);
   }
 
-//  @Enumerated(EnumType.STRING)
-//  private YesNo canDrive;
-//
-//  private String city;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNo conflict;
-//
-//  private String conflictNotes;
-//
-//  private Boolean contactConsentTcPartners;
-//
-//  private Boolean contactConsentRegistration;
-//
+  @Enumerated(EnumType.STRING)
+  private YesNo canDrive;
+
+  private String city;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo conflict;
+
+  private String conflictNotes;
+
+  private Boolean contactConsentTcPartners;
+
+  private Boolean contactConsentRegistration;
 
   // Store the isoCode directly instead of a foreign key reference
   @Column(name = "country_iso_code", nullable = false)
@@ -200,117 +199,113 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private String destLimitNotes;
 
-//  @Enumerated(EnumType.STRING)
-//  private DocumentStatus drivingLicense;
-//
+  @Enumerated(EnumType.STRING)
+  private DocumentStatus drivingLicense;
 
   // Store the isoCode directly instead of a foreign key reference
   @Column(name = "driving_license_country_iso_code", nullable = true)
   private String drivingLicenseCountryIsoCode;
 
-//
-//  private LocalDate drivingLicenseExp;
-//
-//  private String englishAssessment;
-//
-//  private String englishAssessmentScoreIelts;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNo familyMove;
-//
-//  private String familyMoveNotes;
-//
-//  private String frenchAssessment;
-//
-//  private Long frenchAssessmentScoreNclc;
-//
-//  @Column(name = "full_intake_completed_date")
-//  private OffsetDateTime fullIntakeCompletedDate;
-//
-//  @Enumerated(EnumType.STRING)
-//  private Gender gender;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNo healthIssues;
-//
-//  private String healthIssuesNotes;
-//
-//  private String homeLocation;
-//
-//  private String hostChallenges;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNo hostEntryLegally;
-//
-//  private String hostEntryLegallyNotes;
-//
-//  private Integer hostEntryYear;
-//
-//  private String hostEntryYearNotes;
-//
-//  private BigDecimal ieltsScore;
-//
-//  @Convert(converter = IntRecruitReasonConverter.class)
-//  private List<IntRecruitReason> intRecruitReasons;
-//
-//  private String intRecruitOther;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure intRecruitRural;
-//
-//  private String intRecruitRuralNotes;
-//
-//  private String leftHomeNotes;
-//
-//  @Convert(converter = LeftHomeReasonsConverter.class)
-//  private List<LeftHomeReason> leftHomeReasons;
-//
-//  @Enumerated(EnumType.STRING)
-//  private MaritalStatus maritalStatus;
-//
-//  private String maritalStatusNotes;
+  private LocalDate drivingLicenseExp;
+
+  private String englishAssessment;
+
+  private String englishAssessmentScoreIelts;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo familyMove;
+
+  private String familyMoveNotes;
+
+  private String frenchAssessment;
+
+  private Long frenchAssessmentScoreNclc;
+
+  @Column(name = "full_intake_completed_date")
+  private OffsetDateTime fullIntakeCompletedDate;
+
+  @Enumerated(EnumType.STRING)
+  private Gender gender;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo healthIssues;
+
+  private String healthIssuesNotes;
+
+  private String homeLocation;
+
+  private String hostChallenges;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo hostEntryLegally;
+
+  private String hostEntryLegallyNotes;
+
+  private Integer hostEntryYear;
+
+  private String hostEntryYearNotes;
+
+  private BigDecimal ieltsScore;
+
+  @Convert(converter = IntRecruitReasonConverter.class)
+  private List<IntRecruitReason> intRecruitReasons;
+
+  private String intRecruitOther;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure intRecruitRural;
+
+  private String intRecruitRuralNotes;
+
+  private String leftHomeNotes;
+
+  @Convert(converter = LeftHomeReasonsConverter.class)
+  private List<LeftHomeReason> leftHomeReasons;
+
+  @Enumerated(EnumType.STRING)
+  private MaritalStatus maritalStatus;
+
+  private String maritalStatusNotes;
 //
 //  @ManyToOne(fetch = FetchType.LAZY)
 //  @JoinColumn(name = "max_education_level_id")
 //  private EducationLevel maxEducationLevel;
-//
-//  private String mediaWillingness;
-//
+
+  private String mediaWillingness;
+
 //  @OneToOne(fetch = FetchType.LAZY)
 //  @JoinColumn(name = "migration_education_major_id")
 //  private EducationMajor migrationEducationMajor;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNo militaryService;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure militaryWanted;
-//
-//  private LocalDate militaryStart;
-//
-//  private LocalDate militaryEnd;
-//
-//  private String militaryNotes;
-//
-//  @Column(name = "mini_intake_completed_date")
-//  private OffsetDateTime miniIntakeCompletedDate;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNo monitoringEvaluationConsent;
-//
+
+  @Enumerated(EnumType.STRING)
+  private YesNo militaryService;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure militaryWanted;
+
+  private LocalDate militaryStart;
+
+  private LocalDate militaryEnd;
+
+  private String militaryNotes;
+
+  @Column(name = "mini_intake_completed_date")
+  private OffsetDateTime miniIntakeCompletedDate;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo monitoringEvaluationConsent;
 
   // Store the isoCode directly instead of a foreign key reference
   @Column(name = "nationality_iso_code", nullable = false)
   private String nationalityIsoCode;
 
+  private Long numberDependants;
 
-//  private Long numberDependants;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure partnerRegistered;
-//
-//  private String partnerPublicId;
-//
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure partnerRegistered;
+
+  private String partnerPublicId;
+
 ////  @Valid
 ////  // todo - sm - this is actually stored as a CSV string and will need to be mapped from the rest model
 ////  private List<Long> partnerCitizenship = new ArrayList<>();
@@ -319,111 +314,106 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 //  @JoinColumn(name = "partner_edu_level_id")
 //  private EducationLevel partnerEduLevel;
 //
-//  @Enumerated(EnumType.STRING)
-//  private YesNo partnerEnglish;
-//
+  @Enumerated(EnumType.STRING)
+  private YesNo partnerEnglish;
+
 //  @ManyToOne(fetch = FetchType.LAZY)
 //  @JoinColumn(name = "partner_english_level_id")
 //  private LanguageLevel partnerEnglishLevel;
-//
-//  @Enumerated(EnumType.STRING)
-//  private IeltsStatus partnerIelts;
-//
-//  private String partnerIeltsScore;
-//
-//  private Long partnerIeltsYr;
-//
+
+  @Enumerated(EnumType.STRING)
+  private IeltsStatus partnerIelts;
+
+  private String partnerIeltsScore;
+
+  private Long partnerIeltsYr;
+
 //  @ManyToOne(fetch = FetchType.LAZY)
 //  @JoinColumn(name = "partner_occupation_id")
 //  private Occupation partnerOccupation;
-//
-//  @Enumerated(EnumType.STRING)
-//  private ResidenceStatus residenceStatus;
-//
-//  private String residenceStatusNotes;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure returnedHome;
-//
-//  private String returnedHomeReason;
-//
-//  private String returnedHomeReasonNo;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure returnHomeSafe;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure returnHomeFuture;
-//
+
+  @Enumerated(EnumType.STRING)
+  private ResidenceStatus residenceStatus;
+
+  private String residenceStatusNotes;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure returnedHome;
+
+  private String returnedHomeReason;
+
+  private String returnedHomeReasonNo;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure returnHomeSafe;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure returnHomeFuture;
+
 //  private LocalDate returnHomeWhen; // todo - sm - check this type because it is a String type in the TC entity definition
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNo resettleThird;
-//
-//  private String resettleThirdStatus;
-//
-//  private String state;
-//
-//  @Enumerated(EnumType.STRING)
-//  private CandidateStatus status;
-//
+
+  @Enumerated(EnumType.STRING)
+  private YesNo resettleThird;
+
+  private String resettleThirdStatus;
+
+  private String state;
+
+  @Enumerated(EnumType.STRING)
+  private CandidateStatus status;
+
 //  @ManyToOne(fetch = FetchType.LAZY)
 //  @JoinColumn(name = "survey_type_id")
 //  private SurveyType surveyType;
-//
-//  private String surveyComment;
-//
-//  private YesNo unhcrConsent;
-//
-//  private String unhcrNotes;
-//
-//  @Enumerated(EnumType.STRING)
-//  private NotRegisteredStatus unhcrNotRegStatus;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure unhcrRegistered;
-//
-//  @Enumerated(EnumType.STRING)
-//  private UnhcrStatus unhcrStatus;
-//
-//  private String unrwaNotes;
-//
-//  @Enumerated(EnumType.STRING)
-//  private NotRegisteredStatus unrwaNotRegStatus;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure unrwaRegistered;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure visaIssues;
-//
-//  private String visaIssuesNotes;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure visaReject;
-//
-//  private String visaRejectNotes;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNo workAbroad;
-//
-//  private String workAbroadNotes;
-//
-//  @Enumerated(EnumType.STRING)
-//  private WorkPermit workPermit;
-//
-//  @Enumerated(EnumType.STRING)
-//  private YesNoUnsure workPermitDesired;
-//
-//  private String workPermitDesiredNotes;
-//
-//  private Integer yearOfArrival;
-//
-//  private Integer yearOfBirth;
 
-  @Override
-  public String toString() {
-    return this.getClass().getName();
-  }
+  private String surveyComment;
+
+  private YesNo unhcrConsent;
+
+  private String unhcrNotes;
+
+  @Enumerated(EnumType.STRING)
+  private NotRegisteredStatus unhcrNotRegStatus;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure unhcrRegistered;
+
+  @Enumerated(EnumType.STRING)
+  private UnhcrStatus unhcrStatus;
+
+  private String unrwaNotes;
+
+  @Enumerated(EnumType.STRING)
+  private NotRegisteredStatus unrwaNotRegStatus;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure unrwaRegistered;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure visaIssues;
+
+  private String visaIssuesNotes;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure visaReject;
+
+  private String visaRejectNotes;
+
+  @Enumerated(EnumType.STRING)
+  private YesNo workAbroad;
+
+  private String workAbroadNotes;
+
+  @Enumerated(EnumType.STRING)
+  private WorkPermit workPermit;
+
+  @Enumerated(EnumType.STRING)
+  private YesNoUnsure workPermitDesired;
+
+  private String workPermitDesiredNotes;
+
+  private Integer yearOfArrival;
+
+  private Integer yearOfBirth;
 
 }
