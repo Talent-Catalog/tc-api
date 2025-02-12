@@ -177,10 +177,6 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
   private String returnedHomeReasonNo;
   private YesNoUnsure returnHomeSafe;
   private YesNoUnsure returnHomeFuture;
-
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private LocalDate returnHomeWhen;
-
   private YesNo resettleThird;
   private String resettleThirdStatus;
   private String state;

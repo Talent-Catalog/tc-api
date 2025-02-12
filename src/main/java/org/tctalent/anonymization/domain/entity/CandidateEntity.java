@@ -378,8 +378,6 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNoUnsure returnHomeFuture;
 
-//  private LocalDate returnHomeWhen; // todo - sm - check this type because it is a String type in the TC entity definition
-
   @Enumerated(EnumType.STRING)
   private YesNo resettleThird;
 
