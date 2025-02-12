@@ -18,6 +18,7 @@ import org.tctalent.anonymization.domain.entity.Employer;
 import org.tctalent.anonymization.domain.entity.SalesforceJobOpp;
 import org.tctalent.anonymization.model.Country;
 import org.tctalent.anonymization.model.Destination;
+import org.tctalent.anonymization.model.EducationLevel;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.model.IdentifiableDependant;
 import org.tctalent.anonymization.model.Language;
@@ -33,6 +34,7 @@ public interface EntityMapper {
   @Mapping(target = "drivingLicenseCountryIsoCode", source = "drivingLicenseCountry", qualifiedByName = "mapCountryToIsoCode")
   @Mapping(target = "contactConsentTcPartners", source = "contactConsentPartners")
   @Mapping(target = "yearOfBirth", source = "dob", qualifiedByName = "extractYearFromLocalDate")
+  @Mapping(target = "maxEducationLevel", source = "maxEducationLevel", qualifiedByName = "mapEducationLevelToCode")
   CandidateEntity anonymize(IdentifiableCandidate candidate);
 
   @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
@@ -112,4 +114,8 @@ public interface EntityMapper {
     return (level != null) ? level.getName() : null;
   }
 
+  @Named("mapEducationLevelToCode")
+  default Integer mapEducationLevelToCode(EducationLevel level) {
+    return (level != null) ? level.getLevel() : null;
+  }
 }

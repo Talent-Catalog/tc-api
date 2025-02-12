@@ -266,14 +266,14 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   private MaritalStatus maritalStatus;
 
   private String maritalStatusNotes;
-//
-//  @ManyToOne(fetch = FetchType.LAZY)
-//  @JoinColumn(name = "max_education_level_id")
-//  private EducationLevel maxEducationLevel;
+
+  // Store the isoCode directly instead of a foreign key reference
+  @Column(name = "max_education_level", nullable = false)
+  private Integer maxEducationLevel;
 
   private String mediaWillingness;
 
-//  @OneToOne(fetch = FetchType.LAZY)
+//  @OneToOne(fetch = FetchType.LAZY)§
 //  @JoinColumn(name = "migration_education_major_id")
 //  private EducationMajor migrationEducationMajor;
 
