@@ -7,11 +7,15 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import org.tctalent.anonymization.domain.common.AvailImmediateReason;
 import org.tctalent.anonymization.domain.common.CandidateStatus;
 import org.tctalent.anonymization.domain.common.DocumentStatus;
@@ -302,9 +306,33 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private String partnerPublicId;
 
-////  @Valid
-////  // todo - sm - this is actually stored as a CSV string and will need to be mapped from the rest model
-////  private List<Long> partnerCitizenship = new ArrayList<>();
+  private String partnerCitizenship;
+
+  /**
+   * Provides a list of country IDs for the candidate's partner's citizenships,
+   * instead of the comma separated string we store on the DB.
+   * Not currently used but left in case of future utility.
+   * @return list of country IDs or null if nothing stored
+   */
+  @Nullable
+  public List<Long> getPartnerCitizenship() {
+    return partnerCitizenship != null ?
+        Stream.of(partnerCitizenship.split(","))
+            .map(Long::parseLong)
+            .collect(Collectors.toList()) : null;
+  }
+
+  /**
+   * Converts an array of country IDs to a comma-separated string for DB storage.
+   * @param partnerCitizenshipCountryIds array of country IDs indicating countries of which a
+   *                                     given candidate's partner is a citizen.
+   */
+  public void setPartnerCitizenship(List<Long> partnerCitizenshipCountryIds) {
+    this.partnerCitizenship = !CollectionUtils.isEmpty(partnerCitizenshipCountryIds) ?
+        partnerCitizenshipCountryIds.stream()
+            .map(String::valueOf)
+            .collect(Collectors.joining(",")) : null;
+  }
 
   // Store the education level directly instead of a foreign key reference
   @Column(name = "partner_edu_level", nullable = true)
@@ -324,9 +352,13 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private Long partnerIeltsYr;
 
-//  @ManyToOne(fetch = FetchType.LAZY)
-//  @JoinColumn(name = "partner_occupation_id")
-//  private Occupation partnerOccupation;
+  // Store the isco08Code directly instead of a foreign key reference
+  @Column(name = "partner_occupation_isco08_code", nullable = true)
+  private String partnerOccupationIsco08Code;
+
+  // NB: When isco08Codes static has been updated, this field will become redundant and can be removed
+  @Column(name = "partner_occupation_name", nullable = true)
+  private String partnerOccupationName;
 
   @Enumerated(EnumType.STRING)
   private ResidenceStatus residenceStatus;
