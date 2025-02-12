@@ -32,6 +32,7 @@ public interface EntityMapper {
   @Mapping(target = "nationalityIsoCode", source = "nationality", qualifiedByName = "mapCountryToIsoCode")
   @Mapping(target = "drivingLicenseCountryIsoCode", source = "drivingLicenseCountry", qualifiedByName = "mapCountryToIsoCode")
   @Mapping(target = "contactConsentTcPartners", source = "contactConsentPartners")
+  @Mapping(target = "yearOfBirth", source = "dob", qualifiedByName = "extractYearFromLocalDate")
   CandidateEntity anonymize(IdentifiableCandidate candidate);
 
   @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
@@ -41,7 +42,7 @@ public interface EntityMapper {
   CandidateCitizenship mapDestination(
       org.tctalent.anonymization.model.CandidateCitizenship citizenship);
 
-  @Mapping(source = "dob", target = "yearOfBirth", qualifiedByName = "extractYearFromLocalDate")
+  @Mapping(target = "yearOfBirth", source = "dob", qualifiedByName = "extractYearFromLocalDate")
   CandidateDependant mapDependant(IdentifiableDependant dependant);
 
   @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
