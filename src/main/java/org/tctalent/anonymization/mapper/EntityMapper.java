@@ -36,6 +36,7 @@ public interface EntityMapper {
   @Mapping(target = "yearOfBirth", source = "dob", qualifiedByName = "extractYearFromLocalDate")
   @Mapping(target = "maxEducationLevel", source = "maxEducationLevel", qualifiedByName = "mapEducationLevelToCode")
   @Mapping(target = "partnerEduLevel", source = "partnerEduLevel", qualifiedByName = "mapEducationLevelToCode")
+  @Mapping(target = "partnerEnglishLevel", source = "partnerEnglishLevel", qualifiedByName = "mapLanguageLevelToName")
   CandidateEntity anonymize(IdentifiableCandidate candidate);
 
   @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")

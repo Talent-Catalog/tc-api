@@ -313,9 +313,9 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNo partnerEnglish;
 
-//  @ManyToOne(fetch = FetchType.LAZY)
-//  @JoinColumn(name = "partner_english_level_id")
-//  private LanguageLevel partnerEnglishLevel;
+  // Store the written_level directly instead of a foreign key reference
+  @Column(name = "partner_english_level", nullable = true)
+  private String partnerEnglishLevel;
 
   @Enumerated(EnumType.STRING)
   private IeltsStatus partnerIelts;
