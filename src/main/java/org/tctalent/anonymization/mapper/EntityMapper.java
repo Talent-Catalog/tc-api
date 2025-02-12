@@ -12,6 +12,9 @@ import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.entity.CandidateJobExperience;
 import org.tctalent.anonymization.domain.entity.CandidateLanguage;
 import org.tctalent.anonymization.domain.entity.CandidateOccupation;
+import org.tctalent.anonymization.domain.entity.CandidateVisaCheck;
+import org.tctalent.anonymization.domain.entity.CandidateVisaJobCheck;
+import org.tctalent.anonymization.domain.entity.SalesforceJobOpp;
 import org.tctalent.anonymization.model.Country;
 import org.tctalent.anonymization.model.Destination;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
@@ -57,6 +60,20 @@ public interface EntityMapper {
   @Mapping(target = "spokenLevelName", source = "spokenLevel", qualifiedByName = "mapLanguageLevelToName")
   CandidateLanguage mapLanguage(
       org.tctalent.anonymization.model.CandidateLanguage language);
+
+  @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
+  CandidateVisaCheck mapVisaCheck(
+      org.tctalent.anonymization.model.IdentifiableCandidateVisaCheck visaCheck);
+
+  @Mapping(target = "isco08Code", source = "occupation", qualifiedByName = "mapOccupationToIscoCode")
+  @Mapping(target = "name", source = "occupation", qualifiedByName = "mapOccupationToName")
+  @Mapping(target = "tcEligibility", source = "tbbEligibility")
+  CandidateVisaJobCheck mapVisaJobCheck(
+      org.tctalent.anonymization.model.IdentifiableCandidateVisaJobCheck visaJobCheck);
+
+  @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
+  SalesforceJobOpp mapJobOpp(
+      org.tctalent.anonymization.model.JobOpportunity jobOpportunity);
 
   @Named("mapCountryToIsoCode")
   default String mapCountryToIsoCode(Country country) {

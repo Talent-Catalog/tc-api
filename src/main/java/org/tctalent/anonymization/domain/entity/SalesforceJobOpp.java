@@ -17,6 +17,7 @@
 package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,7 +33,6 @@ import lombok.Setter;
 import org.tctalent.anonymization.domain.common.JobOpportunityStage;
 
 
-// todo - sm - check this - it's just called JobOpportunity in the API schema
 @Getter
 @Setter
 @Entity
@@ -40,13 +40,13 @@ import org.tctalent.anonymization.domain.common.JobOpportunityStage;
 @SequenceGenerator(name = "seq_gen", sequenceName = "salesforce_job_opp_tc_job_id_seq", allocationSize = 1)
 public class SalesforceJobOpp extends AbstractDomainEntity<Long> {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_object_id")
-    private Country country;
+    // Store the isoCode directly instead of a foreign key reference
+    @Column(name = "country_iso_code", nullable = false)
+    private String countryIsoCode;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // todo - sm - cascade all to get things working, but I don't think we should do this for employer entities - instead give each employer a public_id and join on public_id key
-    @JoinColumn(name = "employer_id")
-    private Employer employerEntity;
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "employer_id")
+//    private Employer employerEntity;
 
     private boolean evergreen;
     private OffsetDateTime publishedDate;
@@ -56,6 +56,6 @@ public class SalesforceJobOpp extends AbstractDomainEntity<Long> {
 
     private LocalDate submissionDueDate;
     private Long hiringCommitment;
-    private Boolean employerHiredInternationally;
+    private String employerHiredInternationally;
 
 }

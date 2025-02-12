@@ -17,6 +17,7 @@
 package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -47,9 +48,9 @@ public class CandidateVisaCheck extends AbstractDomainEntity<Long> {
     @JoinColumn(name = "candidate_id")
     private CandidateEntity candidate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
-    private Country country;
+    // Store the isoCode directly instead of a foreign key reference
+    @Column(name = "country_iso_code", nullable = false)
+    private String countryIsoCode;
 
     @Enumerated(EnumType.STRING)
     private YesNo protection;
@@ -78,7 +79,15 @@ public class CandidateVisaCheck extends AbstractDomainEntity<Long> {
     @Enumerated(EnumType.STRING)
     private FamilyRelations destinationFamily;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidateVisaCheck", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidateVisaCheck", cascade = CascadeType.ALL)
     private Set<CandidateVisaJobCheck> candidateVisaJobChecks = new HashSet<>();
+
+    public void setCandidateVisaJobChecks(Set<CandidateVisaJobCheck> visaJobChecks) {
+        this.candidateVisaJobChecks.clear();
+        visaJobChecks.forEach(jobCheck -> {
+            jobCheck.setCandidateVisaCheck(this);
+        });
+        this.candidateVisaJobChecks.addAll(visaJobChecks);
+    }
 
 }

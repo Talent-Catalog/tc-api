@@ -17,6 +17,7 @@
 package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,7 +50,7 @@ public class CandidateVisaJobCheck extends AbstractDomainEntity<Long> {
     /**
      * Associated job opportunity
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // todo - sm - see comment on SfJobOpp.employerEntity - in a similar fashion - use publicIds for job opps as well
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "job_opp_id")
     SalesforceJobOpp jobOpp;
 
@@ -59,9 +60,13 @@ public class CandidateVisaJobCheck extends AbstractDomainEntity<Long> {
     @Enumerated(EnumType.STRING)
     private YesNo qualification;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "occupation_id")
-    private Occupation occupation;
+    // Store the isco08Code directly instead of a foreign key reference
+    @Column(name = "isco08_code", nullable = true)
+    private String isco08Code;
+
+    // Store the occupation name directly instead of a foreign key reference
+    @Column(name = "name", nullable = true)
+    private String name;
 
     @Enumerated(EnumType.STRING)
     private YesNo salaryTsmit;
