@@ -273,10 +273,6 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private String mediaWillingness;
 
-//  @OneToOne(fetch = FetchType.LAZY)§
-//  @JoinColumn(name = "migration_education_major_id")
-//  private EducationMajor migrationEducationMajor;
-
   @Enumerated(EnumType.STRING)
   private YesNo militaryService;
 
