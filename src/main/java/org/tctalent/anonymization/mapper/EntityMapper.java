@@ -25,6 +25,7 @@ import org.tctalent.anonymization.model.IdentifiablePartner;
 import org.tctalent.anonymization.model.Language;
 import org.tctalent.anonymization.model.LanguageLevel;
 import org.tctalent.anonymization.model.Occupation;
+import org.tctalent.anonymization.model.SurveyType;
 
 @Mapper(uses = {})
 public interface EntityMapper {
@@ -41,6 +42,7 @@ public interface EntityMapper {
   @Mapping(target = "partnerOccupationIsco08Code", source = "partnerOccupation", qualifiedByName = "mapOccupationToIscoCode")
   @Mapping(target = "partnerOccupationName", source = "partnerOccupation", qualifiedByName = "mapOccupationToName")
   @Mapping(target = "partnerPublicId", source = "partnerCandidate", qualifiedByName = "mapPartnerToPublicId")
+  @Mapping(target = "surveyType", source = "surveyType", qualifiedByName = "mapSurveyTypeToName")
   CandidateEntity anonymize(IdentifiableCandidate candidate);
 
   @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
@@ -128,5 +130,10 @@ public interface EntityMapper {
   @Named("mapPartnerToPublicId")
   default String mapPartnerToPublicId(IdentifiablePartner partner) {
     return (partner != null) ? partner.getPublicId() : null;
+  }
+
+  @Named("mapSurveyTypeToName")
+  default String mapSurveyTypeToName(SurveyType surveyType) {
+    return (surveyType != null) ? surveyType.getName() : null;
   }
 }

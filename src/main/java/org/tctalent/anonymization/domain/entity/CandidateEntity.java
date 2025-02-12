@@ -388,9 +388,9 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private CandidateStatus status;
 
-//  @ManyToOne(fetch = FetchType.LAZY)
-//  @JoinColumn(name = "survey_type_id")
-//  private SurveyType surveyType;
+  // Store the survey type name directly instead of a foreign key reference
+  @Column(name = "survey_type", nullable = true)
+  private String surveyType;
 
   private String surveyComment;
 
