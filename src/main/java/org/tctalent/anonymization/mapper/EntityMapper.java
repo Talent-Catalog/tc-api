@@ -14,6 +14,7 @@ import org.tctalent.anonymization.domain.entity.CandidateLanguage;
 import org.tctalent.anonymization.domain.entity.CandidateOccupation;
 import org.tctalent.anonymization.domain.entity.CandidateVisaCheck;
 import org.tctalent.anonymization.domain.entity.CandidateVisaJobCheck;
+import org.tctalent.anonymization.domain.entity.Employer;
 import org.tctalent.anonymization.domain.entity.SalesforceJobOpp;
 import org.tctalent.anonymization.model.Country;
 import org.tctalent.anonymization.model.Destination;
@@ -74,6 +75,10 @@ public interface EntityMapper {
   @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
   SalesforceJobOpp mapJobOpp(
       org.tctalent.anonymization.model.JobOpportunity jobOpportunity);
+
+  @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
+  Employer mapEmployer(
+      org.tctalent.anonymization.model.Employer employer);
 
   @Named("mapCountryToIsoCode")
   default String mapCountryToIsoCode(Country country) {

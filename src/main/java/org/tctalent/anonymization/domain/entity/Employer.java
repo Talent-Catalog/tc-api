@@ -16,10 +16,8 @@
 
 package org.tctalent.anonymization.domain.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -33,12 +31,9 @@ import org.springframework.lang.Nullable;
 @SequenceGenerator(name = "seq_gen", sequenceName = "employer_id_seq", allocationSize = 1)
 public class Employer extends AbstractDomainEntity<Long> {
 
-    /**
-     * References country object on database
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
-    private Country country;
+    // Store the isoCode directly instead of a foreign key reference
+    @Column(name = "country_iso_code", nullable = false)
+    private String countryIsoCode;
 
     /**
      * Indicates whether the employer has hired internationally or not.

@@ -44,9 +44,9 @@ public class SalesforceJobOpp extends AbstractDomainEntity<Long> {
     @Column(name = "country_iso_code", nullable = false)
     private String countryIsoCode;
 
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "employer_id")
-//    private Employer employerEntity;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "employer_id")
+    private Employer employerEntity;
 
     private boolean evergreen;
     private OffsetDateTime publishedDate;
