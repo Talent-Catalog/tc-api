@@ -25,11 +25,11 @@ import org.tctalent.anonymization.model.TcEligibilityAssessment;
 import org.tctalent.anonymization.model.YesNo;
 
 @SpringBootTest
-public class CandidateMapperTest {
+public class DocumentMapperTest {
 
   @Autowired
-  @Qualifier("candidateMapperImpl")
-  private CandidateMapper mapper;
+  @Qualifier("documentMapperImpl")
+  private DocumentMapper mapper;
 
   @Test
   void shouldMapContactConsentPartnersToContactConsentTcPartners() {

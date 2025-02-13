@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.tctalent.anonymization.batch.processor.ModelToDocumentItemProcessor;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
-import org.tctalent.anonymization.mapper.CandidateMapper;
+import org.tctalent.anonymization.mapper.DocumentMapper;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 
 /**
@@ -22,7 +22,7 @@ import org.tctalent.anonymization.model.IdentifiableCandidate;
 class ModelToDocumentItemProcessorTest {
 
   @Mock
-  private CandidateMapper candidateMapper;
+  private DocumentMapper documentMapper;
 
   @InjectMocks
   private ModelToDocumentItemProcessor candidateRestItemProcessor;
@@ -38,13 +38,13 @@ class ModelToDocumentItemProcessorTest {
     IdentifiableCandidate identifiableCandidate = new IdentifiableCandidate();
     CandidateDocument candidateDocument = new CandidateDocument();
 
-    when(candidateMapper
+    when(documentMapper
         .anonymize(identifiableCandidate))
         .thenReturn(candidateDocument);
 
     CandidateDocument result = candidateRestItemProcessor.process(identifiableCandidate);
 
     assertEquals(candidateDocument, result);
-    verify(candidateMapper).anonymize(identifiableCandidate);
+    verify(documentMapper).anonymize(identifiableCandidate);
   }
 }

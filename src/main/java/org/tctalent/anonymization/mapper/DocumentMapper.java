@@ -18,7 +18,7 @@ import org.tctalent.anonymization.model.IdentifiableDependant;
     IdMapper.class,
     DateTimeMapper.class
 })
-public interface CandidateMapper {
+public interface DocumentMapper {
 
   /**
    * Maps a Mongo {@link CandidateDocument} to an Open API {@link Candidate} model.

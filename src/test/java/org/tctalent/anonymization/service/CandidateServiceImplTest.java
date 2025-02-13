@@ -16,7 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
-import org.tctalent.anonymization.mapper.CandidateMapper;
+import org.tctalent.anonymization.mapper.DocumentMapper;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
 import org.tctalent.anonymization.repository.CandidateMongoRepository;
@@ -24,7 +24,7 @@ import org.tctalent.anonymization.repository.CandidateMongoRepository;
 class CandidateServiceImplTest {
 
   @Mock private CandidateMongoRepository candidateMongoRepository;
-  @Mock private CandidateMapper candidateMapper;
+  @Mock private DocumentMapper documentMapper;
 
   @InjectMocks private CandidateServiceImpl candidateService;
 
@@ -46,11 +46,11 @@ class CandidateServiceImplTest {
         .findAll(pageable))
         .thenReturn(candidateDocumentPage);
 
-    when(candidateMapper
+    when(documentMapper
         .toCandidateModel(any(CandidateDocument.class)))
         .thenReturn(candidate);
 
-    when(candidateMapper
+    when(documentMapper
         .toCandidateModelPage(candidatePage))
         .thenReturn(expectedCandidatePage);
 
@@ -71,7 +71,7 @@ class CandidateServiceImplTest {
         .findByPublicId(publicId))
         .thenReturn(Optional.of(candidateDocument));
 
-    when(candidateMapper
+    when(documentMapper
         .toCandidateModel(candidateDocument))
         .thenReturn(candidate);
 
