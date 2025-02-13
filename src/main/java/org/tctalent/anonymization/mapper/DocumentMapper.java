@@ -15,7 +15,6 @@ import org.tctalent.anonymization.model.IdentifiableCandidateVisaJobCheck;
 import org.tctalent.anonymization.model.IdentifiableDependant;
 
 @Mapper(uses = {
-    IdMapper.class,
     DateTimeMapper.class
 })
 public interface DocumentMapper {
