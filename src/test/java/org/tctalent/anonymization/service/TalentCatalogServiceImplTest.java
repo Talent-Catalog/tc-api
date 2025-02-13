@@ -15,7 +15,7 @@ import org.springframework.web.client.RestClientException;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.mapper.DocumentMapper;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
-import org.tctalent.anonymization.repository.CandidateMongoRepository;
+import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
 @SpringBootTest
 class TalentCatalogServiceImplTest {
@@ -23,7 +23,7 @@ class TalentCatalogServiceImplTest {
   TalentCatalogServiceImpl tcService;
 
   @Autowired
-  CandidateMongoRepository anonCandidateRepository;
+  CandidateDocumentRepository anonCandidateRepository;
 
   @Autowired
   DocumentMapper documentMapper;

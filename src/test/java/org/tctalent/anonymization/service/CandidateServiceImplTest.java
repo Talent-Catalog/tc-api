@@ -19,11 +19,11 @@ import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.mapper.DocumentMapper;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
-import org.tctalent.anonymization.repository.CandidateMongoRepository;
+import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
 class CandidateServiceImplTest {
 
-  @Mock private CandidateMongoRepository candidateMongoRepository;
+  @Mock private CandidateDocumentRepository candidateDocumentRepository;
   @Mock private DocumentMapper documentMapper;
 
   @InjectMocks private CandidateServiceImpl candidateService;
@@ -42,7 +42,7 @@ class CandidateServiceImplTest {
     Page<Candidate> candidatePage = new PageImpl<>(List.of(candidate));
     CandidatePage expectedCandidatePage = new CandidatePage();
 
-    when(candidateMongoRepository
+    when(candidateDocumentRepository
         .findAll(pageable))
         .thenReturn(candidateDocumentPage);
 
@@ -67,7 +67,7 @@ class CandidateServiceImplTest {
     CandidateDocument candidateDocument = new CandidateDocument();
     Candidate candidate = new Candidate();
 
-    when(candidateMongoRepository
+    when(candidateDocumentRepository
         .findByPublicId(publicId))
         .thenReturn(Optional.of(candidateDocument));
 
@@ -86,7 +86,7 @@ class CandidateServiceImplTest {
   void testFindById_NotFound() {
     String publicId = "base-64-encoded-uuid";
 
-    when(candidateMongoRepository
+    when(candidateDocumentRepository
         .findByPublicId(publicId))
         .thenReturn(Optional.empty());
 

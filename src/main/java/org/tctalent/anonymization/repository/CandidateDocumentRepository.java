@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 
 @Repository
-public interface CandidateMongoRepository extends MongoRepository<CandidateDocument, String> {
+public interface CandidateDocumentRepository extends MongoRepository<CandidateDocument, String> {
   Optional<CandidateDocument> findByPublicId(String publicId);
 }

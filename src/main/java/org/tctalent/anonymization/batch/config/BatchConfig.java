@@ -25,8 +25,8 @@ import org.tctalent.anonymization.batch.listener.LoggingEntityWriteListener;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
-import org.tctalent.anonymization.repository.CandidateAuroraRepository;
-import org.tctalent.anonymization.repository.CandidateMongoRepository;
+import org.tctalent.anonymization.repository.CandidateEntityRepository;
+import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
 /**
  * Batch configuration class for setting up the candidate migration job, including its steps,
@@ -142,9 +142,9 @@ public class BatchConfig {
   // todo javadoc
   @Bean
   public ItemWriter<CandidateEntity> jpaItemWriter(
-      CandidateAuroraRepository candidateAuroraRepository) {
+      CandidateEntityRepository candidateEntityRepository) {
     return new RepositoryItemWriterBuilder<CandidateEntity>()
-        .repository(candidateAuroraRepository)
+        .repository(candidateEntityRepository)
         .methodName("save")
         .build();
   }
@@ -152,13 +152,14 @@ public class BatchConfig {
   /**
    * Configures an ItemWriter to save CandidateDocument objects to the MongoDB repository.
    *
-   * @param candidateRepository the repository used to persist CandidateDocument objects
+   * @param candidateDocumentRepository the repository used to persist CandidateDocument objects
    * @return an ItemWriter for writing CandidateDocument objects to MongoDB
    */
   @Bean
-  public ItemWriter<CandidateDocument> mongoItemWriter(CandidateMongoRepository candidateRepository) {
+  public ItemWriter<CandidateDocument> mongoItemWriter(
+      CandidateDocumentRepository candidateDocumentRepository) {
     return new RepositoryItemWriterBuilder<CandidateDocument>()
-        .repository(candidateRepository)
+        .repository(candidateDocumentRepository)
         .methodName("save") // Implicitly throttles the batch, which is preferred. Use "saveAll" if performance is an issue.
         .build();
   }

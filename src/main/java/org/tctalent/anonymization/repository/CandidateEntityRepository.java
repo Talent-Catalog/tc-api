@@ -7,6 +7,6 @@ import java.util.Optional;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 
 @Repository
-public interface CandidateAuroraRepository extends JpaRepository<CandidateEntity, Long> {
+public interface CandidateEntityRepository extends JpaRepository<CandidateEntity, Long> {
   Optional<CandidateEntity> findByPublicId(String publicId);
 }

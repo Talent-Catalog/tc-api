@@ -29,8 +29,8 @@ import org.tctalent.anonymization.batch.reader.RestApiItemReader;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
-import org.tctalent.anonymization.repository.CandidateAuroraRepository;
-import org.tctalent.anonymization.repository.CandidateMongoRepository;
+import org.tctalent.anonymization.repository.CandidateEntityRepository;
+import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
 /**
  * Unit tests for the {@link BatchConfig} class.
@@ -52,8 +52,8 @@ class BatchConfigTest {
   @Mock private LoggingRestToDocumentProcessListener loggingRestToDocumentProcessListener;
   @Mock private LoggingEntityWriteListener loggingEntityWriteListener;
   @Mock private LoggingDocumentWriteListener loggingDocumentWriteListener;
-  @Mock private CandidateAuroraRepository candidateAuroraRepository;
-  @Mock private CandidateMongoRepository candidateMongoRepository;
+  @Mock private CandidateEntityRepository candidateEntityRepository;
+  @Mock private CandidateDocumentRepository candidateDocumentRepository;
 
   @InjectMocks private BatchConfig batchConfig;
 
@@ -128,7 +128,7 @@ class BatchConfigTest {
   @Test
   @DisplayName("Test Mongo item writer configuration")
   void testMongoItemWriter() {
-    ItemWriter<CandidateDocument> writer = batchConfig.mongoItemWriter(candidateMongoRepository);
+    ItemWriter<CandidateDocument> writer = batchConfig.mongoItemWriter(candidateDocumentRepository);
 
     assertNotNull(writer);
   }
@@ -136,7 +136,7 @@ class BatchConfigTest {
   @Test
   @DisplayName("Test Aurora item writer configuration")
   void testAuroraItemWriter() {
-    ItemWriter<CandidateEntity> writer = batchConfig.jpaItemWriter(candidateAuroraRepository);
+    ItemWriter<CandidateEntity> writer = batchConfig.jpaItemWriter(candidateEntityRepository);
 
     assertNotNull(writer);
   }
