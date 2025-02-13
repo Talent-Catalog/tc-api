@@ -2,6 +2,7 @@ package org.tctalent.anonymization.batch.listener;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ChunkListener;
+import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.stereotype.Component;
 import org.tctalent.anonymization.logging.LogBuilder;
@@ -26,9 +27,12 @@ public class LoggingChunkListener implements ChunkListener {
 
   @Override
   public void afterChunkError(ChunkContext context) {
+    StepExecution stepExecution = context.getStepContext().getStepExecution();
+    Throwable exception = stepExecution.getFailureExceptions().isEmpty() ? null : stepExecution.getFailureExceptions().get(0);
+
     LogBuilder.builder(log)
         .action("Error processing chunk")
-        .message("Chunk details:" + context.getStepContext().getStepExecution())
-        .logInfo();
+        .message("Chunk details: " + stepExecution + " | Error: " + (exception != null ? exception.getMessage() : "Unknown error"))
+        .logError(exception);
   }
 }
