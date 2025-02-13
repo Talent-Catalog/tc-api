@@ -16,6 +16,9 @@ tc-service:
 spring:
   application:
     name: tc-anonymization-service
+# Uncomment to set the active profile to bootstrap for testing
+#  profiles:
+#    active: bootstrap
 
   flyway:
     enabled: true
@@ -55,4 +58,4 @@ spring:
     jdbc:
       initialize-schema: never # batch schema are initialised by flyway
     job:
-      enabled: true # disables auto-run of jobs
+      enabled: false # enable/disable auto-run of jobs
