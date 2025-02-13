@@ -72,11 +72,11 @@ public class PagedSearchRequest {
     }
 
     /**
-     * If dtoType is null, this method will default to returning {@link DtoType#FULL},.
+     * If dtoType is null, this method will default to returning {@link DtoType#API},.
      */
     public DtoType getDtoType() {
         return dtoType == null
-            ? DtoType.FULL
+            ? DtoType.API
             : dtoType;
     }
 }
