@@ -15,7 +15,7 @@ tc-service:
 
 spring:
   application:
-    name: tc-anonymization-service
+    name: tc-api-service
 # Uncomment to set the active profile to bootstrap for testing
 #  profiles:
 #    active: bootstrap
