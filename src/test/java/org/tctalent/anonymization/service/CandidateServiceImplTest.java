@@ -5,7 +5,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,16 +15,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.tctalent.anonymization.entity.mongo.CandidateDocument;
-import org.tctalent.anonymization.mapper.CandidateMapper;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
+import org.tctalent.anonymization.mapper.DocumentMapper;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
-import org.tctalent.anonymization.repository.CandidateMongoRepository;
+import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
 class CandidateServiceImplTest {
 
-  @Mock private CandidateMongoRepository candidateMongoRepository;
-  @Mock private CandidateMapper candidateMapper;
+  @Mock private CandidateDocumentRepository candidateDocumentRepository;
+  @Mock private DocumentMapper documentMapper;
 
   @InjectMocks private CandidateServiceImpl candidateService;
 
@@ -43,15 +42,15 @@ class CandidateServiceImplTest {
     Page<Candidate> candidatePage = new PageImpl<>(List.of(candidate));
     CandidatePage expectedCandidatePage = new CandidatePage();
 
-    when(candidateMongoRepository
+    when(candidateDocumentRepository
         .findAll(pageable))
         .thenReturn(candidateDocumentPage);
 
-    when(candidateMapper
+    when(documentMapper
         .toCandidateModel(any(CandidateDocument.class)))
         .thenReturn(candidate);
 
-    when(candidateMapper
+    when(documentMapper
         .toCandidateModelPage(candidatePage))
         .thenReturn(expectedCandidatePage);
 
@@ -64,15 +63,15 @@ class CandidateServiceImplTest {
   @Test
   @DisplayName("Test find candidate by id")
   void testFindById() {
-    UUID publicId = UUID.randomUUID();
+    String publicId = "base-64-encoded-uuid";
     CandidateDocument candidateDocument = new CandidateDocument();
     Candidate candidate = new Candidate();
 
-    when(candidateMongoRepository
+    when(candidateDocumentRepository
         .findByPublicId(publicId))
         .thenReturn(Optional.of(candidateDocument));
 
-    when(candidateMapper
+    when(documentMapper
         .toCandidateModel(candidateDocument))
         .thenReturn(candidate);
 
@@ -85,9 +84,9 @@ class CandidateServiceImplTest {
   @Test
   @DisplayName("Test find candidate by id not found")
   void testFindById_NotFound() {
-    UUID publicId = UUID.randomUUID();
+    String publicId = "base-64-encoded-uuid";
 
-    when(candidateMongoRepository
+    when(candidateDocumentRepository
         .findByPublicId(publicId))
         .thenReturn(Optional.empty());
 

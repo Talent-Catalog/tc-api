@@ -9,5 +9,5 @@ public interface CandidateService {
 
   CandidatePage findAll(Pageable pageable);
 
-  Candidate findByPublicId(UUID publicId);
+  Candidate findByPublicId(String publicId);
 }

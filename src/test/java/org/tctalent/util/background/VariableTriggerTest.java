@@ -25,6 +25,7 @@ import java.time.Instant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.support.SimpleTriggerContext;
+import org.tctalent.anonymization.util.background.VariableTrigger;
 
 class VariableTriggerTest {
 

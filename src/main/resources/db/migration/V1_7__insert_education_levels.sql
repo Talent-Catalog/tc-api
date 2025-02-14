@@ -1,0 +1,12 @@
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (0, NULL, 0, 'inactive');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (271, NULL, 10, 'active');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (273, NULL, 40, 'active');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (8136, 'Bachelor', 90, 'active');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (8137, 'Associate', 70, 'active');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (8138, 'Bachelor', 100, 'active');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (8139, 'Masters', 110, 'active');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (8140, 'Doctoral', 120, 'active');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (9437, NULL, 20, 'active');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (9439, 'Vocational', 60, 'active');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (9440, NULL, 50, 'active');
+INSERT INTO public.education_level (id, education_type, level, status) VALUES (9563, NULL, 0, 'active');

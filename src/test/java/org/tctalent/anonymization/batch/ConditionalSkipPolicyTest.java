@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.tctalent.anonymization.batch.config.ConditionalSkipPolicy;
 import org.tctalent.anonymization.exception.RestApiReaderException;
 
 /**

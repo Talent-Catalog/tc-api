@@ -45,8 +45,12 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
     implementation "org.springframework.boot:spring-boot-starter-batch"
 
-    // PostgresSQL driver
+    // Database drivers and migration tools
     runtimeOnly "org.postgresql:postgresql"
+    //Note that Spring Initializr pulls in org.flywaydb:flyway-core but that will not process
+    //older Postgres DB versions. We need the the following dependency
+    //See https://github.com/flyway/flyway/issues/3902
+    implementation 'org.flywaydb:flyway-database-postgresql'
 
     // Lombok
     compileOnly "org.projectlombok:lombok"

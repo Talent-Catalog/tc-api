@@ -1,6 +1,8 @@
 package org.tctalent.anonymization.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
+import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 
@@ -17,7 +19,7 @@ public interface AnonymizationService {
      * @return Copy of data removing personal information
      * @throws JsonProcessingException if the data couldn't be converted
      */
-    Candidate anonymize(IdentifiableCandidate identifiableCandidate) throws JsonProcessingException;
+    Candidate anonymizeToDto(IdentifiableCandidate identifiableCandidate) throws JsonProcessingException;
 
     /**
      * Converts full candidate represented as JSON String into an anonymized version of it.
@@ -25,5 +27,19 @@ public interface AnonymizationService {
      * @return Copy of data removing personal information
      * @throws JsonProcessingException if the data couldn't be converted
      */
-    Candidate anonymize(String json) throws JsonProcessingException;
+    Candidate anonymizeToDto(String json) throws JsonProcessingException;
+
+    /**
+     * Converts full candidate into an anonymized Document.
+     * @param identifiableCandidate Full candidate data
+     * @return Copy of data removing personal information
+     */
+    CandidateDocument anonymizeToDocument(IdentifiableCandidate identifiableCandidate);
+
+    /**
+     * Converts full candidate into an anonymized JPA Entity.
+     * @param identifiableCandidate Full candidate data
+     * @return Copy of data removing personal information
+     */
+    CandidateEntity anonymizeToEntity(IdentifiableCandidate identifiableCandidate);
 }

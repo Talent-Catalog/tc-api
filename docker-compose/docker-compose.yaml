@@ -2,6 +2,18 @@ version: '3.8'
 
 services:
 
+  aurora-postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: tctalent
+      POSTGRES_PASSWORD: tctalent
+      POSTGRES_DB: tctalent
+    ports:
+      - "5433:5432" # Maps host port 5433 to container port 5432
+    volumes:
+      - aurora-data:/var/lib/postgresql/data
+
   mongo:
     image: mongo:8.0
     restart: always
@@ -26,4 +38,5 @@ services:
       ME_CONFIG_BASICAUTH: false
 
 volumes:
+  aurora-data:
   mongo-data:

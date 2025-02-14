@@ -16,11 +16,21 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.tctalent.anonymization.entity.db.Candidate;
-import org.tctalent.anonymization.entity.mongo.CandidateDocument;
+import org.tctalent.anonymization.batch.config.BatchConfig;
+import org.tctalent.anonymization.batch.config.BatchProperties;
+import org.tctalent.anonymization.batch.listener.LoggingDocumentWriteListener;
+import org.tctalent.anonymization.batch.listener.LoggingEntityWriteListener;
+import org.tctalent.anonymization.batch.listener.LoggingJobExecutionListener;
+import org.tctalent.anonymization.batch.listener.LoggingChunkListener;
+import org.tctalent.anonymization.batch.listener.LoggingRestToDocumentProcessListener;
+import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
+import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
+import org.tctalent.anonymization.batch.reader.RestApiItemReader;
+import org.tctalent.anonymization.domain.entity.CandidateEntity;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
-import org.tctalent.anonymization.repository.CandidateMongoRepository;
-import org.tctalent.anonymization.repository.CandidateRepository;
+import org.tctalent.anonymization.repository.CandidateEntityRepository;
+import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
 /**
  * Unit tests for the {@link BatchConfig} class.
@@ -32,16 +42,18 @@ class BatchConfigTest {
   @Mock private BatchProperties batchProperties;
   @Mock private JobRepository jobRepository;
   @Mock private DataSourceTransactionManager transactionManager;
-  @Mock private ItemReader<Candidate> jpaItemReader;
-  @Mock private ItemProcessor<Candidate, CandidateDocument> jpaItemProcessor;
-  @Mock private ItemProcessor<IdentifiableCandidate, CandidateDocument> restItemProcessor;
+  @Mock private ItemProcessor<IdentifiableCandidate, CandidateDocument> mongoItemProcessor;
+  @Mock private ItemProcessor<IdentifiableCandidate, CandidateEntity> auroraItemProcessor;
   @Mock private ItemWriter<CandidateDocument> mongoItemWriter;
+  @Mock private ItemWriter<CandidateEntity> auroraItemWriter;
   @Mock private LoggingChunkListener loggingChunkListener;
-  @Mock private LoggingItemReaderListener loggingItemReaderListener;
-  @Mock private LoggingItemProcessListener loggingItemProcessListener;
-  @Mock private LoggingItemWriterListener loggingItemWriterListener;
-  @Mock private CandidateRepository candidateRepository;
-  @Mock private CandidateMongoRepository candidateMongoRepository;
+  @Mock private LoggingRestReadListener loggingRestReadListener;
+  @Mock private LoggingRestToEntityProcessListener loggingRestToEntityProcessListener;
+  @Mock private LoggingRestToDocumentProcessListener loggingRestToDocumentProcessListener;
+  @Mock private LoggingEntityWriteListener loggingEntityWriteListener;
+  @Mock private LoggingDocumentWriteListener loggingDocumentWriteListener;
+  @Mock private CandidateEntityRepository candidateEntityRepository;
+  @Mock private CandidateDocumentRepository candidateDocumentRepository;
 
   @InjectMocks private BatchConfig batchConfig;
 
@@ -53,80 +65,80 @@ class BatchConfigTest {
   @Test
   @DisplayName("Test candidate migration job configuration")
   void testCandidateMigrationJob() {
-    Step candidateMigrationStep = mock(Step.class);
-    JobCompletionNotificationListener listener = mock(JobCompletionNotificationListener.class);
+    Step auroraMigrationStep = mock(Step.class);
+    Step mongoMigrationStep = mock(Step.class);
+    LoggingJobExecutionListener listener = mock(LoggingJobExecutionListener.class);
 
-    Job job = batchConfig.candidateMigrationJob(jobRepository, candidateMigrationStep, listener);
+    Job job = batchConfig.candidateMigrationJob(jobRepository, auroraMigrationStep,
+        mongoMigrationStep, listener);
 
     assertNotNull(job);
     assertEquals("candidateMigrationJob", job.getName());
   }
 
   @Test
-  @DisplayName("Test candidate JPA migration step configuration")
-  void testCandidateJpaMigrationStep() {
-    when(batchProperties
-        .getChunkSize())
-        .thenReturn(100);
-
-    Step step = batchConfig.candidateJpaMigrationStep(
-        jobRepository,
-        transactionManager,
-        jpaItemReader,
-        jpaItemProcessor,
-        mongoItemWriter,
-        loggingChunkListener,
-        loggingItemReaderListener,
-        loggingItemProcessListener,
-        loggingItemWriterListener
-    );
-
-    assertNotNull(step);
-    assertEquals("candidateJpaMigrationStep", step.getName());
-  }
-
-  @Test
-  @DisplayName("Test candidate REST migration step configuration")
-  void testCandidateRestMigrationStep() {
+  @DisplayName("Test candidate REST to aurora migration step configuration")
+  void testCandidateRestToAuroraMigrationStep() {
     when(batchProperties
         .getChunkSize())
         .thenReturn(100);
 
     ItemReader<IdentifiableCandidate> tcItemReader = mock(RestApiItemReader.class);
 
-    Step step = batchConfig.candidateRestMigrationStep(
+    Step step = batchConfig.candidateRestToAuroraStep(
         jobRepository,
         transactionManager,
         tcItemReader,
-        restItemProcessor,
-        mongoItemWriter,
+        auroraItemProcessor,
+        auroraItemWriter,
         loggingChunkListener,
-        loggingItemReaderListener,
-        loggingItemProcessListener,
-        loggingItemWriterListener
+        loggingRestReadListener,
+        loggingRestToEntityProcessListener,
+        loggingEntityWriteListener
     );
 
     assertNotNull(step);
-    assertEquals("candidateRestMigrationStep", step.getName());
+    assertEquals("candidateRestToAuroraStep", step.getName());
   }
 
   @Test
-  @DisplayName("Test JPA item reader configuration")
-  void testJpaItemReader() {
+  @DisplayName("Test candidate REST to mongo migration step configuration")
+  void testCandidateRestToMongoMigrationStep() {
     when(batchProperties
-        .getPageSize())
+        .getChunkSize())
         .thenReturn(100);
 
-    ItemReader<Candidate> reader = batchConfig.jpaItemReader(candidateRepository);
+    ItemReader<IdentifiableCandidate> tcItemReader = mock(RestApiItemReader.class);
 
-    assertNotNull(reader);
+    Step step = batchConfig.candidateRestToMongoStep(
+        jobRepository,
+        tcItemReader,
+        mongoItemProcessor,
+        mongoItemWriter,
+        loggingChunkListener,
+        loggingRestReadListener,
+        loggingRestToDocumentProcessListener,
+        loggingDocumentWriteListener
+    );
+
+    assertNotNull(step);
+    assertEquals("candidateRestToMongoStep", step.getName());
   }
 
   @Test
   @DisplayName("Test Mongo item writer configuration")
   void testMongoItemWriter() {
-    ItemWriter<CandidateDocument> writer = batchConfig.mongoItemWriter(candidateMongoRepository);
+    ItemWriter<CandidateDocument> writer = batchConfig.mongoItemWriter(candidateDocumentRepository);
 
     assertNotNull(writer);
   }
+
+  @Test
+  @DisplayName("Test Aurora item writer configuration")
+  void testAuroraItemWriter() {
+    ItemWriter<CandidateEntity> writer = batchConfig.jpaItemWriter(candidateEntityRepository);
+
+    assertNotNull(writer);
+  }
+
 }

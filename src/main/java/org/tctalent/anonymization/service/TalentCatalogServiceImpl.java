@@ -9,10 +9,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.tctalent.anonymization.config.properties.TalentCatalogServiceProperties;
+import org.tctalent.anonymization.dto.request.LoginRequest;
+import org.tctalent.anonymization.dto.request.SavedSearchGetRequest;
+import org.tctalent.anonymization.dto.response.JwtAuthenticationResponse;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
-import org.tctalent.anonymization.request.LoginRequest;
-import org.tctalent.anonymization.request.candidate.SavedSearchGetRequest;
-import org.tctalent.anonymization.response.JwtAuthenticationResponse;
 
 /**
  * @author John Cameron
