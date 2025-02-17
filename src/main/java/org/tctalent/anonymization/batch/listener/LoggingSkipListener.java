@@ -2,10 +2,9 @@ package org.tctalent.anonymization.batch.listener;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.SkipListener;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.StepExecutionListener;
+import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.tctalent.anonymization.domain.entity.BatchFailedItemEntity;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
@@ -16,27 +15,19 @@ import org.tctalent.anonymization.service.BatchFailedItemService;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class LoggingSkipListener implements SkipListener<IdentifiableCandidate, CandidateEntity>,
-    StepExecutionListener {
+@StepScope
+public class LoggingSkipListener implements SkipListener<IdentifiableCandidate, CandidateEntity> {
 
   private final BatchFailedItemService batchFailedItemService;
 
+  @Value("#{stepExecution.jobExecution.id}")
   private Long jobExecutionId;
+
+  @Value("#{stepExecution.id}")
   private Long stepExecutionId;
+
+  @Value("#{stepExecution.stepName}")
   private String stepName;
-
-  // Capture StepExecution info to use in onSkip callbacks
-  @Override
-  public void beforeStep(StepExecution stepExecution) {
-    this.jobExecutionId = stepExecution.getJobExecution().getId();
-    this.stepExecutionId = stepExecution.getId();
-    this.stepName = stepExecution.getStepName();
-  }
-
-  @Override
-  public ExitStatus afterStep(StepExecution stepExecution) {
-    return stepExecution.getExitStatus();
-  }
 
   @Override
   public void onSkipInProcess(IdentifiableCandidate item, Throwable t) {
