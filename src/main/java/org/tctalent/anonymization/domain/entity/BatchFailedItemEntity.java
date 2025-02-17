@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,11 +13,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "batch_failed_items")
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_certification_id_seq", allocationSize = 1)
 @NoArgsConstructor
 @AllArgsConstructor
 public class BatchFailedItemEntity extends AbstractDomainEntity<Long>{
+
+  @Column(name = "job_execution_id", nullable = false)
+  private Long jobExecutionId;
 
   @Column(name = "step_execution_id", nullable = false)
   private Long stepExecutionId;
