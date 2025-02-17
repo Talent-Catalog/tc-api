@@ -23,6 +23,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,9 +43,11 @@ public class CandidateJobExperience extends AbstractDomainEntity<Long> {
     private CandidateEntity candidate;
 
     // Store the isoCode directly instead of a foreign key reference
-    @Column(name = "country_iso_code", nullable = false)
+    @Size(max = 3)
+    @Column(name = "country_iso_code", nullable = false, length = 3)
     private String countryIsoCode;
 
+    @Valid
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_occupation_id")
     private CandidateOccupation candidateOccupation;

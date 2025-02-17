@@ -25,6 +25,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -44,6 +46,7 @@ public class CandidateOccupation extends AbstractDomainEntity<Long> {
     private CandidateEntity candidate;
 
     // Store the isco08Code directly instead of a foreign key reference
+    @Size(max = 255)
     @Column(name = "isco08_code", nullable = true)
     private String isco08Code;
 
@@ -53,6 +56,7 @@ public class CandidateOccupation extends AbstractDomainEntity<Long> {
 
     private Long yearsExperience;
 
+    @Valid
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidateOccupation", cascade = CascadeType.ALL)
     private List<CandidateJobExperience> candidateJobExperiences = new ArrayList<>();
 

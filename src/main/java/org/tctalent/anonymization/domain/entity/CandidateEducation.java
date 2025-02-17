@@ -25,6 +25,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +49,8 @@ public class CandidateEducation extends AbstractDomainEntity<Long> {
     private EducationType educationType;
 
     // Store the isoCode directly instead of a foreign key reference
-    @Column(name = "country_iso_code", nullable = true)
+    @Size(max = 3)
+    @Column(name = "country_iso_code", nullable = true, length = 3)
     private String countryIsoCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
