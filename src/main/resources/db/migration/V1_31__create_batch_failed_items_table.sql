@@ -9,5 +9,6 @@ CREATE TABLE batch_failed_items (
     item_public_id TEXT,            -- e.g. a single item or multiple public IDs for a failed chunk
     error_phase VARCHAR(20),        -- e.g. "PROCESSING" or "WRITING"
     error_message TEXT,             -- the exception message
+    updated_at TIMESTAMP DEFAULT now(),
     created_at TIMESTAMP DEFAULT now()
 );
