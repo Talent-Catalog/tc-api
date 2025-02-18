@@ -26,6 +26,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import lombok.Getter;
@@ -41,9 +43,11 @@ import org.tctalent.anonymization.domain.common.JobOpportunityStage;
 public class SalesforceJobOpp extends AbstractDomainEntity<Long> {
 
     // Store the isoCode directly instead of a foreign key reference
-    @Column(name = "country_iso_code", nullable = false)
+    @Size(max = 3)
+    @Column(name = "country_iso_code", nullable = false, length = 3)
     private String countryIsoCode;
 
+    @Valid
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "employer_id")
     private Employer employerEntity;

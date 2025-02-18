@@ -21,7 +21,7 @@ public class LoggingChunkListener implements ChunkListener {
   public void afterChunk(ChunkContext context) {
     LogBuilder.builder(log)
         .action("Chunk processed successfully")
-        .message("Chunk details:" + context.getStepContext().getStepExecution())
+        .message("Chunk details: " + context.getStepContext().getStepExecution())
         .logInfo();
   }
 
@@ -31,7 +31,7 @@ public class LoggingChunkListener implements ChunkListener {
     Throwable exception = stepExecution.getFailureExceptions().isEmpty() ? null : stepExecution.getFailureExceptions().get(0);
 
     LogBuilder.builder(log)
-        .action("Error processing chunk")
+        .action("Error while processing chunk")
         .message("Chunk details: " + stepExecution + " | Error: " + (exception != null ? exception.getMessage() : "Unknown error"))
         .logError(exception);
   }

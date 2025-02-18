@@ -2,6 +2,7 @@ package org.tctalent.anonymization.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -58,6 +59,8 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private YesNo availImmediate;
 
+  @Size(max = 255)
+  @Column(name = "avail_immediate_job_ops", length = 255)
   private String availImmediateJobOps;
 
   @Enumerated(EnumType.STRING)
@@ -66,7 +69,8 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   private String availImmediateNotes;
 
   // Store the isoCode directly instead of a foreign key reference
-  @Column(name = "birth_country_iso_code", nullable = true)
+  @Size(max = 3)
+  @Column(name = "birth_country_iso_code", nullable = true, length = 3)
   private String birthCountryIsoCode;
 
   /**
@@ -74,6 +78,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
    * CascadeType.ALL cascades all operations (persist, merge, remove, etc.) to certifications.
    * orphanRemoval=true ensures that certifications removed from this list are deleted.
    */
+  @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("dateCompleted DESC")
   private List<CandidateCertification> candidateCertifications = new ArrayList<>();
@@ -91,6 +96,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateCertifications.addAll(certifications);
   }
 
+  @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CandidateCitizenship> candidateCitizenships = new ArrayList<>();
 
@@ -100,6 +106,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateCitizenships.addAll(citizenships);
   }
 
+  @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CandidateDependant> candidateDependants = new ArrayList<>();
 
@@ -109,6 +116,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateDependants.addAll(dependants);
   }
 
+  @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CandidateDestination> candidateDestinations = new ArrayList<>();
 
@@ -118,6 +126,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateDestinations.addAll(destinations);
   }
 
+  @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("yearCompleted DESC")
   private List<CandidateEducation> candidateEducations = new ArrayList<>();
@@ -128,6 +137,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateEducations.addAll(educations);
   }
 
+  @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<@Valid CandidateExam> candidateExams = new ArrayList<>();
 
@@ -137,6 +147,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateExams.addAll(exams);
   }
 
+  @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CandidateLanguage> candidateLanguages = new ArrayList<>();
 
@@ -148,6 +159,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private String candidateMessage;
 
+  @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CandidateOccupation> candidateOccupations = new ArrayList<>();
 
@@ -157,6 +169,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateOccupations.addAll(occupations);
   }
 
+  @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CandidateSkill> candidateSkills = new ArrayList<>();
 
@@ -166,6 +179,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateSkills.addAll(skills);
   }
 
+  @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CandidateVisaCheck> candidateVisaChecks = new ArrayList<>();
 
@@ -178,6 +192,8 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNo canDrive;
 
+  @Size(max = 255)
+  @Column(name = "city", length = 255)
   private String city;
 
   @Enumerated(EnumType.STRING)
@@ -185,12 +201,13 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private String conflictNotes;
 
-  private Boolean contactConsentTcPartners;
-
   private Boolean contactConsentRegistration;
 
+  private Boolean contactConsentTcPartners;
+
   // Store the isoCode directly instead of a foreign key reference
-  @Column(name = "country_iso_code", nullable = false)
+  @Size(max = 3)
+  @Column(name = "country_iso_code", nullable = false, length = 3)
   private String countryIsoCode;
 
   @Enumerated(EnumType.STRING)
@@ -198,6 +215,8 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private LocalDate covidVaccinatedDate;
 
+  @Size(max = 255)
+  @Column(name = "covid_vaccine_name", length = 255)
   private String covidVaccineName;
 
   private String covidVaccineNotes;
@@ -219,13 +238,16 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   private DocumentStatus drivingLicense;
 
   // Store the isoCode directly instead of a foreign key reference
-  @Column(name = "driving_license_country_iso_code", nullable = true)
+  @Size(max = 3)
+  @Column(name = "driving_license_country_iso_code", nullable = true, length = 3)
   private String drivingLicenseCountryIsoCode;
 
   private LocalDate drivingLicenseExp;
 
   private String englishAssessment;
 
+  @Size(max = 255)
+  @Column(name = "english_assessment_score_ielts", length = 255)
   private String englishAssessmentScoreIelts;
 
   @Enumerated(EnumType.STRING)
@@ -264,8 +286,12 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   private BigDecimal ieltsScore;
 
   @Convert(converter = IntRecruitReasonConverter.class)
+  @Size(max = 255)
+  @Column(name = "int_recruit_reasons", length = 255)
   private List<IntRecruitReason> intRecruitReasons;
 
+  @Size(max = 255)
+  @Column(name = "int_recruit_other", length = 255)
   private String intRecruitOther;
 
   @Enumerated(EnumType.STRING)
@@ -276,6 +302,8 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   private String leftHomeNotes;
 
   @Convert(converter = LeftHomeReasonsConverter.class)
+  @Size(max = 255)
+  @Column(name = "left_home_reasons", length = 255)
   private List<LeftHomeReason> leftHomeReasons;
 
   @Enumerated(EnumType.STRING)
@@ -287,6 +315,8 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Column(name = "max_education_level", nullable = true)
   private Integer maxEducationLevel;
 
+  @Size(max = 255)
+  @Column(name = "media_willingness", length = 255)
   private String mediaWillingness;
 
   @Enumerated(EnumType.STRING)
@@ -308,7 +338,8 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   private YesNo monitoringEvaluationConsent;
 
   // Store the isoCode directly instead of a foreign key reference
-  @Column(name = "nationality_iso_code", nullable = false)
+  @Size(max = 3)
+  @Column(name = "nationality_iso_code", nullable = false, length = 3)
   private String nationalityIsoCode;
 
   private Long numberDependants;
@@ -316,8 +347,12 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNoUnsure partnerRegistered;
 
+  @Size(max = 255)
+  @Column(name = "partner_public_id", length = 255)
   private String partnerPublicId;
 
+  @Size(max = 255)
+  @Column(name = "partner_citizenship", length = 255)
   private String partnerCitizenship;
 
   /**
@@ -354,17 +389,21 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   private YesNo partnerEnglish;
 
   // Store the written_level directly instead of a foreign key reference
-  @Column(name = "partner_english_level", nullable = true)
+  @Size(max = 255)
+  @Column(name = "partner_english_level", nullable = true, length = 255)
   private String partnerEnglishLevel;
 
   @Enumerated(EnumType.STRING)
   private IeltsStatus partnerIelts;
 
+  @Size(max = 255)
+  @Column(name = "partner_ielts_score", length = 255)
   private String partnerIeltsScore;
 
   private Long partnerIeltsYr;
 
   // Store the isco08Code directly instead of a foreign key reference
+  @Size(max = 255)
   @Column(name = "partner_occupation_isco08_code", nullable = true)
   private String partnerOccupationIsco08Code;
 
@@ -380,8 +419,12 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNoUnsure returnedHome;
 
+  @Size(max = 255)
+  @Column(name = "returned_home_reason", length = 255)
   private String returnedHomeReason;
 
+  @Size(max = 255)
+  @Column(name = "returned_home_reason_no", length = 255)
   private String returnedHomeReasonNo;
 
   @Enumerated(EnumType.STRING)
@@ -393,15 +436,20 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNo resettleThird;
 
+  @Size(max = 255)
+  @Column(name = "resettle_third_status", length = 255)
   private String resettleThirdStatus;
 
+  @Size(max = 255)
+  @Column(name = "state", length = 255)
   private String state;
 
   @Enumerated(EnumType.STRING)
   private CandidateStatus status;
 
   // Store the survey type name directly instead of a foreign key reference
-  @Column(name = "survey_type", nullable = true)
+  @Size(max = 255)
+  @Column(name = "survey_type", nullable = true, length = 255)
   private String surveyType;
 
   private String surveyComment;

@@ -27,6 +27,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,6 +52,7 @@ public class CandidateVisaJobCheck extends AbstractDomainEntity<Long> {
     /**
      * Associated job opportunity
      */
+    @Valid
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "job_opp_id")
     SalesforceJobOpp jobOpp;
@@ -61,6 +64,7 @@ public class CandidateVisaJobCheck extends AbstractDomainEntity<Long> {
     private YesNo qualification;
 
     // Store the isco08Code directly instead of a foreign key reference
+    @Size(max = 255)
     @Column(name = "isco08_code", nullable = true)
     private String isco08Code;
 

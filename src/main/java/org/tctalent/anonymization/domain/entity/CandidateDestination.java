@@ -25,12 +25,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.tctalent.anonymization.domain.common.YesNoUnsure;
 
-// todo - sm - check this - it's called Destination in the API schema
 @Getter
 @Setter
 @Entity
@@ -45,7 +45,8 @@ public class CandidateDestination extends AbstractDomainEntity<Long>
     private CandidateEntity candidate;
 
     // Store the isoCode directly instead of a foreign key reference
-    @Column(name = "country_iso_code", nullable = false)
+    @Size(max = 3)
+    @Column(name = "country_iso_code", nullable = false, length = 3)
     private String countryIsoCode;
 
     @Enumerated(EnumType.STRING)

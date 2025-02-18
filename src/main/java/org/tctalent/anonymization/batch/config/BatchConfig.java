@@ -10,10 +10,12 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
+import org.springframework.batch.item.validator.ValidationException;
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.tctalent.anonymization.batch.listener.LoggingDocumentWriteListener;
 import org.tctalent.anonymization.batch.listener.LoggingJobExecutionListener;
@@ -22,6 +24,7 @@ import org.tctalent.anonymization.batch.listener.LoggingRestToDocumentProcessLis
 import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
 import org.tctalent.anonymization.batch.listener.LoggingEntityWriteListener;
+import org.tctalent.anonymization.batch.listener.LoggingSkipListener;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
@@ -97,7 +100,8 @@ public class BatchConfig {
       LoggingChunkListener loggingChunkListener,
       LoggingRestReadListener loggingRestReadListener,
       LoggingRestToEntityProcessListener loggingRestToEntityProcessListener,
-      LoggingEntityWriteListener loggingEntityWriteListener) {
+      LoggingEntityWriteListener loggingEntityWriteListener,
+      LoggingSkipListener loggingSkipListener) {
 
     return new StepBuilder("candidateRestToAuroraStep", jobRepository)
         .<IdentifiableCandidate, CandidateEntity>chunk(batchProperties.getChunkSize(), transactionManager)
@@ -109,6 +113,9 @@ public class BatchConfig {
         .listener(loggingRestToEntityProcessListener)
         .listener(loggingEntityWriteListener)
         .faultTolerant()
+        .skip(DataIntegrityViolationException.class)
+        .skip(ValidationException.class)
+        .listener(loggingSkipListener)
         .skipPolicy(new ConditionalSkipPolicy(batchProperties.getMaxReadSkips()))
         .build();
   }
@@ -145,7 +152,7 @@ public class BatchConfig {
       CandidateEntityRepository candidateEntityRepository) {
     return new RepositoryItemWriterBuilder<CandidateEntity>()
         .repository(candidateEntityRepository)
-        .methodName("save")
+        .methodName("saveAndFlush")
         .build();
   }
 

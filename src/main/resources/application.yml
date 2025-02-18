@@ -2,14 +2,14 @@ server:
   port: ${SERVER_PORT:8082}
 
 batch:
-  chunk-size: ${BATCH_CHUNK_SIZE:100}
-  page-size: ${BATCH_PAGE_SIZE:100}
+  chunk-size: ${BATCH_CHUNK_SIZE:20}
+  page-size: ${BATCH_PAGE_SIZE:20}
   max-read-skips: ${BATCH_MAX_READ_SKIPS:10}
   fetch-delay-millis: ${BATCH_FETCH_DELAY_MILLIS:1000}
 
 tc-service:
   apiUrl: ${TC_API_URL:http://localhost:8080/api/admin}
-  search-id: ${TC_SEARCH_ID:4672}
+  search-id: ${TC_SEARCH_ID:2679}
   username: ${TC_USERNAME:appAnonDatabaseService}
   password: ${TC_PASSWORD:12345678} # todo - sm - just a dummy value for local testing
 
@@ -58,4 +58,4 @@ spring:
     jdbc:
       initialize-schema: never # batch schema are initialised by flyway
     job:
-      enabled: false # enable/disable auto-run of jobs
+      enabled: true # enable/disable auto-run of jobs

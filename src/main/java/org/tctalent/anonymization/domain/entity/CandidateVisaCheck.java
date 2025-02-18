@@ -27,6 +27,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -49,7 +51,8 @@ public class CandidateVisaCheck extends AbstractDomainEntity<Long> {
     private CandidateEntity candidate;
 
     // Store the isoCode directly instead of a foreign key reference
-    @Column(name = "country_iso_code", nullable = false)
+    @Size(max = 3)
+    @Column(name = "country_iso_code", nullable = false, length = 3)
     private String countryIsoCode;
 
     @Enumerated(EnumType.STRING)
@@ -79,6 +82,7 @@ public class CandidateVisaCheck extends AbstractDomainEntity<Long> {
     @Enumerated(EnumType.STRING)
     private FamilyRelations destinationFamily;
 
+    @Valid
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidateVisaCheck", cascade = CascadeType.ALL)
     private Set<CandidateVisaJobCheck> candidateVisaJobChecks = new HashSet<>();
 
