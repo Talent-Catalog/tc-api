@@ -152,7 +152,7 @@ public class BatchConfig {
       CandidateEntityRepository candidateEntityRepository) {
     return new RepositoryItemWriterBuilder<CandidateEntity>()
         .repository(candidateEntityRepository)
-        .methodName("save")
+        .methodName("saveAndFlush")
         .build();
   }
 
