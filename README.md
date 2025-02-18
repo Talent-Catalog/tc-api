@@ -1,9 +1,9 @@
-# Talent Catalog Anonymization Service #
+# Talent Catalog API #
 
 ## Overview ##
 
 This service implements the 
-[Talent Catalog Anonymization Service API](https://github.com/Talent-Catalog/tc-anonymization-service-spec)
+[Talent Catalog API Specification](https://github.com/Talent-Catalog/tc-api-spec)
 
 ## How do I get set up? ##
 
@@ -87,18 +87,18 @@ Download and install the latest of the following tools.
         docker-compose --version
       ```
 
-### Clone the TC Anonymization Service and Specification repositories from Git ###
+### Clone the TC API and TC API Specification repositories from Git ###
 
-- Clone [the service](https://github.com/Talent-Catalog/tc-anonymization-service.git) to your local system
+- Clone [the service](https://github.com/Talent-Catalog/tc-api.git) to your local system
 ```shell
-git clone https://github.com/Talent-Catalog/tc-anonymization-service.git
+git clone https://github.com/Talent-Catalog/tc-api.git
 ```
 - Open the root folder in IntelliJ IDEA (it should auto detect gradle and self-configure)
 
-- Clone [the OpenAPI specification](https://github.com/Talent-Catalog/tc-anonymization-service-spec.git) 
+- Clone [the OpenAPI specification](https://github.com/Talent-Catalog/tc-api-spec.git) 
 to your local system
 ```shell
-git clone https://github.com/Talent-Catalog/tc-anonymization-service-spec.git
+git clone https://github.com/Talent-Catalog/tc-api-spec.git
 ```
 - Open the root folder in IntelliJ IDEA as a Module - IntelliJ > File > New > Module from Existing 
 Sources
@@ -106,11 +106,11 @@ Sources
 ### Using Docker-Compose to Start Services ###
 
 With Docker and Docker Compose installed, you can now use docker-compose to set up the required
-services: Mongo, and optionally, Mongo Express.
+services: Aurora-Postgres DB, Mongo DB, and optionally, Mongo Express.
 
-- The Anonymization Service repository includes a docker-compose.yml file in the docker-compose 
-  folder, with preconfigured services for Mongo and Mongo Express. This file is ready for you to 
-  use.
+- The API service git repository includes a docker-compose.yml file in the docker-compose 
+  folder, with preconfigured services for Aurora, Mongo and Mongo Express. This file is ready for 
+  you to use.
 - To start the services, navigate to the docker-compose folder and run the following command:
 ```shell
 cd talentcatalog/docker-compose
@@ -139,6 +139,8 @@ file itself.
 
 The following services will all run from the Docker container:
 
+- **Aurora-Postgres** (listening on the non-default port 5433 to prevent conflict with the core TC 
+service Postgres DB)
 - **Mongo** (listening on port 27017)
 - **Mongo Express** (8081)
 
@@ -149,52 +151,52 @@ docker ps
 
 ### Set up your local database ###
 
-The TC anonymization service is designed to run in a cloud environment alongside the TC core 
+The TC API service is designed to run in a cloud environment alongside the TC core 
 service. You should have the TC core service and database running locally before proceeding. See
 the [talentcatalog](https://github.com/Talent-Catalog/talentcatalog) repository for further details.
 
 Once you have a local TC core service and database installed and running, you can run the 
-TcAnonymizationServiceApplication from IntelliJ - see 'Run the server' below for further details. 
+TcApiServiceApplication from IntelliJ - see 'Run the server' below for further details. 
 
-At the time of writing this ReadMe he application is configured to immediately start a batch job 
+At the time of writing this ReadMe the application is configured to immediately start a batch job 
 that will read candidate data from the TC core database, map this to anonymised candidate data, and 
-save the anonymised data to Mongo database.
+save the anonymised data to Aurora and Mongo databases.
 
 ### Run the server ###
 
 Before running the server, you must generate the model and api classes that the service needs. The 
-schema for these are defined in the OpenAPI specification in tc-anonymization-service-spec which you 
-imported to IntelliJ as an additional module.
+schema for these are defined in the OpenAPI specification in the tc-api-spec which you imported to 
+IntelliJ as an additional module.
 
-From the tc-anonymization-service root folder, execute the Gradle command: 
+From the tc-apin-service root folder, execute the Gradle command: 
 
 ```shell
 ./gradlew clean openApiGenerate
 ```
 
 Then generate the Mapstruct mapper classes that the service uses to map from TC core data to 
-anonymised candidate data. From the tc-anonymization-service root folder, execute the Gradle 
-command:
+anonymised candidate data. From the tc-api-service root folder, execute the Gradle command:
 
 ```shell
 ./gradlew compileJava
 ```
 
-You can now start the anonymization service:
+You can now start the TC API service:
 
-- Create a new Run Profile for `org.tctalent.anonymization.TcAnonymizationServiceApplication`.
+- Create a new Run Profile for `org.tctalent.anonymization.TcApiServiceApplication`.
   In the Environment Variables section of Intellij, check the "Include system environment variables" 
   checkbox.
 - Run the new profile, you should see something similar to this in the logs:
 
 ```
-Started TcAnonymizationServiceApplication in 3.179 seconds (process running for 3.424)
+Started TcApiServiceApplication in 3.179 seconds (process running for 3.424)
 ```
 
 - Your server will be running on port 8082 (as defined in server.port in application.yml).
 - At the time of writing this Readme, the server initiates a batch process on startup that reads 
-  data from the TC core database, maps it to anonymised data, and writes this to Mongo.
-- You can test it the server with a tool such as Postman by issuing a GET to the following endpoint: 
+  data from the TC core database, maps it to anonymised data, and writes this to Aurora and Mongo.
+- You can test out the server with a tool such as Postman by issuing a GET to the following 
+  endpoint: 
   [http://localhost:8082/v1/candidates](http://localhost:8082/v1/candidates)
 
 ### Connect IntelliJ to your database ###
@@ -203,14 +205,15 @@ Started TcAnonymizationServiceApplication in 3.179 seconds (process running for 
 - Give the DB a name that clearly identifies it as your local development version.
 - Populate the other setup parameters with the default values in the `mongo` configuration of the 
   project file `docker-compose.yml`.
+- Repeat these steps to add Aurora DB as PostgreSQL data source: File > New > Data Source > 
+  PostgreSQL > PostgreSQL
 
 ## Version Control ##
 
-We use GitHub. Our repository is called tc-anonymization-service -
-[https://github.com/Talent-Catalog/tc-anonymization-service](https://github.com/Talent-Catalog/tc-anonymization-service)
+We use GitHub. Our repository is called tc-api -
+[https://github.com/Talent-Catalog/tc-api](https://github.com/Talent-Catalog/tc-api)
 
-See the [GitHub wiki](https://github.com/Talent-Catalog/tc-anonymization-service/wiki)
-for additional documentation.
+See the [GitHub wiki](https://github.com/Talent-Catalog/tc-api/wiki) for additional documentation.
 
 ### Master branch ###
 
@@ -253,13 +256,13 @@ to review and understand. It also makes it easier to revert specific functionali
 something wrong and decide to start again, doing it differently.
 
 You should feel comfortable pushing regularly - often doing Commit and Push at the same time. 
-Pushing is effectively saving your work into the "cloud" rather having changes just saved on your 
-computer.
+Pushing is effectively saving your work into the "cloud" rather than having changes just saved on 
+your computer.
 
 ## Deployment and Monitoring ##
 
 See the Deployment and Monitoring pages on the
-[GitHub wiki](https://github.com/Talent-Catalog/tc-anonymization-service/wiki).
+[GitHub wiki](https://github.com/Talent-Catalog/tc-api/wiki).
 
 ## License
 
