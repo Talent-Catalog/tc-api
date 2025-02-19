@@ -168,7 +168,7 @@ Before running the server, you must generate the model and api classes that the 
 schema for these are defined in the OpenAPI specification in the tc-api-spec which you imported to 
 IntelliJ as an additional module.
 
-From the tc-apin-service root folder, execute the Gradle command: 
+From the tc-api root folder, execute the Gradle command: 
 
 ```shell
 ./gradlew clean openApiGenerate
