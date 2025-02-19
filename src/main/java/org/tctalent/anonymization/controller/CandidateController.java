@@ -1,8 +1,6 @@
 package org.tctalent.anonymization.controller;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tctalent.anonymization.api.V1Api;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
+import org.tctalent.anonymization.model.RegisterCandidate201Response;
+import org.tctalent.anonymization.model.RegisterCandidateRequest;
 import org.tctalent.anonymization.service.CandidateService;
 
 @RestController
@@ -45,4 +45,14 @@ public class CandidateController implements V1Api {
     return ResponseEntity.ok(candidate);
   }
 
+  @Override
+  public ResponseEntity<RegisterCandidate201Response> registerCandidate(
+      RegisterCandidateRequest registerCandidateRequest) {
+
+    //TODO JC Connect to tctalent server and simulate a series of updates mimicking a normal registration
+    //TODO JC The server should send the candidate an email notifying them of their registration with instructions on how to log in.
+    //TODO JC Return the public id of the created candidate as well as the message and request id in the RegisterCandidate201Response
+
+    return V1Api.super.registerCandidate(registerCandidateRequest);
+  }
 }
