@@ -46,6 +46,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
       AuthenticationException authException) throws IOException, ServletException {
     // Build a ProblemDetails object with 401 status and a custom message
     ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, authException.getMessage());
+    problemDetail.setInstance(URI.create(request.getRequestURI()));
     response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     mapper.writeValue(response.getOutputStream(), problemDetail);
