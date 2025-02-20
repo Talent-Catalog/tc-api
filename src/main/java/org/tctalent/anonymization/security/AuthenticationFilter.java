@@ -5,10 +5,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import org.springframework.http.MediaType;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 
@@ -23,7 +25,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * @see <a href="https://www.baeldung.com/spring-boot-api-key-secret">
  * @author sadatmalik
  */
+@Component
+@RequiredArgsConstructor
 public class AuthenticationFilter extends OncePerRequestFilter {
+
+  private final AuthenticationEntryPoint authenticationEntryPoint;
 
   @Override
   public void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -32,12 +38,12 @@ public class AuthenticationFilter extends OncePerRequestFilter {
       Authentication authentication = AuthenticationService.getAuthentication(request);
       SecurityContextHolder.getContext().setAuthentication(authentication);
     } catch (Exception exp) {
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-      PrintWriter writer = response.getWriter();
-      writer.print(exp.getMessage());
-      writer.flush();
-      writer.close();
+      // Clear any authentication context
+      SecurityContextHolder.clearContext();
+      // Delegate to the authentication entry point which will build a ProblemDetails response
+      authenticationEntryPoint.commence(request, response,
+          new BadCredentialsException("Invalid API Key", exp));
+      return;
     }
 
     filterChain.doFilter(request, response);
