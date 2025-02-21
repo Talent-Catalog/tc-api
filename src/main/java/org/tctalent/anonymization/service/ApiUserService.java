@@ -1,7 +1,6 @@
 package org.tctalent.anonymization.service;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
