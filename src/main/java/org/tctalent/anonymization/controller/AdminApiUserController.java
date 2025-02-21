@@ -28,7 +28,7 @@ public class AdminApiUserController {
    * @return the API user registration response with the generated API key
    */
   @PostMapping
-//  @PreAuthorize("hasAuthority('ADMIN')") // todo - sm - admin role - pick this up in a separate story
+  @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity<ApiUserRegistrationResponse> registerApiUser(
       @Valid @RequestBody ApiUserRegistrationRequest request) {
 
