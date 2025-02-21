@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import org.springframework.transaction.annotation.Transactional;
 import org.tctalent.anonymization.domain.entity.ApiUser;
 import org.tctalent.anonymization.dto.request.ApiUserRegistrationRequest;
 import org.tctalent.anonymization.dto.response.ApiUserRegistrationResponse;
@@ -20,6 +21,16 @@ public class ApiUserService {
   private final ApiUserRepository apiUserRepository;
   private final BCryptPasswordEncoder passwordEncoder;
 
+  /**
+   * Registers a new API user.
+   * <p>
+   * Generates a secure API key, creates an ApiUser entity, and saves the entity. Returns the
+   * plain API key in the registration response.
+   *
+   * @param request the API user registration request
+   * @return the registration response containing the plain API key
+   */
+  @Transactional
   public ApiUserRegistrationResponse registerApiUser(ApiUserRegistrationRequest request) {
     // Generate the plain API key
     String plainApiKey = ApiKeyGenerator.generateApiKey();
