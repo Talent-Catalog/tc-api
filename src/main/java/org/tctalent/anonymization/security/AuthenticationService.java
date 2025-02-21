@@ -48,7 +48,7 @@ public class AuthenticationService {
     }
     // Convert the String authorities to GrantedAuthority objects
     List<SimpleGrantedAuthority> grantedAuthorities = apiUser.getAuthorities().stream()
-        .map(SimpleGrantedAuthority::new)
+        .map(apiAuthority -> new SimpleGrantedAuthority(apiAuthority.name()))
         .toList();
 
     return new ApiKeyAuthentication(presentedApiKey, grantedAuthorities);

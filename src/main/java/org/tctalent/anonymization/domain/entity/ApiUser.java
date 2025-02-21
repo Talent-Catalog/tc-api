@@ -12,7 +12,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.domain.entity.converter.AuthoritiesConverter;
+import org.tctalent.anonymization.domain.entity.converter.ApiAuthorityConverter;
+import org.tctalent.anonymization.security.ApiAuthority;
 
 /**
  * Represents a user of the API. The ApiUser entity is used to store information about the user,
@@ -33,8 +34,8 @@ public class ApiUser extends AbstractDomainEntity<Long> {
   private String email;
   private String apiKeyHash;
 
-  @Convert(converter = AuthoritiesConverter.class)
-  private Set<String> authorities = new HashSet<>();
+  @Convert(converter = ApiAuthorityConverter.class)
+  private Set<ApiAuthority> authorities = new HashSet<>();
 
   private LocalDateTime expiresAt;
 }
