@@ -30,12 +30,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class AuthenticationFilter extends OncePerRequestFilter {
 
   private final AuthenticationEntryPoint authenticationEntryPoint;
+  private final AuthenticationService authenticationService;
 
   @Override
   public void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws IOException, ServletException {
     try {
-      Authentication authentication = AuthenticationService.getAuthentication(request);
+      Authentication authentication = authenticationService.getAuthentication(request);
       SecurityContextHolder.getContext().setAuthentication(authentication);
     } catch (Exception exp) {
       // Clear any authentication context

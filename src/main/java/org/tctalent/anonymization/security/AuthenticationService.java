@@ -1,9 +1,15 @@
 package org.tctalent.anonymization.security;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.tctalent.anonymization.domain.entity.ApiUser;
+import org.tctalent.anonymization.repository.ApiUserRepository;
 
 /**
  * Authentic Service that checks whether the HTTP request contains the API Key header with a secret
@@ -16,17 +22,45 @@ import org.springframework.security.core.authority.AuthorityUtils;
  * @see <a href="https://www.baeldung.com/spring-boot-api-key-secret">
  * @author sadatmalik
  */
+@Service
+@RequiredArgsConstructor
 public class AuthenticationService {
 
   private static final String AUTH_TOKEN_HEADER_NAME = "X-API-KEY";
-  private static final String AUTH_TOKEN = "tc-api-xxx-yyy-zzz";
 
-  public static Authentication getAuthentication(HttpServletRequest request) {
-    String apiKey = request.getHeader(AUTH_TOKEN_HEADER_NAME);
-    if (apiKey == null || !apiKey.equals(AUTH_TOKEN)) {
+  private final ApiUserRepository apiUserRepository;
+  private final BCryptPasswordEncoder passwordEncoder;
+
+  public Authentication getAuthentication(HttpServletRequest request) {
+    String presentedApiKey = request.getHeader(AUTH_TOKEN_HEADER_NAME);
+    if (presentedApiKey == null) {
       throw new BadCredentialsException("Invalid API Key");
     }
 
-    return new ApiKeyAuthentication(apiKey, AuthorityUtils.NO_AUTHORITIES);
+    ApiUser apiUser = findApiUserByApiKey(presentedApiKey);
+    if (apiUser == null) {
+      throw new BadCredentialsException("Invalid API key");
+    }
+
+    // Verify the API key against the stored hash
+    if (!passwordEncoder.matches(presentedApiKey, apiUser.getApiKeyHash())) {
+      throw new BadCredentialsException("Invalid API key");
+    }
+    // Convert the String authorities to GrantedAuthority objects
+    List<SimpleGrantedAuthority> grantedAuthorities = apiUser.getAuthorities().stream()
+        .map(SimpleGrantedAuthority::new)
+        .toList();
+
+    return new ApiKeyAuthentication(presentedApiKey, grantedAuthorities);
   }
+
+  private ApiUser findApiUserByApiKey(String apiKey) {
+    // todo - sm this iterates over all API users and check if any match.
+    //   before production can directly lookup API keys identifier as they are stored in a hash index.
+    return apiUserRepository.findAll().stream()
+        .filter(user -> passwordEncoder.matches(apiKey, user.getApiKeyHash()))
+        .findFirst()
+        .orElse(null);
+  }
+
 }
