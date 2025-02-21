@@ -1,11 +1,11 @@
 package org.tctalent.anonymization.controller;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.tctalent.anonymization.api.V1Api;
 import org.tctalent.anonymization.model.Candidate;
@@ -24,6 +24,7 @@ public class CandidateController implements V1Api {
    * {@inheritDoc}
    */
   @Override
+  @PreAuthorize("hasAuthority('READ_CANDIDATE_DATA')")
   public ResponseEntity<CandidatePage> getAllCandidates(Integer page, Integer limit,
       String occupation, String location, String nationality) {
     // Adjust page index because Spring Data JPA uses zero-based paging
@@ -40,6 +41,7 @@ public class CandidateController implements V1Api {
    * {@inheritDoc}
    */
   @Override
+  @PreAuthorize("hasAuthority('READ_CANDIDATE_DATA')")
   public ResponseEntity<Candidate> getCandidateByPublicId(String publicId) {
     Candidate candidate = candidateService.findByPublicId(publicId);
     return ResponseEntity.ok(candidate);
