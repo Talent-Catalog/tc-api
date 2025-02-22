@@ -2,15 +2,14 @@ package org.tctalent.anonymization;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
 public class TcApiServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TcApiServiceApplication.class, args);
-
-        //TODO JC Trigger login to server (need app login - ie no MFA)
-        //TODO JC Trigger query of all candidates
     }
 
 }
