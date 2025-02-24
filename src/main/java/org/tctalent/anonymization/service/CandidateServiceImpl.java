@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.tctalent.anonymization.exception.NoSuchObjectException;
 import org.tctalent.anonymization.mapper.DocumentMapper;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
@@ -30,7 +31,7 @@ public class CandidateServiceImpl implements CandidateService {
     return candidateDocumentRepository
         .findByPublicId(publicId)
         .map(documentMapper::toCandidateModel)
-        .orElseThrow(() -> new RuntimeException("Candidate not found")); // todo better exceptions
+        .orElseThrow(() -> new NoSuchObjectException(Candidate.class, publicId));
   }
 
 }

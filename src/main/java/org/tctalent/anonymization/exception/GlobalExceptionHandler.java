@@ -1,6 +1,7 @@
 package org.tctalent.anonymization.exception;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
+import java.util.stream.Collectors;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -8,10 +9,10 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import java.util.stream.Collectors;
 
 /**
  * Global exception handler that converts exceptions into Problem Details responses.
@@ -27,6 +28,18 @@ import java.util.stream.Collectors;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+  /**
+   * Handles standard TC NoSuchObjectException.
+   * <p/>
+   * See <a href="https://www.baeldung.com/spring-boot-return-errors-problemdetail">...</a>
+   * @param ex NoSuchObjection exception containing details
+   * @return ProblemDetail
+   */
+  @ExceptionHandler(NoSuchObjectException.class)
+  public ProblemDetail handleNoSuchObjectException(NoSuchObjectException ex) {
+      return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+  }
 
   /**
    * Handles validation errors when a controller method argument annotated with @Valid fails.
