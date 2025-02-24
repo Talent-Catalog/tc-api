@@ -61,6 +61,7 @@ dependencies {
     // Testing dependencies
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testImplementation 'org.springframework.security:spring-security-test'
 
     // Additional libraries required by imported TC entities - todo check dependencies for curated versions or move to ext
     implementation "org.apache.commons:commons-lang3"

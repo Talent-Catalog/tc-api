@@ -68,7 +68,7 @@ class CandidateServiceImplTest {
     Candidate candidate = new Candidate();
 
     when(candidateDocumentRepository
-        .findByPublicId(publicId))
+        .findFirstByPublicId(publicId))
         .thenReturn(Optional.of(candidateDocument));
 
     when(documentMapper
@@ -87,7 +87,7 @@ class CandidateServiceImplTest {
     String publicId = "base-64-encoded-uuid";
 
     when(candidateDocumentRepository
-        .findByPublicId(publicId))
+        .findFirstByPublicId(publicId))
         .thenReturn(Optional.empty());
 
     Exception exception = assertThrows(
