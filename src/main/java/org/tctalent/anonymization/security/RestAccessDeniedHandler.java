@@ -34,6 +34,7 @@ import org.tctalent.anonymization.exception.GlobalExceptionHandler;
  * }
  * </pre>
  *
+ * @see <a href="https://www.baeldung.com/spring-security-exceptionhandler">
  * @see GlobalExceptionHandler
  * @author sadatmalik
  */
