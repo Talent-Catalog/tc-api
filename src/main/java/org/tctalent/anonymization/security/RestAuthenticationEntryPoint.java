@@ -1,10 +1,7 @@
 package org.tctalent.anonymization.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.net.URI;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ProblemDetail;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -13,16 +10,20 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.tctalent.anonymization.exception.GlobalExceptionHandler;
 
 /**
  * An {@link AuthenticationEntryPoint} implementation that handles authentication failures by
- * returning a Problem Details JSON response compliant with RFC 9457.
- * <p/>
- * When an unauthenticated request attempts to access a protected resource, this entry point is
- * invoked, generating a response with an HTTP 401 (Unauthorized) status and a detailed error
- * message in the body. The response content type is set to {@code application/problem+json} to
- * indicate that it conforms to the Problem Details specification.
- * <p/>
+ * delegating error response construction to the global exception handler. When an unauthenticated
+ * request attempts to access a protected resource, this entry point is invoked. It delegates the
+ * exception to a {@link HandlerExceptionResolver}, which routes the exception to the global exception
+ * handler, which constructs a Problem Details JSON response compliant with RFC 9457.
+ * <p>
+ * The generated response has an HTTP 401 (Unauthorized) status and a detailed error message in the
+ * body. The response content type is set to {@code application/problem+json} to indicate that it
+ * conforms to the Problem Details specification.
+ * <p>
  * Example response:
  * <pre>
  * {
@@ -32,23 +33,21 @@ import java.io.IOException;
  *   "detail": "Invalid API Key"
  * }
  * </pre>
- * </p>
  *
+ * @see GlobalExceptionHandler
  * @author sadatmalik
  */
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-  private final ObjectMapper mapper = new ObjectMapper();
+  @Autowired
+  @Qualifier("handlerExceptionResolver")
+  private HandlerExceptionResolver resolver;
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException authException) throws IOException, ServletException {
-    // Build a ProblemDetails object with 401 status and a custom message
-    ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, authException.getMessage());
-    problemDetail.setInstance(URI.create(request.getRequestURI()));
-    response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
-    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    mapper.writeValue(response.getOutputStream(), problemDetail);
+    // Delegate exception handling to the global exception handler via the resolver
+    resolver.resolveException(request, response, null, authException);
   }
 }
