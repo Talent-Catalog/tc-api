@@ -11,7 +11,10 @@ import java.util.Base64;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.tctalent.anonymization.config.JacksonConfig;
+import org.tctalent.anonymization.mapper.DocumentMapper;
+import org.tctalent.anonymization.mapper.EntityMapper;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.Country;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
@@ -30,7 +33,11 @@ class AnonymizationServiceImplTest {
         JacksonConfig jacksonConfig = new JacksonConfig();
         ObjectMapper objectMapper = jacksonConfig.objectMapper();
 
-        service = new AnonymizationServiceImpl(objectMapper);
+        // Provide dummy mocks for the unused dependencies
+        EntityMapper entityMapper = Mockito.mock(EntityMapper.class);
+        DocumentMapper documentMapper = Mockito.mock(DocumentMapper.class);
+
+        service = new AnonymizationServiceImpl(objectMapper, entityMapper, documentMapper);
     }
 
     @Test
@@ -55,7 +62,7 @@ class AnonymizationServiceImplTest {
             .createdDate(OffsetDateTime.now())
             .build();
 
-        Candidate candidate = service.anonymize(identifiableCandidate);
+        Candidate candidate = service.anonymizeToDto(identifiableCandidate);
 
         assertEquals(publicId, candidate.getPublicId());
         System.out.println(candidate);

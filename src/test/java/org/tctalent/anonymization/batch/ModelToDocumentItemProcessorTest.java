@@ -11,8 +11,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.tctalent.anonymization.batch.processor.ModelToDocumentItemProcessor;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
-import org.tctalent.anonymization.mapper.DocumentMapper;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
+import org.tctalent.anonymization.service.AnonymizationService;
 
 /**
  * Unit tests for the {@link ModelToDocumentItemProcessor} class.
@@ -22,7 +22,7 @@ import org.tctalent.anonymization.model.IdentifiableCandidate;
 class ModelToDocumentItemProcessorTest {
 
   @Mock
-  private DocumentMapper documentMapper;
+  private AnonymizationService anonymizationService;
 
   @InjectMocks
   private ModelToDocumentItemProcessor candidateRestItemProcessor;
@@ -38,13 +38,13 @@ class ModelToDocumentItemProcessorTest {
     IdentifiableCandidate identifiableCandidate = new IdentifiableCandidate();
     CandidateDocument candidateDocument = new CandidateDocument();
 
-    when(documentMapper
-        .anonymize(identifiableCandidate))
+    when(anonymizationService
+        .anonymizeToDocument(identifiableCandidate))
         .thenReturn(candidateDocument);
 
     CandidateDocument result = candidateRestItemProcessor.process(identifiableCandidate);
 
     assertEquals(candidateDocument, result);
-    verify(documentMapper).anonymize(identifiableCandidate);
+    verify(anonymizationService).anonymizeToDocument(identifiableCandidate);
   }
 }

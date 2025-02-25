@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,14 +26,14 @@ import org.tctalent.anonymization.service.CandidateService;
 class CandidateControllerTest {
 
   @Autowired
-  CandidateService candidateService;
+  private CandidateService candidateService;
 
   @Autowired
-  WebApplicationContext wac;
+  private WebApplicationContext wac;
 
-  MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-  Candidate testCandidate;
+  private Candidate testCandidate;
 
   @BeforeEach
   void setUp() {
@@ -46,6 +47,7 @@ class CandidateControllerTest {
   @Test
   @Transactional
   @DisplayName("Get all candidates")
+  @WithMockUser(authorities = "READ_CANDIDATE_DATA")
   void testGetAllCandidates() throws Exception {
     mockMvc.perform(get(CandidateController.BASE_URL)
             .accept(MediaType.APPLICATION_JSON))
@@ -56,11 +58,12 @@ class CandidateControllerTest {
   @Test
   @Transactional
   @DisplayName("Get candidate by public Id")
+  @WithMockUser(authorities = "READ_CANDIDATE_DATA")
   void testGetCandidateByPublicId() throws Exception {
     mockMvc.perform(get(CandidateController.BASE_URL + "/{publicId}", testCandidate.getPublicId())
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.publicId").value(testCandidate.getPublicId().toString()));
+        .andExpect(jsonPath("$.publicId").value(testCandidate.getPublicId()));
   }
 
 }

@@ -28,7 +28,7 @@ public class CandidateServiceImpl implements CandidateService {
   @Override
   public Candidate findByPublicId(String publicId) {
     return candidateDocumentRepository
-        .findByPublicId(publicId)
+        .findFirstByPublicId(publicId)
         .map(documentMapper::toCandidateModel)
         .orElseThrow(() -> new RuntimeException("Candidate not found")); // todo better exceptions
   }
