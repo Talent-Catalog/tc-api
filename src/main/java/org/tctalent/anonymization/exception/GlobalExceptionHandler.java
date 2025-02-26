@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 /**
  * Global exception handler that converts exceptions into Problem Details responses.
  * <p>
- * It overrides exception handles defined in ResponseEntityExceptionHandler if needed. For example
- * to process validation errors (e.g. MethodArgumentNotValidException) and deserialization errors
- * (e.g. HttpMessageNotReadableException)
+ * It overrides exception handlers defined in ResponseEntityExceptionHandler. For example to process
+ * validation errors (e.g. MethodArgumentNotValidException) and deserialization errors (e.g.
+ * HttpMessageNotReadableException)
  * <p>
- * And defines custom exception handlers using @ExceptionHandler for example for authentication and
- * access denied errors. These handlers are invoked via delegation from the Spring Security
+ * It also  defines custom exception handlers using @ExceptionHandler for example for authentication
+ * and access denied errors. These handlers are invoked via delegation from the Spring Security
  * configuration's {@code AuthenticationEntryPoint} and {@code AccessDeniedHandler}
  *
  * @see ResponseEntityExceptionHandler
