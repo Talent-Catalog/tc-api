@@ -23,9 +23,20 @@ import java.util.stream.Collectors;
  * validation errors (e.g. MethodArgumentNotValidException) and deserialization errors (e.g.
  * HttpMessageNotReadableException)
  * <p>
- * It also  defines custom exception handlers using @ExceptionHandler for example for authentication
- * and access denied errors. These handlers are invoked via delegation from the Spring Security
- * configuration's {@code AuthenticationEntryPoint} and {@code AccessDeniedHandler}
+ * It also  defines custom exception handlers annotated with @ExceptionHandler for example for
+ * authentication and access denied errors. These handlers are invoked via delegation from the
+ * Spring Security configuration's {@code AuthenticationEntryPoint} and {@code AccessDeniedHandler}
+ * <p>
+ * Implementation Note: {@code @ExceptionHandler} annotated methods should all be implemented with
+ * a return type of ProblemDetail. Whereas, overriding handlers defined in the
+ * ResponseEntityExceptionHandler base, must return a ResponseEntity.
+ * <p>
+ * Using @ExceptionHandler is the simpler approach but there are some cases when we need to
+ * {@code @Override}:
+ * <p>
+ * For example to include a more specific ProblemDetail "detail" text than the base implementation
+ * provides by default; or for instance if the specific exception we want to handle has been wrapped
+ * in an exception for which a parent handle has been defined.
  *
  * @see ResponseEntityExceptionHandler
  * @see ProblemDetail
