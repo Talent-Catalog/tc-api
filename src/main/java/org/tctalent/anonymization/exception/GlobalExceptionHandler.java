@@ -1,11 +1,9 @@
 package org.tctalent.anonymization.exception;
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-import java.net.URI;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -21,12 +19,13 @@ import java.util.stream.Collectors;
 /**
  * Global exception handler that converts exceptions into Problem Details responses.
  * <p>
- * It can override exception handles if needed. For example to process validation errors (e.g.
- * MethodArgumentNotValidException) and deserialization errors (e.g. HttpMessageNotReadableException)
+ * It overrides exception handles defined in ResponseEntityExceptionHandler if needed. For example
+ * to process validation errors (e.g. MethodArgumentNotValidException) and deserialization errors
+ * (e.g. HttpMessageNotReadableException)
  * <p>
- * It defines exception handlers for authentication and access denied errors. These handlers are
- * invoked via delegation from the Spring Security configuration's {@code AuthenticationEntryPoint}
- * and {@code AccessDeniedHandler}
+ * And defines custom exception handlers using @ExceptionHandler for example for authentication and
+ * access denied errors. These handlers are invoked via delegation from the Spring Security
+ * configuration's {@code AuthenticationEntryPoint} and {@code AccessDeniedHandler}
  *
  * @see ResponseEntityExceptionHandler
  * @see ProblemDetail
@@ -112,51 +111,30 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   /**
    * Handles AuthenticationException instances thrown during security processing.
    * <p>
-   * This method constructs a ProblemDetail object with a 401 (Unauthorized) status, populates it
-   * with the exception message and the request URI, and returns it in the response. The exception
-   * is typically delegated to this handler via the AuthenticationEntryPoint.
+   * Returns a ProblemDetail object with a 401 (Unauthorized) status, and  the exception message.
+   * The exception is typically delegated to this handler via the AuthenticationEntryPoint.
    *
    * @param ex the AuthenticationException thrown during authentication failure
-   * @param request the current web request
-   * @return a ResponseEntity containing a ProblemDetail with a 401 status
+   * @return a ProblemDetails containing the exception message with a 401 status
    */
   @ExceptionHandler(AuthenticationException.class)
-  public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
-    ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
-    // Set the instance URI based on the request
-    problemDetail.setInstance(getInstanceUri(request));
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
-    return createResponseEntity(problemDetail, headers, HttpStatus.UNAUTHORIZED, request);
+  public ProblemDetail handleAuthenticationException(AuthenticationException ex) {
+    return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
   }
 
   /**
    * Handles AccessDeniedException instances thrown when an authenticated user lacks sufficient
    * privileges.
    * <p>
-   * This method constructs a ProblemDetail object with a 403 (Forbidden) status, populates it with
-   * the exception message and the request URI, and returns it in the response. The exception is
-   * typically delegated to this handler via the AccessDeniedHandler.
+   * Returns a ProblemDetail object with a 403 (Forbidden) status, and the exception message. The
+   * exception is typically delegated to this handler via the AccessDeniedHandler.
    *
    * @param ex the AccessDeniedException thrown due to insufficient access rights
-   * @param request the current web request
    * @return a ResponseEntity containing a ProblemDetail with a 403 status
    */
   @ExceptionHandler(AccessDeniedException.class)
-  public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
-    ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
-    // Set the instance URI based on the request
-    problemDetail.setInstance(getInstanceUri(request));
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
-    return createResponseEntity(problemDetail, headers, HttpStatus.FORBIDDEN, request);
-  }
-
-  private URI getInstanceUri(WebRequest request) {
-    String instanceUri = request.getDescription(false).replace("uri=", "");
-    return URI.create(instanceUri.isBlank() ? "/" : instanceUri);
+  public ProblemDetail handleAccessDeniedException(AccessDeniedException ex) {
+    return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
   }
 
 }
