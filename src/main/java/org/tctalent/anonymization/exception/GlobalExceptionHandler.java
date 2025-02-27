@@ -7,7 +7,10 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -16,8 +19,24 @@ import java.util.stream.Collectors;
 /**
  * Global exception handler that converts exceptions into Problem Details responses.
  * <p>
- * It can override exception handles if needed. For example to process validation errors (e.g.
- * MethodArgumentNotValidException) and deserialization errors (e.g. HttpMessageNotReadableException)
+ * It overrides exception handlers defined in ResponseEntityExceptionHandler. For example to process
+ * validation errors (e.g. MethodArgumentNotValidException) and deserialization errors (e.g.
+ * HttpMessageNotReadableException)
+ * <p>
+ * It also  defines custom exception handlers annotated with @ExceptionHandler for example for
+ * authentication and access denied errors. These handlers are invoked via delegation from the
+ * Spring Security configuration's {@code AuthenticationEntryPoint} and {@code AccessDeniedHandler}
+ * <p>
+ * Implementation Note: {@code @ExceptionHandler} annotated methods should all be implemented with
+ * a return type of ProblemDetail. Whereas, overriding handlers defined in the
+ * ResponseEntityExceptionHandler base, must return a ResponseEntity.
+ * <p>
+ * Using @ExceptionHandler is the simpler approach but there are some cases when we need to
+ * {@code @Override}:
+ * <p>
+ * For example to include a more specific ProblemDetail "detail" text than the base implementation
+ * provides by default; or for instance if the specific exception we want to handle has been wrapped
+ * in an exception for which a parent handle has been defined.
  *
  * @see ResponseEntityExceptionHandler
  * @see ProblemDetail
@@ -98,6 +117,35 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // Fallback to default handling if it's not the exception we're expecting
     return super.handleHttpMessageNotReadable(ex, headers, status, request);
+  }
+
+  /**
+   * Handles AuthenticationException instances thrown during security processing.
+   * <p>
+   * Returns a ProblemDetail object with a 401 (Unauthorized) status, and  the exception message.
+   * The exception is typically delegated to this handler via the AuthenticationEntryPoint.
+   *
+   * @param ex the AuthenticationException thrown during authentication failure
+   * @return a ProblemDetails containing the exception message with a 401 status
+   */
+  @ExceptionHandler(AuthenticationException.class)
+  public ProblemDetail handleAuthenticationException(AuthenticationException ex) {
+    return ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+  }
+
+  /**
+   * Handles AccessDeniedException instances thrown when an authenticated user lacks sufficient
+   * privileges.
+   * <p>
+   * Returns a ProblemDetail object with a 403 (Forbidden) status, and the exception message. The
+   * exception is typically delegated to this handler via the AccessDeniedHandler.
+   *
+   * @param ex the AccessDeniedException thrown due to insufficient access rights
+   * @return a ResponseEntity containing a ProblemDetail with a 403 status
+   */
+  @ExceptionHandler(AccessDeniedException.class)
+  public ProblemDetail handleAccessDeniedException(AccessDeniedException ex) {
+    return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
   }
 
 }
