@@ -1,9 +1,19 @@
 package org.tctalent.anonymization.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Collation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
+import org.tctalent.anonymization.exception.NoSuchObjectException;
 import org.tctalent.anonymization.mapper.DocumentMapper;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
@@ -14,14 +24,43 @@ import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 public class CandidateServiceImpl implements CandidateService {
 
   private final CandidateDocumentRepository candidateDocumentRepository;
+  private final MongoTemplate mongoTemplate;
   private final DocumentMapper documentMapper;
 
   @Override
-  public CandidatePage findAll(Pageable pageable) {
-    Page<Candidate> candidatePage =  candidateDocumentRepository
-        .findAll(pageable)
-        .map(documentMapper::toCandidateModel);
+  public CandidatePage findAll(Pageable pageable, List<String> locations,
+      List<String> nationalities, List<String> occupations) {
 
+    Map<String, List<String>> filters = new HashMap<>();
+    if (locations != null) {
+      filters.put("country.isoCode", locations);
+    }
+    if (nationalities != null) {
+      filters.put("nationality.isoCode", nationalities);
+    }
+    if (occupations != null) {
+      filters.put("candidateOccupations.occupation.isco08Code", occupations);
+    }
+
+    //Construct the basic query from all the filters
+    Query query = new Query()
+        //This makes it case insensitive
+        .collation(Collation.of("en").strength(Collation.ComparisonLevel.secondary()));
+    filters.forEach((key, values) -> query
+        .addCriteria(Criteria.where(key).in(values)));
+
+    //Run the query requesting just the page required
+    List<Candidate> candidates = mongoTemplate.find(query.with(pageable), CandidateDocument.class)
+            .stream()
+            .map(documentMapper::toCandidateModel)
+            .toList();
+    //Count the total number of candidates (ie without paging limits).
+    long count = mongoTemplate.count(query, CandidateDocument.class);
+
+    //Construct a page
+    Page<Candidate> candidatePage = new PageImpl<>(candidates, pageable, count);
+
+    //Convert to our CandidatePage structure
     return documentMapper.toCandidateModelPage(candidatePage);
   }
 
@@ -30,7 +69,7 @@ public class CandidateServiceImpl implements CandidateService {
     return candidateDocumentRepository
         .findFirstByPublicId(publicId)
         .map(documentMapper::toCandidateModel)
-        .orElseThrow(() -> new RuntimeException("Candidate not found")); // todo better exceptions
+        .orElseThrow(() -> new NoSuchObjectException(Candidate.class, publicId));
   }
 
 }
