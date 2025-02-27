@@ -29,14 +29,9 @@ public class CandidateController implements V1Api {
    */
   @Override
   @PreAuthorize("hasAuthority('READ_CANDIDATE_DATA')")
-  public ResponseEntity<CandidatePage> getAllCandidates(
-      Integer page,
-      Integer limit,
-      String occupation, String location, String nationality) {
-    // Adjust page index because Spring Data JPA uses zero-based paging
-    // todo sm might be better to just change the API to require page 0 for the first page
-    // todo JC - I think that 0 indexed paging will be familiar to anyone accessing the API so I think we should use 0 for the first page
-    Pageable pageable = PageRequest.of(page - 1, limit);
+  public ResponseEntity<CandidatePage> findCandidates(Integer page, Integer limit,
+      String location, String nationality, String occupation) {
+    Pageable pageable = PageRequest.of(page, limit);
 
     //Extract values from comma separated strings of filtering locations, nationalities and
     //occupations

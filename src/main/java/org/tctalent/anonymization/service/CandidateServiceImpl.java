@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Collation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -32,19 +33,19 @@ public class CandidateServiceImpl implements CandidateService {
 
     Map<String, List<String>> filters = new HashMap<>();
     if (locations != null) {
-      //TODO JC Fix key
-      filters.put("location", locations);
+      filters.put("country.isoCode", locations);
     }
     if (nationalities != null) {
-      //TODO JC Fix key
-      filters.put("nationality", nationalities);
+      filters.put("nationality.isoCode", nationalities);
     }
     if (occupations != null) {
       filters.put("candidateOccupations.occupation.isco08Code", occupations);
     }
 
     //Construct the basic query from all the filters
-    Query query = new Query();
+    Query query = new Query()
+        //This makes it case insensitive
+        .collation(Collation.of("en").strength(Collation.ComparisonLevel.secondary()));
     filters.forEach((key, values) -> query
         .addCriteria(Criteria.where(key).in(values)));
 
