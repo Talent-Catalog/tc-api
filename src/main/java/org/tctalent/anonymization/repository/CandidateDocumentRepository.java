@@ -7,5 +7,5 @@ import org.tctalent.anonymization.domain.document.CandidateDocument;
 
 @Repository
 public interface CandidateDocumentRepository extends MongoRepository<CandidateDocument, String> {
-  Optional<CandidateDocument> findByPublicId(String publicId);
+  Optional<CandidateDocument> findFirstByPublicId(String publicId);
 }

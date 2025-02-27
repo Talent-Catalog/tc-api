@@ -60,7 +60,7 @@ class TalentCatalogServiceImplTest {
       assertTrue(tcService.isLoggedIn());
 
       IdentifiableCandidatePage pageOfIdentifiableCandidates = tcService
-          .fetchPageOfIdentifiableCandidateData(0, 100);
+          .fetchPageOfIdentifiableCandidateData(0, 20);
       assertNotNull(pageOfIdentifiableCandidates);
 
       List<CandidateDocument> anonCandidates = pageOfIdentifiableCandidates
@@ -76,11 +76,6 @@ class TalentCatalogServiceImplTest {
           .collect(Collectors.joining(","));
       System.out.println("Received numbers: " + collect);
 
-      anonCandidateRepository.saveAll(anonCandidates);
-      for (CandidateDocument candidate : anonCandidateRepository.findAll()) {
-        System.out.println(candidate);
-      }
-
     } catch (RestClientException ex) {
       fail(ex);
     }
@@ -95,7 +90,7 @@ class TalentCatalogServiceImplTest {
 
       for (int i = 0; i < 3; i++) {
         IdentifiableCandidatePage pageOfIdentifiableCandidates = tcService
-            .fetchPageOfIdentifiableCandidateData(i, 100);
+            .fetchPageOfIdentifiableCandidateData(i, 20);
         assertNotNull(pageOfIdentifiableCandidates);
 
         List<CandidateDocument> anonCandidates = pageOfIdentifiableCandidates
@@ -110,11 +105,6 @@ class TalentCatalogServiceImplTest {
             .map(ca -> ca.getPublicId().toString())
             .collect(Collectors.joining(","));
         System.out.println("Received numbers: " + collect);
-
-        anonCandidateRepository.saveAll(anonCandidates);
-        for (CandidateDocument candidate : anonCandidateRepository.findAll()) {
-          System.out.println(candidate);
-        }
 
         Thread.sleep(3000);
       }
