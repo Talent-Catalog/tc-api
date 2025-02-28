@@ -3,6 +3,25 @@ package org.tctalent.anonymization.openapi;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for the enum normalisation regex used in our custom OpenAPI generator templates.
+ * <p>
+ * This test validates the regex logic that is applied in the generated {@code fromValue()} method
+ * of both the {@code enumClass.mustache} (for nested enums) and {@code enumOuterClass.mustache}
+ * (for standalone enums) templates. The normalisation converts legacy TC enum values to the Google
+ * standard naming convention (see: <a href="https://cloud.google.com/apis/design/naming_convention#enum_names"/>...</a>)
+ * used in the TC OpenAPI.
+ * <p>
+ * Examples:
+ * <ul>
+ *   <li>"male" is converted to "MALE"</li>
+ *   <li>"Family" is converted to "FAMILY"</li>
+ *   <li>"CurrentWork" is converted to "CURRENT_WORK"</li>
+ *   <li>"autonomousEmployment" is converted to "AUTONOMOUS_EMPLOYMENT"</li>
+ * </ul>
+ *
+ * @author sadatmalik
+ */
 public class EnumNormalisationRegexTest {
 
   // Helper method that applies the normalization
