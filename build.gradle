@@ -114,6 +114,9 @@ openApiGenerate {
             modelTests: "false",
             generateAliasAsModel: "true",
     ])
+
+    // Tell the generator where the custom templates are - e.g. for custom enum code generation
+    templateDir.set(file('../tc-api-spec/custom-templates/JavaSpring').absolutePath)
 }
 
 // Clean-up task: Remove unnecessary generated files
