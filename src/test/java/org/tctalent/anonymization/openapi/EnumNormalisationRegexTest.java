@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
  *   <li>"Family" is converted to "FAMILY"</li>
  *   <li>"CurrentWork" is converted to "CURRENT_WORK"</li>
  *   <li>"autonomousEmployment" is converted to "AUTONOMOUS_EMPLOYMENT"</li>
+ *   <li>"OETRead" is converted to "OET_READ</li>
  * </ul>
  *
  * @author sadatmalik
@@ -29,7 +30,10 @@ public class EnumNormalisationRegexTest {
   // Google standard naming conventions for API enums
   // See: https://cloud.google.com/apis/design/naming_convention#enum_names
   private String normalise(String value) {
-    return value.replaceAll("([a-z])([A-Z]+)", "$1_$2").toUpperCase();
+    // Insert an underscore between a sequence of uppercase letters and an uppercase letter followed by a lowercase letter.
+    String step1 = value.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2");
+    // Insert an underscore between a lowercase letter and an uppercase letter.
+    return step1.replaceAll("([a-z])([A-Z])", "$1_$2").toUpperCase();
   }
 
   @Test
@@ -55,4 +59,11 @@ public class EnumNormalisationRegexTest {
     assertEquals("AUTONOMOUS_EMPLOYMENT", normalise("autonomousEmployment"),
         "Expected 'autonomousEmployment' to normalize to 'AUTONOMOUS_EMPLOYMENT'");
   }
+
+  @Test
+  public void testNormaliseOetRead() {
+    assertEquals("OET_READ", normalise("OETRead"),
+        "Expected 'OETRead' to normalize to 'OET_READ'");
+  }
+
 }
