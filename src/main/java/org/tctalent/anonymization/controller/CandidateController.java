@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tctalent.anonymization.api.V1Api;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
+import org.tctalent.anonymization.model.JobMatch201Response;
+import org.tctalent.anonymization.model.JobMatchRequest;
+import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
+import org.tctalent.anonymization.model.OfferToAssistCandidatesRequest;
 import org.tctalent.anonymization.model.RegisterCandidate201Response;
 import org.tctalent.anonymization.model.RegisterCandidateRequest;
 import org.tctalent.anonymization.service.CandidateService;
@@ -66,6 +70,18 @@ public class CandidateController implements V1Api {
   public ResponseEntity<Candidate> getCandidateByPublicId(String publicId) {
     Candidate candidate = candidateService.findByPublicId(publicId);
     return ResponseEntity.ok(candidate);
+  }
+
+  @Override
+  public ResponseEntity<JobMatch201Response> jobMatch(JobMatchRequest jobMatchRequest) {
+    //TODO JC This will delegate to some common OfferToAssist code
+    return V1Api.super.jobMatch(jobMatchRequest);
+  }
+
+  @Override
+  public ResponseEntity<OfferToAssistCandidates201Response> offerToAssistCandidates(
+      OfferToAssistCandidatesRequest offerToAssistCandidatesRequest) {
+    return V1Api.super.offerToAssistCandidates(offerToAssistCandidatesRequest);
   }
 
   @Override
