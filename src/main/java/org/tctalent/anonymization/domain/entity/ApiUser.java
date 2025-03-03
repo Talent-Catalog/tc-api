@@ -29,7 +29,7 @@ import org.tctalent.anonymization.security.ApiAuthority;
 @SequenceGenerator(name = "seq_gen", sequenceName = "api_user_id_seq", allocationSize = 1)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiUser extends AbstractDomainEntity<Long> {
+public class ApiUser extends AbstractAuditableDomainEntity<Long> {
   private String ownerName;
   private String email;
   private String apiKeyHash;
