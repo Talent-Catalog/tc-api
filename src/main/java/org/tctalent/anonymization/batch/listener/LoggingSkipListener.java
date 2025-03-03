@@ -6,7 +6,7 @@ import org.springframework.batch.core.SkipListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.tctalent.anonymization.domain.entity.BatchFailedItemEntity;
+import org.tctalent.anonymization.domain.entity.BatchFailedItem;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.service.BatchFailedItemService;
@@ -35,7 +35,7 @@ public class LoggingSkipListener implements SkipListener<IdentifiableCandidate, 
     // todo log builder
     log.warn("Skipping item in PROCESSING due to error: {}, item: {}", t.getMessage(), publicId);
 
-    BatchFailedItemEntity failedItem = BatchFailedItemEntity.builder()
+    BatchFailedItem failedItem = BatchFailedItem.builder()
         .jobExecutionId(jobExecutionId)
         .stepExecutionId(stepExecutionId)
         .stepName(stepName)
@@ -54,7 +54,7 @@ public class LoggingSkipListener implements SkipListener<IdentifiableCandidate, 
     // todo log builder
     log.warn("Skipping item in WRITING due to error: {}, item: {}", t.getMessage(), publicId);
 
-    BatchFailedItemEntity failedItem = BatchFailedItemEntity.builder()
+    BatchFailedItem failedItem = BatchFailedItem.builder()
         .jobExecutionId(jobExecutionId)
         .stepExecutionId(stepExecutionId)
         .stepName(stepName)
