@@ -17,9 +17,9 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum IeltsStatus {
-    NoResponse,
-    YesGeneral,
-    YesAcademic,
-    No,
-    Unsure
+    NO_RESPONSE,
+    YES_GENERAL,
+    YES_ACADEMIC,
+    NO,
+    UNSURE
 }

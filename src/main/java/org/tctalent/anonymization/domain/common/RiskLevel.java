@@ -17,8 +17,8 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum RiskLevel {
-    NoResponse,
-    Low,
-    Medium,
-    High
+    NO_RESPONSE,
+    LOW,
+    MEDIUM,
+    HIGH
 }

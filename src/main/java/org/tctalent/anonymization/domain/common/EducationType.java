@@ -17,9 +17,9 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum EducationType {
-    Associate,
-    Vocational,
-    Bachelor,
-    Masters,
-    Doctoral
+    ASSOCIATE,
+    VOCATIONAL,
+    BACHELOR,
+    MASTERS,
+    DOCTORAL
 }

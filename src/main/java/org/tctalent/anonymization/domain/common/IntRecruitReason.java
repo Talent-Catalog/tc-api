@@ -17,10 +17,10 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum IntRecruitReason {
-    NoResponse,
-    CantReturnHome,
-    Citizenship,
-    Experience,
-    Children,
-    Other
+    NO_RESPONSE,
+    CANT_RETURN_HOME,
+    CITIZENSHIP,
+    EXPERIENCE,
+    CHILDREN,
+    OTHER
 }

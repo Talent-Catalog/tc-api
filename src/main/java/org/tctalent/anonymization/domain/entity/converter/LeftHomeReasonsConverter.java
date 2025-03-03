@@ -22,7 +22,7 @@ import org.tctalent.anonymization.domain.common.EnumHelper;
 import org.tctalent.anonymization.domain.common.LeftHomeReason;
 
 /**
- * Converts between List of VisaIssue enums and comma separated string of enum
+ * Converts between List of LeftHomeReasons enums and comma separated string of enum
  * names which is how they are stored in the database.
  *
  * @author John Cameron

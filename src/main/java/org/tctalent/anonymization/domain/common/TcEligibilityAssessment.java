@@ -17,8 +17,8 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum TcEligibilityAssessment {
-    NoResponse,
-    Proceed,
-    Discuss,
-    DontProceed
+    NO_RESPONSE,
+    PROCEED,
+    DISCUSS,
+    DONT_PROCEED
 }

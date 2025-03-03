@@ -17,10 +17,10 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum WorkPermit {
-    NoResponse("No response"),
-    YesNotDesired("Yes - a permit to work but not in my desired field"),
-    YesDesired("Yes - a permit to work in my desired field"),
-    No("No - I do not have a work permit");
+    NO_RESPONSE("No response"),
+    YES_NOT_DESIRED("Yes - a permit to work but not in my desired field"),
+    YES_DESIRED("Yes - a permit to work in my desired field"),
+    NO("No - I do not have a work permit");
 
     public final String label;
 

@@ -17,11 +17,11 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum NotRegisteredStatus {
-    NoResponse("No response"),
-    WasRegistered("No longer registered, but was registered previously"),
-    NeverRegistered("Never been registered"),
-    Registering("Attempted to register and pending"),
-    Unsure("Unsure"),
+    NO_RESPONSE("No response"),
+    WAS_REGISTERED("No longer registered, but was registered previously"),
+    NEVER_REGISTERED("Never been registered"),
+    REGISTERING("Attempted to register and pending"),
+    UNSURE("Unsure"),
     NA("Not applicable");
 
     public final String label;

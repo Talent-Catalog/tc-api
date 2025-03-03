@@ -17,8 +17,8 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum DocumentStatus {
-    NoResponse,
-    Valid,
-    Expired,
-    None
+    NO_RESPONSE,
+    VALID,
+    EXPIRED,
+    NONE
 }
