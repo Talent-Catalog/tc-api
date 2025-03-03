@@ -19,10 +19,10 @@ package org.tctalent.anonymization.domain.entity;
 import java.time.OffsetDateTime;
 
 /**
- * Interface implemented by objects who want to record audit information about when they were
+ * Interface implemented by objects who want to record timestamp information about when they were
  * created and when they were last updated.
  */
-public interface Auditable {
+public interface TemporalEntity {
 
     /**
      * Date time of object creation

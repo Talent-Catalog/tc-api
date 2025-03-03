@@ -28,8 +28,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class AbstractAuditableDomainEntity<IdType extends Serializable>
-    extends AbstractDomainEntity<IdType> implements Auditable {
+public abstract class AbstractTimestampedEntity<IdType extends Serializable>
+    extends AbstractDomainEntity<IdType> implements TemporalEntity {
 
     @Column(name = "created_date")
     private OffsetDateTime createdDate;
