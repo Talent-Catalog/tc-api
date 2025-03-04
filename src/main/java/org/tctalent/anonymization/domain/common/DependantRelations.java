@@ -17,13 +17,13 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum DependantRelations {
-    NoResponse,
-    Partner,
-    Child,
-    Parent,
-    Sibling,
-    AuntUncle,
-    Grandparent,
-    Cousin,
-    Other
+    NO_RESPONSE,
+    PARTNER,
+    CHILD,
+    PARENT,
+    SIBLING,
+    AUNT_UNCLE,
+    GRANDPARENT,
+    COUSIN,
+    OTHER
 }

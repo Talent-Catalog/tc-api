@@ -41,7 +41,7 @@ class CandidateControllerTest {
         .build();
 
     Pageable pageable = PageRequest.of(0, 10);
-    testCandidate = candidateService.findAll(pageable).getContent().iterator().next();
+    testCandidate = candidateService.findAll(pageable, null, null, null).getContent().iterator().next();
   }
 
   @Test

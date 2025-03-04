@@ -17,7 +17,7 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum Status {
-  active,
-  inactive,
-  deleted
+  ACTIVE,
+  INACTIVE,
+  DELETED
 }

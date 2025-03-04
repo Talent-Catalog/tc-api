@@ -17,10 +17,10 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum VisaEligibility {
-    NoResponse,
-    Yes,
-    YesBut,
-    DiscussFurther,
-    SeekAdvice,
-    No,
+    NO_RESPONSE,
+    YES,
+    YES_BUT,
+    DISCUSS_FURTHER,
+    SEEK_ADVICE,
+    NO,
 }

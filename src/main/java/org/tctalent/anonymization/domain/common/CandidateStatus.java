@@ -26,54 +26,54 @@ public enum CandidateStatus {
     /**
      * The candidate's data is ready to be shared with prospective employers.
      */
-    active,
+    ACTIVE,
 
     /**
      * The candidate has found employment themselves
      */
-    autonomousEmployment,
+    AUTONOMOUS_EMPLOYMENT,
 
     /**
      * Candidate has been deleted. (The status of the candidate's corresponding User object should
-     * also be set to deleted - ie {@link Status#deleted}
+     * also be set to deleted - ie {@link Status#DELETED}
      */
-    deleted,
+    DELETED,
 
     /**
      * Candidate has started registration but has not submitted - ie they are still in the
      * middle of completing their registration.
      */
-    draft,
+    DRAFT,
 
     /**
      * Candidate is no longer looking for placement through TBB.
      */
-    employed,
+    EMPLOYED,
 
     /**
      * Candidate's registration is not complete enough to be considered active.
      */
-    incomplete,
+    INCOMPLETE,
 
     /**
      * The candidate is not eligible for TBB's support
      */
-    ineligible,
+    INELIGIBLE,
 
     /**
      * Candidate has completed registration but TBB staff have not yet reviewed the registration.
      */
-    pending,
+    PENDING,
 
     /**
      * We cannot contact candidate
      */
-    unreachable,
+    UNREACHABLE,
 
     /**
      * The candidate has requested to be withdrawn from consideration.
      */
-    withdrawn,
+    WITHDRAWN,
 
 
 }

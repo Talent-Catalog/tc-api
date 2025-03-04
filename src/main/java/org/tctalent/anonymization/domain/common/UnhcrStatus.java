@@ -17,13 +17,13 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum UnhcrStatus {
-    NoResponse("No response"),
-    MandateRefugee("Assessed by UNHCR as a mandate refugee (RSD)"),
-    RegisteredAsylum("Registered with UNHCR as asylum seeker"),
-    RegisteredStateless("Registered with UNHCR as stateless"),
-    RegisteredStatusUnknown("Registered with UNHCR but status unknown"),
-    NotRegistered("Not registered"),
-    Unsure("Unsure"),
+    NO_RESPONSE("No response"),
+    MANDATE_REFUGEE("Assessed by UNHCR as a mandate refugee (RSD)"),
+    REGISTERED_ASYLUM("Registered with UNHCR as asylum seeker"),
+    REGISTERED_STATELESS("Registered with UNHCR as stateless"),
+    REGISTERED_STATUS_UNKNOWN("Registered with UNHCR but status unknown"),
+    NOT_REGISTERED("Not registered"),
+    UNSURE("Unsure"),
     NA("Not applicable");
 
     public final String label;

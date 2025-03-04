@@ -82,12 +82,12 @@ public class BootstrapCandidate implements CommandLineRunner {
       CandidateEntity candidate = new CandidateEntity();
       candidate.setPublicId("test-public-id-123");
       candidate.setAsylumYear(LocalDate.of(2010, 1, 1));
-      candidate.setArrestImprison(YesNoUnsure.No);
+      candidate.setArrestImprison(YesNoUnsure.NO);
       candidate.setArrestImprisonNotes("No arrest or imprisonment");
       candidate.setAvailDate(LocalDate.of(2025, 1, 1));
-      candidate.setAvailImmediate(YesNo.Yes);
+      candidate.setAvailImmediate(YesNo.YES);
       candidate.setAvailImmediateJobOps("Available immediately");
-      candidate.setAvailImmediateReason(AvailImmediateReason.Other);
+      candidate.setAvailImmediateReason(AvailImmediateReason.OTHER);
       candidate.setAvailImmediateNotes("Available immediately");
       candidate.setBirthCountryIsoCode("US");
       candidate.setCandidateCertifications(createCertifications());
@@ -100,101 +100,101 @@ public class BootstrapCandidate implements CommandLineRunner {
           createCandidateLanguage(342L, "en", "English"),
           createCandidateLanguage(346L, "es", "Spanish")));
       candidate.setCandidateOccupations(List.of(
-          createCandidateOccupation(8577L, "2411", "Accountant", Status.active),
-          createCandidateOccupation(8484L, "3343", "Administrative assistant", Status.active)));
+          createCandidateOccupation(8577L, "2411", "Accountant", Status.ACTIVE),
+          createCandidateOccupation(8484L, "3343", "Administrative assistant", Status.ACTIVE)));
       candidate.setCandidateSkills(List.of(
           createCandidateSkill("Skill 1", "1 year"),
           createCandidateSkill("Skill 2", "2 years")));
       candidate.setCandidateVisaChecks(candidateVisaChecks());
-      candidate.setCanDrive(YesNo.Yes);
+      candidate.setCanDrive(YesNo.YES);
       candidate.setCity("City 1");
-      candidate.setConflict(YesNo.No);
+      candidate.setConflict(YesNo.NO);
       candidate.setConflictNotes("No conflict");
       candidate.setContactConsentTcPartners(true);
       candidate.setContactConsentRegistration(true);
       candidate.setCountryIsoCode("AF");
-      candidate.setCovidVaccinated(YesNo.Yes);
+      candidate.setCovidVaccinated(YesNo.YES);
       candidate.setCovidVaccinatedDate(LocalDate.of(2021, 1, 1));
       candidate.setCovidVaccineName("Vaccine 1");
       candidate.setCovidVaccineNotes("Notes 1");
-      candidate.setCovidVaccinatedStatus(VaccinationStatus.Full);
-      candidate.setCrimeConvict(YesNoUnsure.No);
+      candidate.setCovidVaccinatedStatus(VaccinationStatus.FULL);
+      candidate.setCrimeConvict(YesNoUnsure.NO);
       candidate.setCrimeConvictNotes("No crime or conviction");
-      candidate.setDestLimit(YesNo.No);
+      candidate.setDestLimit(YesNo.NO);
       candidate.setDestLimitNotes("No destination limit");
       candidate.setDrivingLicenseCountryIsoCode("US");
       candidate.setDrivingLicenseExp(LocalDate.of(2025, 1, 1));
       candidate.setEnglishAssessment("English assessment");
       candidate.setEnglishAssessmentScoreIelts("7.5");
-      candidate.setFamilyMove(YesNo.Yes);
+      candidate.setFamilyMove(YesNo.YES);
       candidate.setFamilyMoveNotes("Family move notes");
       candidate.setFrenchAssessment("French assessment");
       candidate.setFrenchAssessmentScoreNclc(82L);
       candidate.setFullIntakeCompletedDate(OffsetDateTime.of(2025, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC));
-      candidate.setGender(Gender.male);
-      candidate.setHealthIssues(YesNo.No);
+      candidate.setGender(Gender.MALE);
+      candidate.setHealthIssues(YesNo.NO);
       candidate.setHealthIssuesNotes("No health issues");
       candidate.setHomeLocation("Home location");
       candidate.setHostChallenges("Host challenges");
-      candidate.setHostEntryLegally(YesNo.Yes);
+      candidate.setHostEntryLegally(YesNo.YES);
       candidate.setHostEntryLegallyNotes("Host entry legally notes");
       candidate.setIeltsScore(new BigDecimal("7.5"));
-      candidate.setIntRecruitReasons(List.of(IntRecruitReason.Experience, IntRecruitReason.Citizenship));
+      candidate.setIntRecruitReasons(List.of(IntRecruitReason.EXPERIENCE, IntRecruitReason.CITIZENSHIP));
       candidate.setIntRecruitOther("Other reason");
-      candidate.setIntRecruitRural(YesNoUnsure.Yes);
+      candidate.setIntRecruitRural(YesNoUnsure.YES);
       candidate.setIntRecruitRuralNotes("Rural notes");
       candidate.setLeftHomeNotes("Left home notes");
-      candidate.setLeftHomeReasons(List.of(LeftHomeReason.Safety, LeftHomeReason.Job));
-      candidate.setMaritalStatus(MaritalStatus.Married);
+      candidate.setLeftHomeReasons(List.of(LeftHomeReason.SAFETY, LeftHomeReason.JOB));
+      candidate.setMaritalStatus(MaritalStatus.MARRIED);
       candidate.setMaxEducationLevel(100);
       candidate.setMediaWillingness("Media willingness");
-      candidate.setMilitaryService(YesNo.Yes);
-      candidate.setMilitaryWanted(YesNoUnsure.Yes);
+      candidate.setMilitaryService(YesNo.YES);
+      candidate.setMilitaryWanted(YesNoUnsure.YES);
       candidate.setMilitaryStart(LocalDate.of(2005, 1, 1));
       candidate.setMilitaryEnd(LocalDate.of(2010, 1, 1));
       candidate.setMilitaryNotes("Military notes");
       candidate.setMiniIntakeCompletedDate(OffsetDateTime.of(2025, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC));
-      candidate.setMonitoringEvaluationConsent(YesNo.Yes);
+      candidate.setMonitoringEvaluationConsent(YesNo.YES);
       candidate.setNationalityIsoCode("US");
       candidate.setNumberDependants(2L);
-      candidate.setPartnerRegistered(YesNoUnsure.Yes);
+      candidate.setPartnerRegistered(YesNoUnsure.YES);
       candidate.setPartnerPublicId("partner-public-id-123");
       candidate.setPartnerEduLevel(100);
-      candidate.setPartnerEnglish(YesNo.Yes);
+      candidate.setPartnerEnglish(YesNo.YES);
       candidate.setPartnerEnglishLevel("Full Professional Proficiency");
-      candidate.setPartnerIelts(IeltsStatus.YesAcademic);
+      candidate.setPartnerIelts(IeltsStatus.YES_ACADEMIC);
       candidate.setPartnerIeltsScore("7.5");
       candidate.setPartnerIeltsYr(2010L);
       candidate.setPartnerOccupationIsco08Code("2411");
       candidate.setPartnerOccupationName("Accountant");
-      candidate.setResidenceStatus(ResidenceStatus.LegalRes);
+      candidate.setResidenceStatus(ResidenceStatus.LEGAL_RES);
       candidate.setResidenceStatusNotes("Legal residence status notes");
-      candidate.setReturnedHome(YesNoUnsure.Yes);
+      candidate.setReturnedHome(YesNoUnsure.YES);
       candidate.setReturnedHomeReason("Returned home reason");
       candidate.setReturnedHomeReasonNo("Returned home reason no");
-      candidate.setReturnHomeSafe(YesNoUnsure.NoResponse);
-      candidate.setReturnHomeFuture(YesNoUnsure.NoResponse);
-      candidate.setResettleThird(YesNo.NoResponse);
+      candidate.setReturnHomeSafe(YesNoUnsure.NO_RESPONSE);
+      candidate.setReturnHomeFuture(YesNoUnsure.NO_RESPONSE);
+      candidate.setResettleThird(YesNo.NO_RESPONSE);
       candidate.setResettleThirdStatus("Residence status");
       candidate.setState("State 1");
-      candidate.setStatus(CandidateStatus.active);
+      candidate.setStatus(CandidateStatus.ACTIVE);
       candidate.setSurveyType("Information Session");
       candidate.setSurveyComment("Survey comment");
-      candidate.setUnhcrConsent(YesNo.Yes);
+      candidate.setUnhcrConsent(YesNo.YES);
       candidate.setUnhcrNotes("UNHCR notes");
       candidate.setUnhcrNotRegStatus(NotRegisteredStatus.NA);
-      candidate.setUnhcrRegistered(YesNoUnsure.Unsure);
-      candidate.setUnhcrStatus(UnhcrStatus.NoResponse);
+      candidate.setUnhcrRegistered(YesNoUnsure.UNSURE);
+      candidate.setUnhcrStatus(UnhcrStatus.NO_RESPONSE);
       candidate.setUnrwaNotes("UNRWA notes");
-      candidate.setUnrwaRegistered(YesNoUnsure.Yes);
-      candidate.setVisaIssues(YesNoUnsure.No);
+      candidate.setUnrwaRegistered(YesNoUnsure.YES);
+      candidate.setVisaIssues(YesNoUnsure.NO);
       candidate.setVisaIssuesNotes("No visa issues");
-      candidate.setVisaReject(YesNoUnsure.No);
+      candidate.setVisaReject(YesNoUnsure.NO);
       candidate.setVisaRejectNotes("No visa rejection");
-      candidate.setWorkAbroad(YesNo.Yes);
+      candidate.setWorkAbroad(YesNo.YES);
       candidate.setWorkAbroadNotes("Work abroad notes");
-      candidate.setWorkPermit(WorkPermit.No);
-      candidate.setWorkPermitDesired(YesNoUnsure.Yes);
+      candidate.setWorkPermit(WorkPermit.NO);
+      candidate.setWorkPermitDesired(YesNoUnsure.YES);
       candidate.setWorkPermitDesiredNotes("Work permit notes");
       candidate.setYearOfArrival(2010);
       candidate.setYearOfBirth(1990);
@@ -230,13 +230,13 @@ public class BootstrapCandidate implements CommandLineRunner {
 
     private List<CandidateCitizenship> createCandidateCitizenships() {
       CandidateCitizenship citizenship1 = new CandidateCitizenship();
-      citizenship1.setHasPassport(HasPassport.ValidPassport);
+      citizenship1.setHasPassport(HasPassport.VALID_PASSPORT);
       citizenship1.setPassportExp(LocalDate.of(2025, 1, 1));
       citizenship1.setNationalityIsoCode("AF");
       citizenship1.setNotes("Notes 1");
 
       CandidateCitizenship citizenship2 = new CandidateCitizenship();
-      citizenship2.setHasPassport(HasPassport.InvalidPassport);
+      citizenship2.setHasPassport(HasPassport.INVALID_PASSPORT);
       citizenship2.setNationalityIsoCode("US");
       citizenship2.setNotes("Notes 2");
 
@@ -245,20 +245,20 @@ public class BootstrapCandidate implements CommandLineRunner {
 
     private List<CandidateDependant> createDependants() {
       CandidateDependant dependant1 = new CandidateDependant();
-      dependant1.setRelation(DependantRelations.Child);
+      dependant1.setRelation(DependantRelations.CHILD);
       dependant1.setRelationOther("Adopted");
       dependant1.setYearOfBirth(2010);
-      dependant1.setGender(Gender.female);
+      dependant1.setGender(Gender.FEMALE);
       dependant1.setRegistered(Registration.UNHCR);
-      dependant1.setHealthConcern(YesNo.Yes);
+      dependant1.setHealthConcern(YesNo.YES);
 
       CandidateDependant dependant2 = new CandidateDependant();
-      dependant2.setRelation(DependantRelations.Partner);
+      dependant2.setRelation(DependantRelations.PARTNER);
       dependant2.setRelationOther("Spouse");
       dependant2.setYearOfBirth(1985);
-      dependant2.setGender(Gender.male);
+      dependant2.setGender(Gender.MALE);
       dependant2.setRegistered(Registration.UNRWA);
-      dependant2.setHealthConcern(YesNo.No);
+      dependant2.setHealthConcern(YesNo.NO);
 
       return List.of(dependant1, dependant2);
     }
@@ -266,12 +266,12 @@ public class BootstrapCandidate implements CommandLineRunner {
     private List<CandidateDestination> createDestinations() {
       CandidateDestination destination1 = new CandidateDestination();
       destination1.setCountryIsoCode( "AF");
-      destination1.setInterest(YesNoUnsure.Yes);
+      destination1.setInterest(YesNoUnsure.YES);
       destination1.setNotes("Notes 1");
 
       CandidateDestination destination2 = new CandidateDestination();
       destination2.setCountryIsoCode( "US");
-      destination2.setInterest(YesNoUnsure.No);
+      destination2.setInterest(YesNoUnsure.NO);
       destination2.setNotes("Notes 2");
 
       return List.of(destination1, destination2);
@@ -279,9 +279,9 @@ public class BootstrapCandidate implements CommandLineRunner {
 
     private List<CandidateEducation> createEducations() {
       CandidateEducation education1 = new CandidateEducation();
-      education1.setEducationType(EducationType.Associate);
+      education1.setEducationType(EducationType.ASSOCIATE);
       education1.setCountryIsoCode("AF");
-      education1.setEducationMajor(createEducationMajor(8713L, "0111", "Major 1", Status.active));
+      education1.setEducationMajor(createEducationMajor(8713L, "0111", "Major 1", Status.ACTIVE));
       education1.setLengthOfCourseYears(2);
       education1.setInstitution("Institution 1");
       education1.setCourseName("Course 1");
@@ -289,9 +289,9 @@ public class BootstrapCandidate implements CommandLineRunner {
       education1.setIncomplete(false);
 
       CandidateEducation education2 = new CandidateEducation();
-      education2.setEducationType(EducationType.Bachelor);
+      education2.setEducationType(EducationType.BACHELOR);
       education2.setCountryIsoCode("US");
-      education2.setEducationMajor(createEducationMajor(8714L, "0112", "Major 2", Status.active));
+      education2.setEducationMajor(createEducationMajor(8714L, "0112", "Major 2", Status.ACTIVE));
       education2.setLengthOfCourseYears(4);
       education2.setInstitution("Institution 2");
       education2.setCourseName("Course 2");
@@ -312,7 +312,7 @@ public class BootstrapCandidate implements CommandLineRunner {
 
     private List<CandidateExam> createExams() {
       CandidateExam exam1 = new CandidateExam();
-      exam1.setExam(Exam.IELTSGen);
+      exam1.setExam(Exam.IELTS_GEN);
       exam1.setOtherExam("Other exam 1");
       exam1.setScore("7.5");
       exam1.setYear(2010L);
@@ -380,7 +380,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       language.setId(id);
       language.setIsoCode(isoCode);
       language.setName(name);
-      language.setStatus(Status.active);
+      language.setStatus(Status.ACTIVE);
       return language;
   }
 
@@ -389,7 +389,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       languageLevel.setId(351L);
       languageLevel.setLevel(30);
       languageLevel.setName("Full Professional Proficiency");
-      languageLevel.setStatus(Status.active);
+      languageLevel.setStatus(Status.ACTIVE);
       return languageLevel;
   }
 
@@ -403,28 +403,28 @@ public class BootstrapCandidate implements CommandLineRunner {
   private List<CandidateVisaCheck> candidateVisaChecks() {
       CandidateVisaCheck visaCheck1 = new CandidateVisaCheck();
       visaCheck1.setCountryIsoCode("AF");
-      visaCheck1.setProtection(YesNo.Yes);
-      visaCheck1.setEnglishThreshold(YesNo.Yes);
-      visaCheck1.setHealthAssessment(YesNo.Yes);
-      visaCheck1.setCharacterAssessment(YesNo.Yes);
-      visaCheck1.setSecurityRisk(YesNo.Yes);
-      visaCheck1.setOverallRisk(RiskLevel.High);
-      visaCheck1.setValidTravelDocs(DocumentStatus.Valid);
-      visaCheck1.setPathwayAssessment(YesNoUnsure.Yes);
-      visaCheck1.setDestinationFamily(FamilyRelations.AuntUncle);
+      visaCheck1.setProtection(YesNo.YES);
+      visaCheck1.setEnglishThreshold(YesNo.YES);
+      visaCheck1.setHealthAssessment(YesNo.YES);
+      visaCheck1.setCharacterAssessment(YesNo.YES);
+      visaCheck1.setSecurityRisk(YesNo.YES);
+      visaCheck1.setOverallRisk(RiskLevel.HIGH);
+      visaCheck1.setValidTravelDocs(DocumentStatus.VALID);
+      visaCheck1.setPathwayAssessment(YesNoUnsure.YES);
+      visaCheck1.setDestinationFamily(FamilyRelations.AUNT_UNCLE);
       visaCheck1.setCandidateVisaJobChecks(createCandidateVisaJobChecks());
 
       CandidateVisaCheck visaCheck2 = new CandidateVisaCheck();
       visaCheck2.setCountryIsoCode("US");
-      visaCheck2.setProtection(YesNo.No);
-      visaCheck2.setEnglishThreshold(YesNo.No);
-      visaCheck2.setHealthAssessment(YesNo.No);
-      visaCheck2.setCharacterAssessment(YesNo.No);
-      visaCheck2.setSecurityRisk(YesNo.No);
-      visaCheck2.setOverallRisk(RiskLevel.Low);
-      visaCheck2.setValidTravelDocs(DocumentStatus.Expired);
-      visaCheck2.setPathwayAssessment(YesNoUnsure.No);
-      visaCheck2.setDestinationFamily(FamilyRelations.Cousin);
+      visaCheck2.setProtection(YesNo.NO);
+      visaCheck2.setEnglishThreshold(YesNo.NO);
+      visaCheck2.setHealthAssessment(YesNo.NO);
+      visaCheck2.setCharacterAssessment(YesNo.NO);
+      visaCheck2.setSecurityRisk(YesNo.NO);
+      visaCheck2.setOverallRisk(RiskLevel.LOW);
+      visaCheck2.setValidTravelDocs(DocumentStatus.EXPIRED);
+      visaCheck2.setPathwayAssessment(YesNoUnsure.NO);
+      visaCheck2.setDestinationFamily(FamilyRelations.COUSIN);
       visaCheck2.setCandidateVisaJobChecks(createCandidateVisaJobChecks());
 
       return List.of(visaCheck1, visaCheck2);
@@ -433,35 +433,35 @@ public class BootstrapCandidate implements CommandLineRunner {
   private Set<CandidateVisaJobCheck> createCandidateVisaJobChecks() {
       CandidateVisaJobCheck visaJobCheck1 = new CandidateVisaJobCheck();
       visaJobCheck1.setJobOpp(createJobOpp());
-      visaJobCheck1.setInterest(YesNo.Yes);
-      visaJobCheck1.setQualification(YesNo.Yes);
+      visaJobCheck1.setInterest(YesNo.YES);
+      visaJobCheck1.setQualification(YesNo.YES);
       visaJobCheck1.setIsco08Code("2411");
-      visaJobCheck1.setSalaryTsmit(YesNo.Yes);
-      visaJobCheck1.setRegional(YesNo.Yes);
-      visaJobCheck1.setEligible_494(YesNo.Yes);
-      visaJobCheck1.setEligible_186(YesNo.Yes);
-      visaJobCheck1.setEligibleOther(OtherVisas.OtherHum);
-      visaJobCheck1.setPutForward(VisaEligibility.Yes);
-      visaJobCheck1.setTcEligibility(TcEligibilityAssessment.Proceed);
+      visaJobCheck1.setSalaryTsmit(YesNo.YES);
+      visaJobCheck1.setRegional(YesNo.YES);
+      visaJobCheck1.setEligible_494(YesNo.YES);
+      visaJobCheck1.setEligible_186(YesNo.YES);
+      visaJobCheck1.setEligibleOther(OtherVisas.OTHER_HUM);
+      visaJobCheck1.setPutForward(VisaEligibility.YES);
+      visaJobCheck1.setTcEligibility(TcEligibilityAssessment.PROCEED);
       visaJobCheck1.setAgeRequirement("18-45");
       visaJobCheck1.setLanguagesRequired(List.of(342L, 346L));
-      visaJobCheck1.setLanguagesThresholdMet(YesNo.Yes);
+      visaJobCheck1.setLanguagesThresholdMet(YesNo.YES);
 
       CandidateVisaJobCheck visaJobCheck2 = new CandidateVisaJobCheck();
       visaJobCheck2.setJobOpp(createJobOpp());
-      visaJobCheck2.setInterest(YesNo.No);
-      visaJobCheck2.setQualification(YesNo.No);
+      visaJobCheck2.setInterest(YesNo.NO);
+      visaJobCheck2.setQualification(YesNo.NO);
       visaJobCheck2.setIsco08Code("3343");
-      visaJobCheck2.setSalaryTsmit(YesNo.No);
-      visaJobCheck2.setRegional(YesNo.No);
-      visaJobCheck2.setEligible_494(YesNo.No);
-      visaJobCheck2.setEligible_186(YesNo.No);
-      visaJobCheck2.setEligibleOther(OtherVisas.OtherHum);
-      visaJobCheck2.setPutForward(VisaEligibility.No);
-      visaJobCheck2.setTcEligibility(TcEligibilityAssessment.Discuss);
+      visaJobCheck2.setSalaryTsmit(YesNo.NO);
+      visaJobCheck2.setRegional(YesNo.NO);
+      visaJobCheck2.setEligible_494(YesNo.NO);
+      visaJobCheck2.setEligible_186(YesNo.NO);
+      visaJobCheck2.setEligibleOther(OtherVisas.OTHER_HUM);
+      visaJobCheck2.setPutForward(VisaEligibility.NO);
+      visaJobCheck2.setTcEligibility(TcEligibilityAssessment.DISCUSS);
       visaJobCheck2.setAgeRequirement("18-45");
       visaJobCheck2.setLanguagesRequired(List.of(342L, 346L));
-      visaJobCheck2.setLanguagesThresholdMet(YesNo.No);
+      visaJobCheck2.setLanguagesThresholdMet(YesNo.NO);
 
       return Set.of(visaJobCheck1, visaJobCheck2);
   }
@@ -472,7 +472,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       jobOpp.setEmployerEntity(createEmployerEntity());
       jobOpp.setEvergreen(true);
       jobOpp.setPublishedDate(OffsetDateTime.now());
-      jobOpp.setStage(JobOpportunityStage.jobOffer);
+      jobOpp.setStage(JobOpportunityStage.JOB_OFFER);
       jobOpp.setSubmissionDueDate(LocalDate.of(2025, 1, 1));
       jobOpp.setHiringCommitment(5L);
       jobOpp.setEmployerHiredInternationally("Yes");
@@ -490,9 +490,9 @@ public class BootstrapCandidate implements CommandLineRunner {
   private EducationLevel createEducationLevel() {
     EducationLevel educationLevel = new EducationLevel();
     educationLevel.setId(8138L);
-    educationLevel.setEducationType(EducationType.Bachelor);
+    educationLevel.setEducationType(EducationType.BACHELOR);
     educationLevel.setLevel(100);
-    educationLevel.setStatus(Status.active);
+    educationLevel.setStatus(Status.ACTIVE);
     return educationLevel;
   }
 
@@ -501,14 +501,14 @@ public class BootstrapCandidate implements CommandLineRunner {
       major.setId(8713L);
       major.setIscedCode(null); // todo - sm - key by isced_code instead of id
       major.setName("Accounting");
-      major.setStatus(Status.active);
+      major.setStatus(Status.ACTIVE);
       return major;
   }
 
   private SurveyType createSurveyType() {
       SurveyType surveyType = new SurveyType();
       surveyType.setName("Information Session");
-      surveyType.setStatus(Status.active);
+      surveyType.setStatus(Status.ACTIVE);
       return surveyType;
   }
 

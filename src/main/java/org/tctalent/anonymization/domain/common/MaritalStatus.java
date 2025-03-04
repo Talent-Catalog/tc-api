@@ -17,12 +17,12 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum MaritalStatus {
-    NoResponse,
-    Married,
-    Engaged,
-    Defacto,
-    Single,
-    Divorced,
-    Separated,
-    Widower
+    NO_RESPONSE,
+    MARRIED,
+    ENGAGED,
+    DEFACTO,
+    SINGLE,
+    DIVORCED,
+    SEPARATED,
+    WIDOWER
 }

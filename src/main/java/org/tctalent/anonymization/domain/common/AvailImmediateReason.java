@@ -17,9 +17,9 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum AvailImmediateReason {
-    Family,
-    Health,
-    CurrentWork,
-    Studies,
-    Other
+    FAMILY,
+    HEALTH,
+    CURRENT_WORK,
+    STUDIES,
+    OTHER
 }

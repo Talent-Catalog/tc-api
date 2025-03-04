@@ -110,17 +110,17 @@ public class DocumentMapperTest {
     // Arrange
     IdentifiableDependant dependant1 = new IdentifiableDependant();
     dependant1.setDob(LocalDate.of(2005, 3, 10));
-    dependant1.setRelation(DependantRelations.Child);
-    dependant1.setGender(Gender.male);
+    dependant1.setRelation(DependantRelations.CHILD);
+    dependant1.setGender(Gender.MALE);
     dependant1.setRegistered(Registration.UNHCR);
-    dependant1.setHealthConcern(YesNo.No);
+    dependant1.setHealthConcern(YesNo.NO);
 
     IdentifiableDependant dependant2 = new IdentifiableDependant();
     dependant2.setDob(LocalDate.of(2010, 7, 20));
-    dependant2.setRelation(DependantRelations.Child);
-    dependant2.setGender(Gender.female);
+    dependant2.setRelation(DependantRelations.CHILD);
+    dependant2.setGender(Gender.FEMALE);
     dependant2.setRegistered(Registration.NA);
-    dependant2.setHealthConcern(YesNo.Yes);
+    dependant2.setHealthConcern(YesNo.YES);
 
     IdentifiableCandidate source = new IdentifiableCandidate();
     source.setCandidateDependants(List.of(dependant1, dependant2));
@@ -133,17 +133,17 @@ public class DocumentMapperTest {
 
     Dependant mappedDependant1 = result.getCandidateDependants().get(0);
     assertThat(mappedDependant1.getYearOfBirth()).isEqualTo(2005);
-    assertThat(mappedDependant1.getRelation().name()).isSameAs(DependantRelations.Child.name());
-    assertThat(mappedDependant1.getGender().name()).isEqualTo(Gender.male.name());
+    assertThat(mappedDependant1.getRelation().name()).isSameAs(DependantRelations.CHILD.name());
+    assertThat(mappedDependant1.getGender().name()).isEqualTo(Gender.MALE.name());
     assertThat(mappedDependant1.getRegistered().name()).isEqualTo(Registration.UNHCR.name());
-    assertThat(mappedDependant1.getHealthConcern().name()).isEqualTo(YesNo.No.name());
+    assertThat(mappedDependant1.getHealthConcern().name()).isEqualTo(YesNo.NO.name());
 
     Dependant mappedDependant2 = result.getCandidateDependants().get(1);
     assertThat(mappedDependant2.getYearOfBirth()).isEqualTo(2010);
-    assertThat(mappedDependant2.getRelation().name()).isEqualTo(DependantRelations.Child.name());
-    assertThat(mappedDependant2.getGender().name()).isEqualTo(Gender.female.name());
+    assertThat(mappedDependant2.getRelation().name()).isEqualTo(DependantRelations.CHILD.name());
+    assertThat(mappedDependant2.getGender().name()).isEqualTo(Gender.FEMALE.name());
     assertThat(mappedDependant2.getRegistered().name()).isEqualTo(Registration.NA.name());
-    assertThat(mappedDependant2.getHealthConcern().name()).isEqualTo(YesNo.Yes.name());
+    assertThat(mappedDependant2.getHealthConcern().name()).isEqualTo(YesNo.YES.name());
   }
 
   @Test
@@ -164,7 +164,7 @@ public class DocumentMapperTest {
     // Arrange
     IdentifiableDependant dependant = new IdentifiableDependant();
     dependant.setDob(null);
-    dependant.setRelation(DependantRelations.Child);
+    dependant.setRelation(DependantRelations.CHILD);
 
     IdentifiableCandidate source = new IdentifiableCandidate();
     source.setCandidateDependants(List.of(dependant));
@@ -176,16 +176,16 @@ public class DocumentMapperTest {
     assertThat(result.getCandidateDependants()).hasSize(1);
     Dependant mappedDependant = result.getCandidateDependants().get(0);
     assertThat(mappedDependant.getYearOfBirth()).isNull();
-    assertThat(mappedDependant.getRelation().name()).isEqualTo(DependantRelations.Child.name());
+    assertThat(mappedDependant.getRelation().name()).isEqualTo(DependantRelations.CHILD.name());
   }
 
   @Test
   void shouldMapCandidateVisaJobCheckTcEligibility() {
     // Arrange
     IdentifiableCandidateVisaJobCheck visaJobCheck = new IdentifiableCandidateVisaJobCheck();
-    visaJobCheck.setTbbEligibility(TcEligibilityAssessment.Proceed);
+    visaJobCheck.setTbbEligibility(TcEligibilityAssessment.PROCEED);
     visaJobCheck.setAgeRequirement("Age requirement");
-    visaJobCheck.eligible186(YesNo.Yes);
+    visaJobCheck.eligible186(YesNo.YES);
 
     IdentifiableCandidateVisaCheck visaCheck = new IdentifiableCandidateVisaCheck();
     visaCheck.setCandidateVisaJobChecks(List.of(visaJobCheck));
@@ -203,7 +203,7 @@ public class DocumentMapperTest {
 
     assertThat(result.getCandidateVisaChecks().get(0).getCandidateVisaJobChecks()
         .get(0).getTcEligibility().name())
-        .isEqualTo(TcEligibilityAssessment.Proceed.name());
+        .isEqualTo(TcEligibilityAssessment.PROCEED.name());
 
     assertThat(result.getCandidateVisaChecks().get(0).getCandidateVisaJobChecks()
         .get(0).getAgeRequirement())
@@ -211,7 +211,7 @@ public class DocumentMapperTest {
 
     assertThat(result.getCandidateVisaChecks().get(0).getCandidateVisaJobChecks()
         .get(0).getEligible186().name())
-        .isEqualTo(YesNo.Yes.name());
+        .isEqualTo(YesNo.YES.name());
   }
 
   @Test

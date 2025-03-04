@@ -17,7 +17,7 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum Gender {
-    male,
-    female,
-    other
+    MALE,
+    FEMALE,
+    OTHER;
 }

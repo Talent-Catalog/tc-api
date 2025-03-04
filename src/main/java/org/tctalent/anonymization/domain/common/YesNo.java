@@ -17,7 +17,7 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum YesNo {
-    NoResponse,
-    Yes,
-    No
+    NO_RESPONSE,
+    YES,
+    NO
 }
