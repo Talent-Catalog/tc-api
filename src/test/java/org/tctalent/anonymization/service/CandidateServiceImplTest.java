@@ -54,7 +54,7 @@ class CandidateServiceImplTest {
         .toCandidateModelPage(candidatePage))
         .thenReturn(expectedCandidatePage);
 
-    CandidatePage result = candidateService.findAll(pageable);
+    CandidatePage result = candidateService.findAll(pageable, null, null, null);
 
     assertNotNull(result);
     assertEquals(expectedCandidatePage, result);
@@ -96,6 +96,6 @@ class CandidateServiceImplTest {
         "Should throw an exception if the candidate is not found"
     );
 
-    assertEquals("Candidate not found", exception.getMessage());
+    assertEquals("Missing Candidate matching " + publicId, exception.getMessage());
   }
 }

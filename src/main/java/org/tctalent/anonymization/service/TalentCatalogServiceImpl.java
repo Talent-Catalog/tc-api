@@ -10,9 +10,12 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.tctalent.anonymization.config.properties.TalentCatalogServiceProperties;
 import org.tctalent.anonymization.dto.request.LoginRequest;
+import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
 import org.tctalent.anonymization.dto.request.SavedSearchGetRequest;
 import org.tctalent.anonymization.dto.response.JwtAuthenticationResponse;
+import org.tctalent.anonymization.exception.TalentCatalogServiceException;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
+import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
 
 /**
  * @author John Cameron
@@ -30,6 +33,27 @@ public class TalentCatalogServiceImpl implements TalentCatalogService {
     this.properties = properties;
     this.restClient = restClientBuilder.baseUrl(properties.getApiUrl()).build();
     this.savedSearchId = properties.getSearchId();
+  }
+
+  @Override
+  public OfferToAssistCandidates201Response create(OfferToAssistRequest request)
+    throws RestClientException {
+    try {
+      return restClient.post()
+          .uri("/ota")
+          .contentType(APPLICATION_JSON)
+          .header(HttpHeaders.AUTHORIZATION,
+              credentials.getTokenType() + " " + credentials.getAccessToken())
+          .body(request)
+          .retrieve()
+          .body(OfferToAssistCandidates201Response.class);
+    } catch (HttpClientErrorException e) {
+      //Check for logged out
+      if (e.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
+        credentials = null;
+      }
+      throw new TalentCatalogServiceException(e);
+    }
   }
 
   @Override
@@ -65,7 +89,7 @@ public class TalentCatalogServiceImpl implements TalentCatalogService {
       if (e.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
         credentials = null;
       }
-      throw e;
+      throw new TalentCatalogServiceException(e);
     }
   }
 
@@ -89,7 +113,7 @@ public class TalentCatalogServiceImpl implements TalentCatalogService {
       if (e.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
         credentials = null;
       }
-      throw e;
+      throw new TalentCatalogServiceException(e);
     }
   }
 

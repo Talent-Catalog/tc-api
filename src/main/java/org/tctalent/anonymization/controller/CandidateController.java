@@ -5,16 +5,21 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.tctalent.anonymization.api.V1Api;
+import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
+import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
+import org.tctalent.anonymization.model.OfferToAssistCandidatesRequest;
 import org.tctalent.anonymization.model.RegisterCandidate201Response;
 import org.tctalent.anonymization.model.RegisterCandidateRequest;
 import org.tctalent.anonymization.service.CandidateService;
+import org.tctalent.anonymization.service.TalentCatalogService;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +28,7 @@ public class CandidateController implements V1Api {
   public static final String BASE_URL = "/v1/candidates";
 
   private final CandidateService candidateService;
+  private final TalentCatalogService talentCatalogService;
 
   /**
    * {@inheritDoc}
@@ -66,6 +72,21 @@ public class CandidateController implements V1Api {
   public ResponseEntity<Candidate> getCandidateByPublicId(String publicId) {
     Candidate candidate = candidateService.findByPublicId(publicId);
     return ResponseEntity.ok(candidate);
+  }
+
+  @Override
+  public ResponseEntity<OfferToAssistCandidates201Response> offerToAssistCandidates(
+      OfferToAssistCandidatesRequest offerToAssistCandidatesRequest) {
+
+    if (!talentCatalogService.isLoggedIn()) {
+      talentCatalogService.login();
+    }
+
+    Long partnerId = 2L; //TODO JC Get this from authorization
+
+    OfferToAssistRequest offerToAssistRequest = new OfferToAssistRequest(offerToAssistCandidatesRequest);
+    offerToAssistRequest.setPartnerId(partnerId);
+    return new ResponseEntity<>(talentCatalogService.create(offerToAssistRequest), HttpStatus.CREATED);
   }
 
   @Override
