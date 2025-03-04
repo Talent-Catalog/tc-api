@@ -502,4 +502,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private Integer yearOfBirth;
 
+  @Column(name = "created_date")
+  private OffsetDateTime createdDate;
+
 }

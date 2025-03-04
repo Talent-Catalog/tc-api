@@ -18,7 +18,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "seq_gen", sequenceName = "candidate_certification_id_seq", allocationSize = 1)
 @NoArgsConstructor
 @AllArgsConstructor
-public class BatchFailedItemEntity extends AbstractDomainEntity<Long>{
+public class BatchFailedItem extends AbstractTimestampedEntity<Long> {
 
   @Column(name = "job_execution_id", nullable = false)
   private Long jobExecutionId;

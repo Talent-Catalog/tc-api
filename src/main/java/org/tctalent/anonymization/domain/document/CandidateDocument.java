@@ -205,8 +205,5 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private Instant createdDate;
-
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private Instant updatedDate;
 }
 

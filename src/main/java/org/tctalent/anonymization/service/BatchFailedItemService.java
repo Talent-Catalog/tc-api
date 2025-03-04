@@ -2,16 +2,16 @@ package org.tctalent.anonymization.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.tctalent.anonymization.domain.entity.BatchFailedItemEntity;
-import org.tctalent.anonymization.repository.BatchFailedItemEntityRepository;
+import org.tctalent.anonymization.domain.entity.BatchFailedItem;
+import org.tctalent.anonymization.repository.BatchFailedItemRepository;
 
 @Service
 @RequiredArgsConstructor
 public class BatchFailedItemService {
 
-  private final BatchFailedItemEntityRepository batchFailedItemRepository;
+  private final BatchFailedItemRepository batchFailedItemRepository;
 
-  public void recordFailure(BatchFailedItemEntity failedItem) {
+  public void recordFailure(BatchFailedItem failedItem) {
     batchFailedItemRepository.save(failedItem);
   }
 }

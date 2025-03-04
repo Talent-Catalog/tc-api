@@ -21,7 +21,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.MappedSuperclass;
 import java.io.Serializable;
-import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,12 +44,6 @@ public abstract class AbstractDomainEntity<IdType extends Serializable>  impleme
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_gen")
     @Column(name = "id")
     private IdType id;
-
-    @Column(name = "created_date")
-    private OffsetDateTime createdDate;
-
-    @Column(name = "updated_date")
-    private OffsetDateTime updatedDate;
 
     /*
       For good discussion on hashCode and equals for entities see
