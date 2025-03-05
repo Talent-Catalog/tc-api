@@ -1,19 +1,10 @@
 package org.tctalent.anonymization.domain.entity;
 
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.security.Principal;
+import javax.security.auth.Subject;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.tctalent.anonymization.domain.entity.converter.ApiAuthorityConverter;
-import org.tctalent.anonymization.security.ApiAuthority;
 
 /**
  * Represents a user of the API. The ApiUser entity is used to store information about the user,
@@ -23,19 +14,17 @@ import org.tctalent.anonymization.security.ApiAuthority;
  */
 @Getter
 @Setter
-@Entity
-@Builder
-@Table(name = "api_user")
-@SequenceGenerator(name = "seq_gen", sequenceName = "api_user_id_seq", allocationSize = 1)
-@NoArgsConstructor
 @AllArgsConstructor
-public class ApiUser extends AbstractTimestampedEntity<Long> {
-  private String ownerName;
-  private String email;
-  private String apiKeyHash;
+public class ApiUser implements Principal {
+  private Long partnerId;
 
-  @Convert(converter = ApiAuthorityConverter.class)
-  private Set<ApiAuthority> authorities = new HashSet<>();
+  @Override
+  public String getName() {
+    return partnerId.toString();
+  }
 
-  private LocalDateTime expiresAt;
+  @Override
+  public boolean implies(Subject subject) {
+    return false;
+  }
 }
