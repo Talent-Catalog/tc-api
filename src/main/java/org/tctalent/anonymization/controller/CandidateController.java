@@ -67,11 +67,13 @@ public class CandidateController implements V1Api {
   @Override
   public ResponseEntity<Candidate> getCandidateByPublicId(String publicId) {
 
+    //TODO JC - we don't need to retrieve api user here - but just doing it to illustrate
+    //TODO JC how we could retrieve the partnerId associated with the current API user if needed
+    //TODO JC eg this will be needed for OTA's and CandidateRegistration
     final Optional<ApiUser> currentApiUser = authenticationService.getCurrentApiUser();
     if (currentApiUser.isEmpty()) {
       throw new UnauthorisedActionException("registerCandidate");
     }
-
     Long partnerId = currentApiUser.get().getPartnerId();
 
     Candidate candidate = candidateService.findByPublicId(publicId);
