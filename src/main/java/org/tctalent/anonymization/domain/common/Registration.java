@@ -17,9 +17,9 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum Registration {
-    NoResponse,
+    NO_RESPONSE,
     UNHCR,
     UNRWA,
-    Neither,
+    NEITHER,
     NA
 }

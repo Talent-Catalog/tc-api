@@ -17,10 +17,10 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum ResidenceStatus {
-    NoResponse("No response"),
-    LegalRes("Legal resident"),
-    IllegalRes("Illegal resident"),
-    Other("Other");
+    NO_RESPONSE("No response"),
+    LEGAL_RES("Legal resident"),
+    ILLEGAL_RES("Illegal resident"),
+    OTHER("Other");
 
     public final String label;
 

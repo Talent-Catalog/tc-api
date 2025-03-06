@@ -17,9 +17,9 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum VaccinationStatus {
-    NoResponse("No response"),
-    Full("Fully Vaccinated"),
-    Partial("Partially Vaccinated");
+    NO_RESPONSE("No response"),
+    FULL("Fully Vaccinated"),
+    PARTIAL("Partially Vaccinated");
 
     public final String label;
 

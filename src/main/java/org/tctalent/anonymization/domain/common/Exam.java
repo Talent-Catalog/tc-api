@@ -17,13 +17,13 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum Exam {
-    NoResponse,
+    NO_RESPONSE,
     OET,
-    OETRead,
-    OETList,
-    OETLang,
-    IELTSGen,
-    IELTSAca,
+    OET_READ,
+    OET_LIST,
+    OET_LANG,
+    IELTS_GEN,
+    IELTS_ACA,
     TOEFL,
-    Other
+    OTHER
 }

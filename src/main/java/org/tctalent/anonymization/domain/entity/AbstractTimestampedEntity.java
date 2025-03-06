@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Talent Beyond Boundaries.
+ * Copyright (c) 2024 Talent Catalog.
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License as published by the Free
@@ -14,11 +14,27 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.domain.common;
+package org.tctalent.anonymization.domain.entity;
 
-public enum SearchType {
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import java.io.Serializable;
+import java.time.OffsetDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-    and,
-    or,
-    not
+@Getter
+@Setter
+@NoArgsConstructor
+@MappedSuperclass
+public abstract class AbstractTimestampedEntity<IdType extends Serializable>
+    extends AbstractDomainEntity<IdType> implements TemporalEntity {
+
+    @Column(name = "created_date")
+    private OffsetDateTime createdDate;
+
+    @Column(name = "updated_date")
+    private OffsetDateTime updatedDate;
+
 }

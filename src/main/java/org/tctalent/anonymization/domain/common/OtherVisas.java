@@ -17,10 +17,10 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum OtherVisas {
-    NoResponse,
-    TempSkilled,
-    SpecialHum,
-    OtherHum,
-    DirectEnt,
-    PointsIndep,
+    NO_RESPONSE,
+    TEMP_SKILLED,
+    SPECIAL_HUM,
+    OTHER_HUM,
+    DIRECT_ENT,
+    POINTS_INDEP,
 }

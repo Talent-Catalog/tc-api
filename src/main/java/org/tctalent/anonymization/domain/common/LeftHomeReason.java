@@ -17,8 +17,8 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum LeftHomeReason {
-    NoResponse,
-    Safety,
-    Job,
-    Other
+    NO_RESPONSE,
+    SAFETY,
+    JOB,
+    OTHER
 }

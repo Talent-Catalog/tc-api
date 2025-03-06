@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Talent Beyond Boundaries.
+ * Copyright (c) 2024 Talent Catalog.
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License as published by the Free
@@ -14,10 +14,26 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-package org.tctalent.anonymization.domain.common;
+package org.tctalent.anonymization.domain.entity;
 
-public enum AttachmentType {
-    googlefile,
-    file,
-    link
+import java.time.OffsetDateTime;
+
+/**
+ * Interface implemented by objects who want to record timestamp information about when they were
+ * created and when they were last updated.
+ */
+public interface TemporalEntity {
+
+    /**
+     * Date time of object creation
+     * @return Date time of object creation
+     */
+    OffsetDateTime getCreatedDate();
+
+    /**
+     * Date time of last update
+     * @return Date time of last update
+     */
+    OffsetDateTime getUpdatedDate();
+
 }

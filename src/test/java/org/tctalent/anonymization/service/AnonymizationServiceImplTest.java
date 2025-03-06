@@ -49,7 +49,7 @@ class AnonymizationServiceImplTest {
         Country nationality = Country.builder()
             .isoCode("GB")
             .name("United Kingdon")
-            .status(Status.active)
+            .status(Status.ACTIVE)
             .build();
 
         IdentifiableCandidate identifiableCandidate = IdentifiableCandidate.builder()

@@ -17,8 +17,8 @@
 package org.tctalent.anonymization.domain.common;
 
 public enum HasPassport {
-    NoResponse,
-    ValidPassport,
-    InvalidPassport,
-    NoPassport
+    NO_RESPONSE,
+    VALID_PASSPORT,
+    INVALID_PASSPORT,
+    NO_PASSPORT
 }
