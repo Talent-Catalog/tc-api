@@ -3,6 +3,7 @@ package org.tctalent.anonymization.exception;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -46,6 +47,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * @see HttpMessageNotReadableException
  * @author sadatmalik
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -218,6 +220,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   public ProblemDetail handleGeneralException(Exception ex) {
+    // todo - sm - use log builder
+    log.error("Unexpected error", ex);
+
     return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
   }
 
