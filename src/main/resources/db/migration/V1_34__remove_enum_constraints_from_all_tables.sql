@@ -1,0 +1,93 @@
+-- Drop all CHECK enum constraints
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_arrest_imprison_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_avail_immediate_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_avail_immediate_reason_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_can_drive_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_conflict_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_covid_vaccinated_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_covid_vaccinated_status_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_crime_convict_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_dest_limit_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_driving_license_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_family_move_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_gender_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_health_issues_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_host_entry_legally_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_int_recruit_rural_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_marital_status_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_military_service_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_military_wanted_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_monitoring_evaluation_consent_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_partner_english_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_partner_ielts_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_partner_registered_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_resettle_third_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_residence_status_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_return_home_future_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_return_home_safe_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_returned_home_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_status_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_unhcr_consent_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_unhcr_not_reg_status_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_unhcr_registered_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_unhcr_status_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_unrwa_not_reg_status_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_unrwa_registered_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_visa_issues_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_visa_reject_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_work_abroad_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_work_permit_check;
+ALTER TABLE public.candidate DROP CONSTRAINT candidate_work_permit_desired_check;
+
+ALTER TABLE public.candidate_citizenship DROP CONSTRAINT candidate_citizenship_has_passport_check;
+
+ALTER TABLE public.candidate_dependant DROP CONSTRAINT candidate_dependant_gender_check;
+ALTER TABLE public.candidate_dependant DROP CONSTRAINT candidate_dependant_health_concern_check;
+ALTER TABLE public.candidate_dependant DROP CONSTRAINT candidate_dependant_registered_check;
+ALTER TABLE public.candidate_dependant DROP CONSTRAINT candidate_dependant_relation_check;
+
+ALTER TABLE public.candidate_destination DROP CONSTRAINT candidate_destination_interest_check;
+
+ALTER TABLE public.candidate_education DROP CONSTRAINT candidate_education_education_type_check;
+
+ALTER TABLE public.candidate_exam DROP CONSTRAINT candidate_exam_exam_check;
+
+ALTER TABLE public.candidate_visa_check DROP CONSTRAINT candidate_visa_check_character_assessment_check;
+ALTER TABLE public.candidate_visa_check DROP CONSTRAINT candidate_visa_check_destination_family_check;
+ALTER TABLE public.candidate_visa_check DROP CONSTRAINT candidate_visa_check_english_threshold_check;
+ALTER TABLE public.candidate_visa_check DROP CONSTRAINT candidate_visa_check_health_assessment_check;
+ALTER TABLE public.candidate_visa_check DROP CONSTRAINT candidate_visa_check_overall_risk_check;
+ALTER TABLE public.candidate_visa_check DROP CONSTRAINT candidate_visa_check_pathway_assessment_check;
+ALTER TABLE public.candidate_visa_check DROP CONSTRAINT candidate_visa_check_protection_check;
+ALTER TABLE public.candidate_visa_check DROP CONSTRAINT candidate_visa_check_security_risk_check;
+ALTER TABLE public.candidate_visa_check DROP CONSTRAINT candidate_visa_check_valid_travel_docs_check;
+
+ALTER TABLE public.candidate_visa_job_check DROP CONSTRAINT candidate_visa_job_check_eligible_186_check;
+ALTER TABLE public.candidate_visa_job_check DROP CONSTRAINT candidate_visa_job_check_eligible_494_check;
+ALTER TABLE public.candidate_visa_job_check DROP CONSTRAINT candidate_visa_job_check_eligible_other_check;
+ALTER TABLE public.candidate_visa_job_check DROP CONSTRAINT candidate_visa_job_check_interest_check;
+ALTER TABLE public.candidate_visa_job_check DROP CONSTRAINT candidate_visa_job_check_languages_threshold_met_check;
+ALTER TABLE public.candidate_visa_job_check DROP CONSTRAINT candidate_visa_job_check_put_forward_check;
+ALTER TABLE public.candidate_visa_job_check DROP CONSTRAINT candidate_visa_job_check_qualification_check;
+ALTER TABLE public.candidate_visa_job_check DROP CONSTRAINT candidate_visa_job_check_regional_check;
+ALTER TABLE public.candidate_visa_job_check DROP CONSTRAINT candidate_visa_job_check_salary_tsmit_check;
+ALTER TABLE public.candidate_visa_job_check DROP CONSTRAINT candidate_visa_job_check_tc_eligibility_check;
+
+ALTER TABLE public.country DROP CONSTRAINT country_status_check;
+
+ALTER TABLE public.education_level DROP CONSTRAINT education_level_education_type_check;
+ALTER TABLE public.education_level DROP CONSTRAINT education_level_status_check;
+
+ALTER TABLE public.education_major DROP CONSTRAINT education_major_status_check;
+
+ALTER TABLE public.language DROP CONSTRAINT language_status_check;
+
+ALTER TABLE public.language_level DROP CONSTRAINT language_level_cefr_level_check;
+ALTER TABLE public.language_level DROP CONSTRAINT language_level_status_check;
+
+ALTER TABLE public.occupation DROP CONSTRAINT occupation_status_check;
+
+ALTER TABLE public.salesforce_job_opp DROP CONSTRAINT salesforce_job_opp_stage_check;
+
+ALTER TABLE public.survey_type DROP CONSTRAINT survey_type_status_check;
+
