@@ -220,7 +220,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(Exception.class)
   public ProblemDetail handleGeneralException(Exception ex) {
-    // todo - sm - use log builder
+    // todo - jc - use log builder
     log.error("Unexpected error", ex);
 
     return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
