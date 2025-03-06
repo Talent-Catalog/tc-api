@@ -216,4 +216,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
   }
 
+  @ExceptionHandler(Exception.class)
+  public ProblemDetail handleGeneralException(Exception ex) {
+    return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+  }
+
 }
