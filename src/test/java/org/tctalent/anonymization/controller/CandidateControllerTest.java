@@ -1,7 +1,6 @@
 package org.tctalent.anonymization.controller;
 
 import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,7 +40,7 @@ class CandidateControllerTest {
         .build();
 
     Pageable pageable = PageRequest.of(0, 10);
-    testCandidate = candidateService.findAll(pageable).getContent().iterator().next();
+    testCandidate = candidateService.findAll(pageable, null, null, null).getContent().iterator().next();
   }
 
   @Test
