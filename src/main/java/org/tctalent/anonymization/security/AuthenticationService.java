@@ -1,8 +1,11 @@
 package org.tctalent.anonymization.security;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +28,13 @@ import org.tctalent.anonymization.service.TalentCatalogService;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+  /**
+   * Simple cache of apiKeys to ApiUser's - avoiding unnecessary calls back to TC server.
+   * <p/>
+   * Cache is only cleared when server is restarted.
+   */
+  private Map<String, ApiUser> keyToUserCache = new HashMap<>();
+
   private static final String AUTH_TOKEN_HEADER_NAME = "X-API-KEY";
 
   private final TalentCatalogService talentCatalogService;
@@ -43,12 +53,31 @@ public class AuthenticationService {
     return new ApiKeyAuthentication(apiUser);
   }
 
+  /**
+   * Looks up user associated with authentication key.
+   * @param apiKey API key
+   * @return ApiUser matching apiKey or null if there is no match for given key
+   */
+  @Nullable
   private ApiUser findApiUserByApiKey(String apiKey) {
-    if (!talentCatalogService.isLoggedIn()) {
-      talentCatalogService.login();
+
+    ApiUser apiUser;
+
+    //Get user from cache if we have already retrieved it
+    if (keyToUserCache.containsKey(apiKey)) {
+      apiUser = keyToUserCache.get(apiKey);
+    } else {
+      //Get user from TC service
+      if (!talentCatalogService.isLoggedIn()) {
+        talentCatalogService.login();
+      }
+      Long partnerId = talentCatalogService.findPartnerIdByPublicApiKey(apiKey);
+      apiUser = partnerId == null ? null : new ApiUser(partnerId);
+
+      //Remember result in cache. Note that this can store nulls if the key is not recognized.
+      keyToUserCache.put(apiKey, apiUser);
     }
-    Long partnerId = talentCatalogService.findPartnerIdByPublicApiKey(apiKey);
-    return partnerId == null ? null : new ApiUser(partnerId);
+    return apiUser;
   }
 
   /**
