@@ -18,10 +18,6 @@ import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
 import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
 import org.tctalent.anonymization.model.OfferToAssistCandidatesRequest;
-import org.tctalent.anonymization.model.JobMatch201Response;
-import org.tctalent.anonymization.model.JobMatchRequest;
-import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
-import org.tctalent.anonymization.model.OfferToAssistCandidatesRequest;
 import org.tctalent.anonymization.model.RegisterCandidate201Response;
 import org.tctalent.anonymization.model.RegisterCandidateRequest;
 import org.tctalent.anonymization.security.AuthenticationService;
@@ -76,16 +72,6 @@ public class CandidateController implements V1Api {
    */
   @Override
   public ResponseEntity<Candidate> getCandidateByPublicId(String publicId) {
-
-    //TODO JC - we don't need to retrieve api user here - but just doing it to illustrate
-    //TODO JC how we could retrieve the partnerId associated with the current API user if needed
-    //TODO JC eg this will be needed for OTA's and CandidateRegistration
-    final Optional<ApiUser> currentApiUser = authenticationService.getCurrentApiUser();
-    if (currentApiUser.isEmpty()) {
-      throw new UnauthorisedActionException("registerCandidate");
-    }
-    Long partnerId = currentApiUser.get().getPartnerId();
-
     Candidate candidate = candidateService.findByPublicId(publicId);
     return ResponseEntity.ok(candidate);
   }
@@ -94,12 +80,15 @@ public class CandidateController implements V1Api {
   public ResponseEntity<OfferToAssistCandidates201Response> offerToAssistCandidates(
       OfferToAssistCandidatesRequest offerToAssistCandidatesRequest) {
 
+    final Optional<ApiUser> currentApiUser = authenticationService.getCurrentApiUser();
+    if (currentApiUser.isEmpty()) {
+      throw new UnauthorisedActionException("registerCandidate");
+    }
+    Long partnerId = currentApiUser.get().getPartnerId();
+
     if (!talentCatalogService.isLoggedIn()) {
       talentCatalogService.login();
     }
-
-    Long partnerId = 2L; //TODO JC Get this from authorization
-
     OfferToAssistRequest offerToAssistRequest = new OfferToAssistRequest(offerToAssistCandidatesRequest);
     offerToAssistRequest.setPartnerId(partnerId);
     return new ResponseEntity<>(talentCatalogService.create(offerToAssistRequest), HttpStatus.CREATED);
