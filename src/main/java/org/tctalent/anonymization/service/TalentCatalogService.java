@@ -1,5 +1,6 @@
 package org.tctalent.anonymization.service;
 
+import org.springframework.lang.Nullable;
 import org.springframework.web.client.RestClientException;
 import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
@@ -54,4 +55,12 @@ public interface TalentCatalogService {
    * @throws RestClientException if errors are returned (eg unauthorized)
    */
   IdentifiableCandidatePage fetchPageOfIdentifiableCandidateData(int pageNumber, int pageSize) throws RestClientException;
+
+  /**
+   * Returns the partner id associated with the given public API key
+   * @param apiKey Public Api Key
+   * @return Partner id or null if none found with this key
+   */
+  @Nullable
+  Long findPartnerIdByPublicApiKey(String apiKey);
 }

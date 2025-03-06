@@ -4,6 +4,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
@@ -114,6 +115,25 @@ public class TalentCatalogServiceImpl implements TalentCatalogService {
         credentials = null;
       }
       throw new TalentCatalogServiceException(e);
+    }
+  }
+
+  @Override
+  @Nullable
+  public Long findPartnerIdByPublicApiKey(String apiKey) {
+    try {
+      return restClient.get()
+          .uri("/partner/public-api-key/" + apiKey)
+          .header(HttpHeaders.AUTHORIZATION,
+              credentials.getTokenType() + " " + credentials.getAccessToken())
+          .retrieve()
+          .body(Long.class);
+    } catch (HttpClientErrorException e) {
+      //Check for logged out
+      if (e.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
+        return null;
+      }
+      throw e;
     }
   }
 
