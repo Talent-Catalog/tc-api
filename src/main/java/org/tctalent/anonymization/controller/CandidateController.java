@@ -9,10 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.tctalent.anonymization.api.V1Api;
-import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
 import org.tctalent.anonymization.domain.entity.ApiUser;
+import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
 import org.tctalent.anonymization.exception.UnauthorisedActionException;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
@@ -38,6 +39,7 @@ public class CandidateController implements V1Api {
    * {@inheritDoc}
    */
   @Override
+  @PreAuthorize("hasAuthority('READ_CANDIDATE_DATA')")
   public ResponseEntity<CandidatePage> findCandidates(Integer page, Integer limit,
       String location, String nationality, String occupation) {
     Pageable pageable = PageRequest.of(page, limit);
@@ -71,18 +73,20 @@ public class CandidateController implements V1Api {
    * {@inheritDoc}
    */
   @Override
+  @PreAuthorize("hasAuthority('READ_CANDIDATE_DATA')")
   public ResponseEntity<Candidate> getCandidateByPublicId(String publicId) {
     Candidate candidate = candidateService.findByPublicId(publicId);
     return ResponseEntity.ok(candidate);
   }
 
   @Override
+  @PreAuthorize("hasAuthority('OFFER_CANDIDATE_SERVICES')")
   public ResponseEntity<OfferToAssistCandidates201Response> offerToAssistCandidates(
       OfferToAssistCandidatesRequest offerToAssistCandidatesRequest) {
 
     final Optional<ApiUser> currentApiUser = authenticationService.getCurrentApiUser();
     if (currentApiUser.isEmpty()) {
-      throw new UnauthorisedActionException("registerCandidate");
+      throw new UnauthorisedActionException("offerToAssistCandidates");
     }
     long partnerId = currentApiUser.get().getPartner().getPartnerId();
 
@@ -95,6 +99,7 @@ public class CandidateController implements V1Api {
   }
 
   @Override
+  @PreAuthorize("hasAuthority('REGISTER_CANDIDATES')")
   public ResponseEntity<RegisterCandidate201Response> registerCandidate(
       RegisterCandidateRequest registerCandidateRequest) {
 
