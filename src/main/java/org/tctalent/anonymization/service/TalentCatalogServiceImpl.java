@@ -14,6 +14,7 @@ import org.tctalent.anonymization.dto.request.LoginRequest;
 import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
 import org.tctalent.anonymization.dto.request.SavedSearchGetRequest;
 import org.tctalent.anonymization.dto.response.JwtAuthenticationResponse;
+import org.tctalent.anonymization.dto.response.Partner;
 import org.tctalent.anonymization.exception.TalentCatalogServiceException;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
 import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
@@ -126,14 +127,14 @@ public class TalentCatalogServiceImpl implements TalentCatalogService {
 
     @Override
     @Nullable
-    public Long findPartnerIdByPublicApiKey(String apiKey) {
+    public Partner findPartnerByPublicApiKey(String apiKey) {
         try {
             return restClient.get()
                 .uri("/partner/public-api-key/" + apiKey)
                 .header(HttpHeaders.AUTHORIZATION,
                     credentials.getTokenType() + " " + credentials.getAccessToken())
                 .retrieve()
-                .body(Long.class);
+                .body(Partner.class);
         } catch (HttpClientErrorException e) {
             //Check for logged out
             if (e.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {

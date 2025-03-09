@@ -84,7 +84,7 @@ public class CandidateController implements V1Api {
     if (currentApiUser.isEmpty()) {
       throw new UnauthorisedActionException("registerCandidate");
     }
-    Long partnerId = currentApiUser.get().getPartnerId();
+    long partnerId = currentApiUser.get().getPartner().getPartnerId();
 
     if (!talentCatalogService.isLoggedIn()) {
       talentCatalogService.login();

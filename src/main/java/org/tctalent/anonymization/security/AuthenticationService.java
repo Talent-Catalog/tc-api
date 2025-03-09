@@ -2,14 +2,17 @@ package org.tctalent.anonymization.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.tctalent.anonymization.domain.entity.ApiUser;
+import org.tctalent.anonymization.dto.response.Partner;
 import org.tctalent.anonymization.service.TalentCatalogService;
 
 /**
@@ -52,7 +55,12 @@ public class AuthenticationService {
             throw new BadCredentialsException("Invalid API key");
         }
 
-        return new ApiKeyAuthentication(apiUser);
+        // Convert the String authorities to GrantedAuthority objects
+        List<SimpleGrantedAuthority> grantedAuthorities =
+            apiUser.getPartner().getPublicApiAuthorities().stream()
+                .map(SimpleGrantedAuthority::new).toList();
+
+        return new ApiKeyAuthentication(apiUser, grantedAuthorities);
     }
 
     /**
@@ -74,8 +82,8 @@ public class AuthenticationService {
             if (!talentCatalogService.isLoggedIn()) {
                 talentCatalogService.login();
             }
-            Long partnerId = talentCatalogService.findPartnerIdByPublicApiKey(apiKey);
-            apiUser = partnerId == null ? null : new ApiUser(partnerId);
+            Partner partner = talentCatalogService.findPartnerByPublicApiKey(apiKey);
+            apiUser = partner == null ? null : new ApiUser(partner);
 
             //Remember result in cache. Note that this can store nulls if the key is not recognized.
             keyToUserCache.put(apiKey, apiUser);
