@@ -119,7 +119,9 @@ public class CandidateController implements V1Api {
     //Convert OTA response into a JobMatch response
     JobMatch201Response response = new JobMatch201Response();
     response.setJobMatchId(otaResponse.getOfferId());
-    response.setMessage(otaResponse.getMessage());
+
+    //Job match has slightly different response message.
+    response.setMessage("Your interest has been successfully recorded.");
 
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
