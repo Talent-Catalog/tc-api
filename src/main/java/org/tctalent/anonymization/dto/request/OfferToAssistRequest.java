@@ -37,7 +37,7 @@ import org.tctalent.anonymization.model.OfferToAssistCandidatesRequest;
 public class OfferToAssistRequest extends OfferToAssistCandidatesRequest {
 
     /**
-     * Copt constructor given an OfferToAssistCandidatesRequest
+     * Copy constructor given an OfferToAssistCandidatesRequest
      * @param request Request through the public API
      */
     public OfferToAssistRequest(@NonNull OfferToAssistCandidatesRequest request) {
