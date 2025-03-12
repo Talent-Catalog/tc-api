@@ -86,6 +86,7 @@ public class AuthenticationService {
             apiUser = partner == null ? null : new ApiUser(partner);
 
             //Remember result in cache. Note that this can store nulls if the key is not recognized.
+            //This way repeated requests from an unknown key will only hit the TC server once.
             keyToUserCache.put(apiKey, apiUser);
         }
         return apiUser;
