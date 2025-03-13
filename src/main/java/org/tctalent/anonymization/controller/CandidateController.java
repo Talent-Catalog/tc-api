@@ -6,18 +6,24 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.tctalent.anonymization.api.V1Api;
 import org.tctalent.anonymization.domain.entity.ApiUser;
+import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
 import org.tctalent.anonymization.exception.UnauthorisedActionException;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
+import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
+import org.tctalent.anonymization.model.OfferToAssistCandidatesRequest;
 import org.tctalent.anonymization.model.RegisterCandidate201Response;
 import org.tctalent.anonymization.model.RegisterCandidateRequest;
 import org.tctalent.anonymization.security.AuthenticationService;
 import org.tctalent.anonymization.service.CandidateService;
+import org.tctalent.anonymization.service.TalentCatalogService;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,11 +33,13 @@ public class CandidateController implements V1Api {
 
   private final AuthenticationService authenticationService;
   private final CandidateService candidateService;
+  private final TalentCatalogService talentCatalogService;
 
   /**
    * {@inheritDoc}
    */
   @Override
+  @PreAuthorize("hasAuthority('READ_CANDIDATE_DATA')")
   public ResponseEntity<CandidatePage> findCandidates(Integer page, Integer limit,
       String location, String nationality, String occupation) {
     Pageable pageable = PageRequest.of(page, limit);
@@ -65,22 +73,33 @@ public class CandidateController implements V1Api {
    * {@inheritDoc}
    */
   @Override
+  @PreAuthorize("hasAuthority('READ_CANDIDATE_DATA')")
   public ResponseEntity<Candidate> getCandidateByPublicId(String publicId) {
-
-    //TODO JC - we don't need to retrieve api user here - but just doing it to illustrate
-    //TODO JC how we could retrieve the partnerId associated with the current API user if needed
-    //TODO JC eg this will be needed for OTA's and CandidateRegistration
-    final Optional<ApiUser> currentApiUser = authenticationService.getCurrentApiUser();
-    if (currentApiUser.isEmpty()) {
-      throw new UnauthorisedActionException("registerCandidate");
-    }
-    Long partnerId = currentApiUser.get().getPartnerId();
-
     Candidate candidate = candidateService.findByPublicId(publicId);
     return ResponseEntity.ok(candidate);
   }
 
   @Override
+  @PreAuthorize("hasAuthority('OFFER_CANDIDATE_SERVICES')")
+  public ResponseEntity<OfferToAssistCandidates201Response> offerToAssistCandidates(
+      OfferToAssistCandidatesRequest offerToAssistCandidatesRequest) {
+
+    final Optional<ApiUser> currentApiUser = authenticationService.getCurrentApiUser();
+    if (currentApiUser.isEmpty()) {
+      throw new UnauthorisedActionException("offerToAssistCandidates");
+    }
+    long partnerId = currentApiUser.get().getPartner().getPartnerId();
+
+    if (!talentCatalogService.isLoggedIn()) {
+      talentCatalogService.login();
+    }
+    OfferToAssistRequest offerToAssistRequest = new OfferToAssistRequest(offerToAssistCandidatesRequest);
+    offerToAssistRequest.setPartnerId(partnerId);
+    return new ResponseEntity<>(talentCatalogService.create(offerToAssistRequest), HttpStatus.CREATED);
+  }
+
+  @Override
+  @PreAuthorize("hasAuthority('REGISTER_CANDIDATES')")
   public ResponseEntity<RegisterCandidate201Response> registerCandidate(
       RegisterCandidateRequest registerCandidateRequest) {
 

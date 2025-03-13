@@ -1,7 +1,6 @@
 package org.tctalent.anonymization.controller;
 
 import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
