@@ -172,7 +172,7 @@ There is no need to build the OpenAPI-generated code locally for standard develo
 > 
 > For developers who need to iterate quickly on API spec changes (for example, when working 
 > simultaneously on the spec and the service), please consult the 
-> [OpenAPI Spec Dependency Wiki](https://github.com/Talent-Catalog/tc-api/wiki/OpenAPI-Spec-Dependency) 
+> [Working With the OpenAPI Wiki](https://github.com/Talent-Catalog/tc-api/wiki/Working-with-the-OpenAPI) 
 > for instructions on using local iterative development with `publishToMavenLocal`.
 
 With the Maven artefact in place, you must generate the Mapstruct mapper classes that the service
