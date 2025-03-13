@@ -11,5 +11,4 @@ public class CandidateExam {
   private String otherExam;
   private String score;
   private Long year;
-  private String notes;
 }
