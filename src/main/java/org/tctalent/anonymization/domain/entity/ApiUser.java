@@ -5,6 +5,8 @@ import javax.security.auth.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.NonNull;
+import org.tctalent.anonymization.dto.response.Partner;
 
 /**
  * Represents a user of the API. The ApiUser entity is used to store information about the user,
@@ -16,11 +18,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ApiUser implements Principal {
-  private Long partnerId;
+  @NonNull
+  private Partner partner;
 
   @Override
   public String getName() {
-    return partnerId.toString();
+    return partner.getName();
   }
 
   @Override

@@ -96,6 +96,6 @@ class CandidateServiceImplTest {
         "Should throw an exception if the candidate is not found"
     );
 
-    assertEquals("Missing Candidate matching base-64-encoded-uuid", exception.getMessage());
+    assertEquals("Missing Candidate matching " + publicId, exception.getMessage());
   }
 }

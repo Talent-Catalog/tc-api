@@ -28,6 +28,9 @@ configurations {
 
 // Repositories: Define where dependencies should be resolved from
 repositories {
+    // Use mavenLocal() for local iterative spec and service development
+    // See: https://github.com/Talent-Catalog/tc-api/wiki/OpenAPI-Spec-Dependency
+    //mavenLocal()
     mavenCentral()
 }
 
@@ -46,6 +49,9 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-batch"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "org.springframework.boot:spring-boot-starter-security"
+
+    // TC open api spec
+    implementation "io.github.sadatmalik:tc-api-spec:1.0.2"
 
     // Database drivers and migration tools
     runtimeOnly "org.postgresql:postgresql"
@@ -87,53 +93,11 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
 }
 
-// OpenAPI validation task: Validate the OpenAPI specification
-openApiValidate {
-    inputSpec.set(file('../tc-api-spec/openapi.yaml').absolutePath)
-    recommend.set(true)
-}
-
-// OpenAPI generation task: Generate API and model classes from the OpenAPI spec
-openApiGenerate {
-    generatorName.set("spring")
-    inputSpec.set(file('../tc-api-spec/openapi.yaml').absolutePath)
-    outputDir.set("$buildDir/generated")
-    apiPackage.set("org.tctalent.anonymization.api")
-    modelPackage.set("org.tctalent.anonymization.model")
-    configOptions.put("dateLibrary", "java8")
-    configOptions.put("openApiNullable", "false")
-    configOptions.put("useJakartaEe", "true")
-    configOptions.put("useLombokAnnotations", "true")
-    configOptions.put("additionalModelTypeAnnotations", "@lombok.Getter @lombok.Setter")
-    configOptions.put("generateBuilders", "true")
-    library.set("spring-boot")
-    globalProperties.set([
-            modelDocs: "false",
-            apiDocs: "false",
-            apiTests: "false",
-            modelTests: "false",
-            generateAliasAsModel: "true",
-    ])
-
-    // Tell the generator where the custom templates are - e.g. for custom enum code generation
-    templateDir.set(file('../tc-api-spec/custom-templates/JavaSpring').absolutePath)
-}
-
-// Clean-up task: Remove unnecessary generated files
-tasks.named("openApiGenerate").configure {
-    doLast {
-        def generatedMainClass = file("$buildDir/generated/src/main/java/org/openapitools/OpenApiGeneratorApplication.java")
-        if (generatedMainClass.exists()) {
-            generatedMainClass.delete()
-        }
-    }
-}
-
 // Include generated sources in the main source set
 sourceSets {
     main {
         java {
-            srcDir "$buildDir/generated/src/main/java"
+            srcDirs = ["src/main/java", "$buildDir/generated/sources/annotationProcessor/java/main"]
         }
     }
 }
@@ -142,9 +106,6 @@ sourceSets {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-// Code generation runs before compilation
-compileJava.dependsOn("openApiGenerate")
 
 // Java compilation options
 compileJava {

@@ -42,8 +42,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
       // Clear any authentication context
       SecurityContextHolder.clearContext();
       // Delegate to the authentication entry point which will build a ProblemDetails response
+      //Note that an exception here means that we were unable to authenticate - not necessarily
+      //that the credentials were not good.
       authenticationEntryPoint.commence(request, response,
-          new BadCredentialsException("Invalid API Key", exp));
+          new BadCredentialsException("Unable to authenticate", exp));
       return;
     }
 
