@@ -12,12 +12,14 @@ import org.springframework.web.client.RestClientException;
 import org.tctalent.anonymization.config.properties.TalentCatalogServiceProperties;
 import org.tctalent.anonymization.dto.request.LoginRequest;
 import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
+import org.tctalent.anonymization.dto.request.RegisterCandidateByPartnerRequest;
 import org.tctalent.anonymization.dto.request.SavedSearchGetRequest;
 import org.tctalent.anonymization.dto.response.JwtAuthenticationResponse;
 import org.tctalent.anonymization.dto.response.Partner;
 import org.tctalent.anonymization.exception.TalentCatalogServiceException;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
 import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
+import org.tctalent.anonymization.model.RegisterCandidate201Response;
 
 /**
  * @author John Cameron
@@ -147,5 +149,26 @@ public class TalentCatalogServiceImpl implements TalentCatalogService {
     @Override
     public boolean isLoggedIn() {
         return credentials != null;
+    }
+
+    @Override
+    public RegisterCandidate201Response register(RegisterCandidateByPartnerRequest request)
+        throws RestClientException {
+        try {
+            return restClient.post()
+                .uri("/candidate/register-by-partner")
+                .contentType(APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION,
+                    credentials.getTokenType() + " " + credentials.getAccessToken())
+                .body(request)
+                .retrieve()
+                .body(RegisterCandidate201Response.class);
+        } catch (HttpClientErrorException e) {
+            //Check for logged out
+            if (e.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
+                credentials = null;
+            }
+            throw new TalentCatalogServiceException(e);
+        }
     }
 }
