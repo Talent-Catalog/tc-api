@@ -26,6 +26,7 @@ import org.tctalent.anonymization.batch.listener.LoggingRestToDocumentProcessLis
 import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
 import org.tctalent.anonymization.batch.listener.LoggingSkipListener;
+import org.tctalent.anonymization.batch.listener.LoggingSkipListenerForMongo;
 import org.tctalent.anonymization.batch.reader.RestApiItemReader;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
@@ -53,6 +54,7 @@ class BatchConfigTest {
   @Mock private LoggingRestToDocumentProcessListener loggingRestToDocumentProcessListener;
   @Mock private LoggingEntityWriteListener loggingEntityWriteListener;
   @Mock private LoggingDocumentWriteListener loggingDocumentWriteListener;
+  @Mock private LoggingSkipListenerForMongo loggingSkipListenerForMongo;
   @Mock private LoggingSkipListener loggingSkipListener;
   @Mock private CandidateEntityRepository candidateEntityRepository;
   @Mock private CandidateDocumentRepository candidateDocumentRepository;
@@ -121,7 +123,8 @@ class BatchConfigTest {
         loggingChunkListener,
         loggingRestReadListener,
         loggingRestToDocumentProcessListener,
-        loggingDocumentWriteListener
+        loggingDocumentWriteListener,
+        loggingSkipListenerForMongo
     );
 
     assertNotNull(step);
