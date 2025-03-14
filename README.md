@@ -164,21 +164,23 @@ save the anonymised data to Aurora and Mongo databases.
 
 ### Run the server ###
 
-Before running the server, you must generate the model and api classes that the service needs. The 
-schema for these are defined in the OpenAPI specification in the tc-api-spec which you imported to 
-IntelliJ as an additional module.
+The generated Open API models and controllers are provided in a published Maven artefact 
+(tc-api-spec) that is referenced as a project dependency in the tc-api-service build.gradle file. 
+There is no need to build the OpenAPI-generated code locally for standard development.
 
-From the tc-api root folder, execute the Gradle command: 
+> Developer Note:
+> 
+> For developers who need to iterate quickly on API spec changes (for example, when working 
+> simultaneously on the spec and the service), please consult the 
+> [Working With the OpenAPI Wiki](https://github.com/Talent-Catalog/tc-api/wiki/Working-with-the-OpenAPI) 
+> for instructions on using local iterative development with `publishToMavenLocal`.
+
+With the Maven artefact in place, you must generate the Mapstruct mapper classes that the service
+uses to map from TC core data to anonymised candidate data. From the tc-api-service root folder, 
+execute the Gradle command:
 
 ```shell
-./gradlew clean openApiGenerate
-```
-
-Then generate the Mapstruct mapper classes that the service uses to map from TC core data to 
-anonymised candidate data. From the tc-api-service root folder, execute the Gradle command:
-
-```shell
-./gradlew compileJava
+./gradlew clean compileJava
 ```
 
 You can now start the TC API service:
