@@ -51,7 +51,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-security"
 
     // TC open api spec
-    implementation "io.github.sadatmalik:tc-api-spec:1.0.2"
+    implementation "io.github.sadatmalik:tc-api-spec:1.0.5"
 
     // Database drivers and migration tools
     runtimeOnly "org.postgresql:postgresql"
