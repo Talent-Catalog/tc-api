@@ -1,5 +1,5 @@
 module tc-prod {
-  source = "../.."
+  source = "./.."
   project_name = "tc"
   project_description = "Production Talent Catalog set up"
   fargate_cpu = 1024
