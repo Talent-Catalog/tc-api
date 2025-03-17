@@ -211,9 +211,21 @@ module "db" {
     }
   }
 
+  vpc_security_group_ids = [module.security_group.security_group_id]
+
+  create_cloudwatch_log_group     = true
+
+  backup_retention_period = 1
+  skip_final_snapshot     = true
+  deletion_protection     = false
+
+  performance_insights_enabled          = true
+  performance_insights_retention_period = 7
+  create_monitoring_role                = true
+  monitoring_interval                   = 60
+
   storage_encrypted   = true
   apply_immediately   = true
-  monitoring_interval = 10
 
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
