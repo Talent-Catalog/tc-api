@@ -13,6 +13,12 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "image_tag" {
+  description = "The image tag for the ECS service"
+  default     = "latest"
+}
+
+
 variable "app_port" {
   description = "Port exposed by the docker image to redirect traffic to"
   default     = 8088

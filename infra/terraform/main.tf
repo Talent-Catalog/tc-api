@@ -36,7 +36,7 @@ locals {
 
   tags = {
     Name       = local.name
-    Repository = "https://github.com/Talent-Catalog/terraform"
+    Repository = "https://github.com/Talent-Catalog/tc-api"
   }
 }
 
@@ -92,7 +92,7 @@ module "ecs_service" {
       memory    = var.fargate_memory
       essential = true
 
-      image     = aws_ecr_repository.repo.repository_url
+      image = "${aws_ecr_repository.repo.repository_url}:${var.image_tag}"
       port_mappings = [
         {
           name          = local.container_name
