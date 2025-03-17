@@ -6,6 +6,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.5'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'org.openapi.generator' version '7.8.0'
+    id 'com.google.cloud.tools.jib' version '3.4.4'
 }
 
 // Project metadata: Group and version details
@@ -123,4 +124,16 @@ tasks.withType(JavaCompile).configureEach {
 tasks.withType(GenerateTask).configureEach {
     outputs.upToDateWhen { false }
     outputs.cacheIf { false }
+}
+
+jib {
+    to {
+        if (project.hasProperty("test-tc-system")) {
+            image = "231168606641.dkr.ecr.us-east-1.amazonaws.com/tc-api"
+        } else if (project.hasProperty("prod-tc-system")) {
+            image = "968457613372.dkr.ecr.us-east-1.amazonaws.com/tc-api"
+        }
+        tags = ["latest", version]
+        credHelper = 'ecr-login'
+    }
 }
