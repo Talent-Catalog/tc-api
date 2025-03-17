@@ -104,8 +104,16 @@ module "ecs_service" {
 
       environment = [
         {
-          name  = "DATABASE_HOST"
+          name  = "DATABASE_URL"
           value = module.db.cluster_endpoint
+        },
+        {
+          name  = "DATABASE_USERNAME"
+          value = var.db_user_name
+        },
+        {
+          name  = "DATABASE_PASSWORD"
+          value = ""
         },
       ]
 
