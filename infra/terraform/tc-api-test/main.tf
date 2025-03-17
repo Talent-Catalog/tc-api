@@ -6,5 +6,5 @@ module tc-test {
   fargate_memory = 2048
   db_name = "tcapi"
   db_user_name = "tcapi"
-  db_instance_class = "db.t3.micro"
+  db_instance_class = "db.t3.medium" # smallest test instance available for aurora
 }

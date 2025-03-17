@@ -73,7 +73,7 @@ module "ecs_cluster" {
 
 module "ecs_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
-  depends_on = [module.db,module.elasticache]
+  depends_on = [module.db]
 
   name        = local.name
   cluster_arn = module.ecs_cluster.arn
@@ -105,11 +105,7 @@ module "ecs_service" {
       environment = [
         {
           name  = "DATABASE_HOST"
-          value = module.db.db_instance_address
-        },
-        {
-          name  = "REDIST_HOST"
-          value = module.elasticache.replication_group_primary_endpoint_address
+          value = module.db.cluster_endpoint
         },
       ]
 
@@ -189,110 +185,40 @@ module "ecs_service" {
 # RDS Module
 ################################################################################
 module "db" {
-  source  = "terraform-aws-modules/rds/aws"
-  version = "6.10.0"
+  # See https://registry.terraform.io/modules/terraform-aws-modules/rds-aurora/aws/latest
+  source  = "terraform-aws-modules/rds-aurora/aws"
+  version = "9.13.0"
 
-  identifier = local.name
+  name           = local.name
 
-  # All available versions: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
-  engine                   = "postgres"
-  engine_version           = "14"
-  engine_lifecycle_support = "open-source-rds-extended-support-disabled"
-  family                   = "postgres14" # DB parameter group
-  major_engine_version     = "14"         # DB option group
-  instance_class           = var.db_instance_class
-
-  allocated_storage     = 20
-
-  db_name  = var.db_name
-  username = var.db_user_name
-  port     = 5432
-
-  multi_az               = true
-  db_subnet_group_name   = module.vpc.database_subnet_group
-  vpc_security_group_ids = [module.security_group.security_group_id]
-
-  maintenance_window              = "Mon:00:00-Mon:03:00"
-  backup_window                   = "03:00-06:00"
-  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
-  create_cloudwatch_log_group     = true
-
-  backup_retention_period = 1
-  skip_final_snapshot     = true
-  deletion_protection     = false
-
-  performance_insights_enabled          = true
-  performance_insights_retention_period = 7
-  create_monitoring_role                = true
-  monitoring_interval                   = 60
-  monitoring_role_name                  = "${local.name}-monitoring-role"
-  monitoring_role_use_name_prefix       = true
-  monitoring_role_description           = "Monitoring ${local.description}"
-
-  parameters = [
-    {
-      #Autovacuum is a built-in PostgreSQL utility that removes outdated or unnecessary data to
-      #free up space in the database.
-      # The autovacuum process runs the VACUUM command in the background at regular intervals.
-      name  = "autovacuum"
-      value = 1
-    },
-    {
-      name  = "client_encoding"
-      value = "utf8"
-    }
-  ]
-
-  tags = local.tags
-  db_option_group_tags = {
-    "Sensitive" = "low"
+  engine         = "aurora-postgresql"
+  engine_version = "15"
+  instance_class = var.db_instance_class
+  instances = {
+    one = {}
   }
-  db_parameter_group_tags = {
-    "Sensitive" = "low"
-  }
-  cloudwatch_log_group_tags = {
-    "Sensitive" = "high"
-  }
-}
 
+  master_username = var.db_user_name
 
-################################################################################
-# ElastiCache Module
-################################################################################
-
-module "elasticache" {
-  source = "terraform-aws-modules/elasticache/aws"
-
-  replication_group_id = local.name
-
-  engine_version = "7.1"
-  node_type      = "cache.t2.micro"
-
-  # Add some replicas matching the number of azs we have (-1)
-  replicas_per_node_group = 2
-
-  maintenance_window = "sun:05:00-sun:09:00"
-  apply_immediately  = true
-
-  # Security Group
-  vpc_id = module.vpc.vpc_id
+  vpc_id               = module.vpc.vpc_id
+  db_subnet_group_name = module.vpc.database_subnet_group
   security_group_rules = {
-    ingress_vpc = {
-      # Default type is `ingress`
-      # Default port is based on the default engine port
-      description = "VPC traffic"
-      cidr_ipv4   = module.vpc.vpc_cidr_block
+    ex1_ingress = {
+      cidr_blocks = ["10.20.0.0/20"]
+    }
+    ex1_ingress = {
+      source_security_group_id = module.security_group.security_group_id
     }
   }
 
-  # Subnet Group
-  subnet_group_name        = local.name
-  subnet_group_description = "${local.name} subnet group"
-  subnet_ids               = module.vpc.private_subnets
+  storage_encrypted   = true
+  apply_immediately   = true
+  monitoring_interval = 10
+
+  enabled_cloudwatch_logs_exports = ["postgresql"]
 
   tags = local.tags
 }
-
 
 ################################################################################
 # Supporting Resources
