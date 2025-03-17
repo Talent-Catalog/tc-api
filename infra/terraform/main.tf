@@ -105,7 +105,7 @@ module "ecs_service" {
       environment = [
         {
           name  = "DATABASE_URL"
-          value = module.db.cluster_endpoint
+          value = "jdbc:postgresql://${module.db.cluster_endpoint}/${var.db_name}"
         },
         {
           name  = "DATABASE_USERNAME"
@@ -207,6 +207,8 @@ module "db" {
   }
 
   master_username = var.db_user_name
+
+  database_name = var.db_name
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group
