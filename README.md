@@ -175,13 +175,9 @@ There is no need to build the OpenAPI-generated code locally for standard develo
 > [Working With the OpenAPI Wiki](https://github.com/Talent-Catalog/tc-api/wiki/Working-with-the-OpenAPI) 
 > for instructions on using local iterative development with `publishToMavenLocal`.
 
-With the Maven artefact in place, you must generate the Mapstruct mapper classes that the service
-uses to map from TC core data to anonymised candidate data. From the tc-api-service root folder, 
-execute the Gradle command:
-
-```shell
-./gradlew clean compileJava
-```
+With the Maven artefact in place, simply run the TcApiServiceApplication from IntelliJ as normal. 
+There is no need to generate the Mapstruct mapper classes from Gradle. The IntelliJ build will do 
+this. 
 
 You can now start the TC API service:
 

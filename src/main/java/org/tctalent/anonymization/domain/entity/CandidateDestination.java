@@ -52,8 +52,6 @@ public class CandidateDestination extends AbstractDomainEntity<Long>
     @Enumerated(EnumType.STRING)
     private YesNoUnsure interest;
 
-    private String notes;
-
     @Override
     public int compareTo(CandidateDestination o) {
         if (countryIsoCode == null) {

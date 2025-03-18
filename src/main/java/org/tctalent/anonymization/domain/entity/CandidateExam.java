@@ -50,6 +50,4 @@ public class CandidateExam extends AbstractDomainEntity<Long> {
 
     private Long year;
 
-    private String notes;
-
 }
