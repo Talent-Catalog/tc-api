@@ -25,8 +25,8 @@ import org.tctalent.anonymization.batch.listener.LoggingRestToDocumentProcessLis
 import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
 import org.tctalent.anonymization.batch.listener.LoggingEntityWriteListener;
-import org.tctalent.anonymization.batch.listener.LoggingSkipListener;
-import org.tctalent.anonymization.batch.listener.LoggingSkipListenerForMongo;
+import org.tctalent.anonymization.batch.listener.LoggingEntitySkipListener;
+import org.tctalent.anonymization.batch.listener.LoggingDocumentSkipListener;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
@@ -103,7 +103,7 @@ public class BatchConfig {
       LoggingRestReadListener loggingRestReadListener,
       LoggingRestToEntityProcessListener loggingRestToEntityProcessListener,
       LoggingEntityWriteListener loggingEntityWriteListener,
-      LoggingSkipListener loggingSkipListener) {
+      LoggingEntitySkipListener loggingEntitySkipListener) {
 
     return new StepBuilder("candidateRestToAuroraStep", jobRepository)
         .<IdentifiableCandidate, CandidateEntity>chunk(batchProperties.getChunkSize(), transactionManager)
@@ -117,7 +117,7 @@ public class BatchConfig {
         .faultTolerant()
         .skip(DataIntegrityViolationException.class)
         .skip(ValidationException.class)
-        .listener(loggingSkipListener)
+        .listener(loggingEntitySkipListener)
         .skipPolicy(new ConditionalSkipPolicy(batchProperties.getMaxReadSkips()))
         .build();
   }
@@ -133,7 +133,7 @@ public class BatchConfig {
       LoggingRestReadListener loggingRestReadListener,
       LoggingRestToDocumentProcessListener loggingRestToDocumentProcessListener,
       LoggingDocumentWriteListener loggingDocumentWriteListener,
-      LoggingSkipListenerForMongo loggingSkipListenerForMongo) {
+      LoggingDocumentSkipListener loggingDocumentSkipListener) {
 
     return new StepBuilder("candidateRestToMongoStep", jobRepository)
         .<IdentifiableCandidate, CandidateDocument>chunk(batchProperties.getChunkSize(), new ResourcelessTransactionManager())
@@ -148,7 +148,7 @@ public class BatchConfig {
         .skip(CodecConfigurationException.class)
         .skip(DataIntegrityViolationException.class)
         .skip(ValidationException.class)
-        .listener(loggingSkipListenerForMongo)
+        .listener(loggingDocumentSkipListener)
         .skipPolicy(new ConditionalSkipPolicy(batchProperties.getMaxReadSkips()))
         .build();
   }
