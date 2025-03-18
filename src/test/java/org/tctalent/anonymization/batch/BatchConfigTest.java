@@ -25,8 +25,8 @@ import org.tctalent.anonymization.batch.listener.LoggingChunkListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestToDocumentProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
-import org.tctalent.anonymization.batch.listener.LoggingSkipListener;
-import org.tctalent.anonymization.batch.listener.LoggingSkipListenerForMongo;
+import org.tctalent.anonymization.batch.listener.LoggingEntitySkipListener;
+import org.tctalent.anonymization.batch.listener.LoggingDocumentSkipListener;
 import org.tctalent.anonymization.batch.reader.RestApiItemReader;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
@@ -54,8 +54,8 @@ class BatchConfigTest {
   @Mock private LoggingRestToDocumentProcessListener loggingRestToDocumentProcessListener;
   @Mock private LoggingEntityWriteListener loggingEntityWriteListener;
   @Mock private LoggingDocumentWriteListener loggingDocumentWriteListener;
-  @Mock private LoggingSkipListenerForMongo loggingSkipListenerForMongo;
-  @Mock private LoggingSkipListener loggingSkipListener;
+  @Mock private LoggingDocumentSkipListener loggingDocumentSkipListener;
+  @Mock private LoggingEntitySkipListener loggingEntitySkipListener;
   @Mock private CandidateEntityRepository candidateEntityRepository;
   @Mock private CandidateDocumentRepository candidateDocumentRepository;
 
@@ -99,7 +99,7 @@ class BatchConfigTest {
         loggingRestReadListener,
         loggingRestToEntityProcessListener,
         loggingEntityWriteListener,
-        loggingSkipListener
+        loggingEntitySkipListener
     );
 
     assertNotNull(step);
@@ -124,7 +124,7 @@ class BatchConfigTest {
         loggingRestReadListener,
         loggingRestToDocumentProcessListener,
         loggingDocumentWriteListener,
-        loggingSkipListenerForMongo
+        loggingDocumentSkipListener
     );
 
     assertNotNull(step);
