@@ -83,12 +83,10 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setPublicId("test-public-id-123");
       candidate.setAsylumYear(LocalDate.of(2010, 1, 1));
       candidate.setArrestImprison(YesNoUnsure.NO);
-      candidate.setArrestImprisonNotes("No arrest or imprisonment");
       candidate.setAvailDate(LocalDate.of(2025, 1, 1));
       candidate.setAvailImmediate(YesNo.YES);
       candidate.setAvailImmediateJobOps("Available immediately");
       candidate.setAvailImmediateReason(AvailImmediateReason.OTHER);
-      candidate.setAvailImmediateNotes("Available immediately");
       candidate.setBirthCountryIsoCode("US");
       candidate.setCandidateCertifications(createCertifications());
       candidate.setCandidateCitizenships(createCandidateCitizenships());
@@ -109,41 +107,27 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setCanDrive(YesNo.YES);
       candidate.setCity("City 1");
       candidate.setConflict(YesNo.NO);
-      candidate.setConflictNotes("No conflict");
       candidate.setContactConsentTcPartners(true);
       candidate.setContactConsentRegistration(true);
       candidate.setCountryIsoCode("AF");
       candidate.setCovidVaccinated(YesNo.YES);
       candidate.setCovidVaccinatedDate(LocalDate.of(2021, 1, 1));
       candidate.setCovidVaccineName("Vaccine 1");
-      candidate.setCovidVaccineNotes("Notes 1");
       candidate.setCovidVaccinatedStatus(VaccinationStatus.FULL);
       candidate.setCrimeConvict(YesNoUnsure.NO);
-      candidate.setCrimeConvictNotes("No crime or conviction");
       candidate.setDestLimit(YesNo.NO);
-      candidate.setDestLimitNotes("No destination limit");
       candidate.setDrivingLicenseCountryIsoCode("US");
       candidate.setDrivingLicenseExp(LocalDate.of(2025, 1, 1));
-      candidate.setEnglishAssessment("English assessment");
       candidate.setEnglishAssessmentScoreIelts("7.5");
       candidate.setFamilyMove(YesNo.YES);
-      candidate.setFamilyMoveNotes("Family move notes");
-      candidate.setFrenchAssessment("French assessment");
       candidate.setFrenchAssessmentScoreNclc(82L);
       candidate.setFullIntakeCompletedDate(OffsetDateTime.of(2025, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC));
       candidate.setGender(Gender.MALE);
       candidate.setHealthIssues(YesNo.NO);
-      candidate.setHealthIssuesNotes("No health issues");
-      candidate.setHomeLocation("Home location");
-      candidate.setHostChallenges("Host challenges");
       candidate.setHostEntryLegally(YesNo.YES);
-      candidate.setHostEntryLegallyNotes("Host entry legally notes");
       candidate.setIeltsScore(new BigDecimal("7.5"));
       candidate.setIntRecruitReasons(List.of(IntRecruitReason.EXPERIENCE, IntRecruitReason.CITIZENSHIP));
-      candidate.setIntRecruitOther("Other reason");
       candidate.setIntRecruitRural(YesNoUnsure.YES);
-      candidate.setIntRecruitRuralNotes("Rural notes");
-      candidate.setLeftHomeNotes("Left home notes");
       candidate.setLeftHomeReasons(List.of(LeftHomeReason.SAFETY, LeftHomeReason.JOB));
       candidate.setMaritalStatus(MaritalStatus.MARRIED);
       candidate.setMaxEducationLevel(100);
@@ -152,7 +136,6 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setMilitaryWanted(YesNoUnsure.YES);
       candidate.setMilitaryStart(LocalDate.of(2005, 1, 1));
       candidate.setMilitaryEnd(LocalDate.of(2010, 1, 1));
-      candidate.setMilitaryNotes("Military notes");
       candidate.setMiniIntakeCompletedDate(OffsetDateTime.of(2025, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC));
       candidate.setMonitoringEvaluationConsent(YesNo.YES);
       candidate.setNationalityIsoCode("US");
@@ -168,34 +151,22 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setPartnerOccupationIsco08Code("2411");
       candidate.setPartnerOccupationName("Accountant");
       candidate.setResidenceStatus(ResidenceStatus.LEGAL_RES);
-      candidate.setResidenceStatusNotes("Legal residence status notes");
       candidate.setReturnedHome(YesNoUnsure.YES);
-      candidate.setReturnedHomeReason("Returned home reason");
-      candidate.setReturnedHomeReasonNo("Returned home reason no");
       candidate.setReturnHomeSafe(YesNoUnsure.NO_RESPONSE);
       candidate.setReturnHomeFuture(YesNoUnsure.NO_RESPONSE);
       candidate.setResettleThird(YesNo.NO_RESPONSE);
-      candidate.setResettleThirdStatus("Residence status");
-      candidate.setState("State 1");
       candidate.setStatus(CandidateStatus.ACTIVE);
       candidate.setSurveyType("Information Session");
-      candidate.setSurveyComment("Survey comment");
       candidate.setUnhcrConsent(YesNo.YES);
-      candidate.setUnhcrNotes("UNHCR notes");
       candidate.setUnhcrNotRegStatus(NotRegisteredStatus.NA);
       candidate.setUnhcrRegistered(YesNoUnsure.UNSURE);
       candidate.setUnhcrStatus(UnhcrStatus.NO_RESPONSE);
-      candidate.setUnrwaNotes("UNRWA notes");
       candidate.setUnrwaRegistered(YesNoUnsure.YES);
       candidate.setVisaIssues(YesNoUnsure.NO);
-      candidate.setVisaIssuesNotes("No visa issues");
       candidate.setVisaReject(YesNoUnsure.NO);
-      candidate.setVisaRejectNotes("No visa rejection");
       candidate.setWorkAbroad(YesNo.YES);
-      candidate.setWorkAbroadNotes("Work abroad notes");
       candidate.setWorkPermit(WorkPermit.NO);
       candidate.setWorkPermitDesired(YesNoUnsure.YES);
-      candidate.setWorkPermitDesiredNotes("Work permit notes");
       candidate.setYearOfArrival(2010);
       candidate.setYearOfBirth(1990);
 
@@ -233,12 +204,10 @@ public class BootstrapCandidate implements CommandLineRunner {
       citizenship1.setHasPassport(HasPassport.VALID_PASSPORT);
       citizenship1.setPassportExp(LocalDate.of(2025, 1, 1));
       citizenship1.setNationalityIsoCode("AF");
-      citizenship1.setNotes("Notes 1");
 
       CandidateCitizenship citizenship2 = new CandidateCitizenship();
       citizenship2.setHasPassport(HasPassport.INVALID_PASSPORT);
       citizenship2.setNationalityIsoCode("US");
-      citizenship2.setNotes("Notes 2");
 
       return List.of(citizenship1, citizenship2);
     }
@@ -267,12 +236,10 @@ public class BootstrapCandidate implements CommandLineRunner {
       CandidateDestination destination1 = new CandidateDestination();
       destination1.setCountryIsoCode( "AF");
       destination1.setInterest(YesNoUnsure.YES);
-      destination1.setNotes("Notes 1");
 
       CandidateDestination destination2 = new CandidateDestination();
       destination2.setCountryIsoCode( "US");
       destination2.setInterest(YesNoUnsure.NO);
-      destination2.setNotes("Notes 2");
 
       return List.of(destination1, destination2);
     }
@@ -316,14 +283,12 @@ public class BootstrapCandidate implements CommandLineRunner {
       exam1.setOtherExam("Other exam 1");
       exam1.setScore("7.5");
       exam1.setYear(2010L);
-      exam1.setNotes("Notes 1");
 
       CandidateExam exam2 = new CandidateExam();
       exam2.setExam(Exam.TOEFL);
       exam2.setOtherExam("Other exam 2");
       exam2.setScore("100");
       exam2.setYear(2014L);
-      exam2.setNotes("Notes 2");
 
       return List.of(exam1, exam2);
     }
