@@ -146,8 +146,6 @@ public class BatchConfig {
         .listener(loggingDocumentWriteListener)
         .faultTolerant()
         .skip(CodecConfigurationException.class)
-        .skip(DataIntegrityViolationException.class)
-        .skip(ValidationException.class)
         .listener(loggingDocumentSkipListener)
         .skipPolicy(new ConditionalSkipPolicy(batchProperties.getMaxReadSkips()))
         .build();
