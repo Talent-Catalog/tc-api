@@ -211,6 +211,10 @@ module "mongo_service" {
   desired_count = 1
   launch_type   = "FARGATE"
 
+  # Enables ECS Exec
+  enable_execute_command = true
+  platform_version       = "LATEST"
+
   container_definitions = {
     mongo = {
       image         = "mongo:8.0"
@@ -218,7 +222,14 @@ module "mongo_service" {
       memory        = 512
       essential     = true
 
-      port_mappings = [{ containerPort = 27017, protocol = "tcp" }]
+      port_mappings = [
+        {
+          name          = "mongo"
+          containerPort = 27017,
+          hostPort      = 27017
+          protocol      = "tcp"
+        }
+      ]
       environment   = [
         {
           name = "MONGO_INITDB_ROOT_USERNAME",
@@ -278,21 +289,18 @@ module "mongo_service" {
 
   service_connect_configuration = {
     namespace = aws_service_discovery_http_namespace.this.arn
-    services = {
-      discovery_name = "mongo"
+    service = {
+      client_alias = {
+        port     = 27017
+        dns_name = "mongo"
+      }
       port_name      = "mongo"
-      client_aliases = [
-        {
-          port     = 27017
-          dns_name = "mongo"
-        }
-      ]
+      discovery_name = "mongo"
     }
   }
 
   tags = local.tags
 }
-
 
 ################################################################################
 # RDS Module
