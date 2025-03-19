@@ -73,7 +73,7 @@ module "ecs_cluster" {
 
 module "ecs_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
-  depends_on = [module.db]
+  depends_on = [module.db, module.mongo_service]
 
   name        = local.name
   cluster_arn = module.ecs_cluster.arn
@@ -114,6 +114,14 @@ module "ecs_service" {
         {
           name  = "DATABASE_PASSWORD"
           value = ""
+        },
+        {
+          name  = "MONGO_URL"
+          value = format(
+            "mongodb://%s:tctalent@mongo:27017/%s?authSource=admin",
+            var.doc_db_user_name,
+            var.doc_db_name,
+          )
         },
       ]
 
