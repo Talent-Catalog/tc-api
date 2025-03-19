@@ -8,4 +8,7 @@ module tc-test {
   db_name = "tcapi"
   db_user_name = "tcapi"
   db_instance_class = "db.t3.medium" # smallest test instance available for aurora
+  doc_db_name = "tcapi"
+  doc_db_user_name = "tcapi"
 }
+

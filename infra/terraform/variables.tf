@@ -41,6 +41,14 @@ variable "db_instance_class" {
   default = "db.t3.micro"
 }
 
+variable "doc_db_name" {
+  description = "Name of the document database"
+}
+
+variable "doc_db_user_name" {
+  description = "Doc data base user name"
+}
+
 variable "fargate_cpu" {
   description = "Fargate instance CPU units to provision (1 vCPU = 1024 CPU units)"
   default     = "1024"
