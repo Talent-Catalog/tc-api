@@ -68,12 +68,12 @@ module "ecs_cluster" {
 }
 
 ################################################################################
-# Service
+# TC API Service
 ################################################################################
 
 module "ecs_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
-  depends_on = [module.db, module.mongo_service]
+  depends_on = [module.db]
 
   name        = local.name
   cluster_arn = module.ecs_cluster.arn
@@ -196,6 +196,103 @@ module "ecs_service" {
 
   tags = local.tags
 }
+
+################################################################################
+# Mongo DB Service
+################################################################################
+
+module "mongo_service" {
+  source      = "terraform-aws-modules/ecs/aws//modules/service"
+  name        = "${local.name}-mongo"
+  cluster_arn = module.ecs_cluster.arn
+
+  cpu           = 256
+  memory        = 512
+  desired_count = 1
+  launch_type   = "FARGATE"
+
+  container_definitions = {
+    mongo = {
+      image         = "mongo:8.0"
+      cpu           = 256
+      memory        = 512
+      essential     = true
+
+      port_mappings = [{ containerPort = 27017, protocol = "tcp" }]
+      environment   = [
+        {
+          name = "MONGO_INITDB_ROOT_USERNAME",
+          value = var.doc_db_user_name
+        },
+        {
+          name = "MONGO_INITDB_ROOT_PASSWORD",
+          value = "tctalent"
+        },
+        {
+          name = "MONGO_INITDB_DATABASE",
+          value = var.doc_db_name
+        },
+      ]
+
+      readonly_root_filesystem = false
+
+      enable_cloudwatch_logging = true
+      log_configuration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/fargate/service/${local.name}-mongo-log"
+          awslogs-stream-prefix = "mongodb"
+          awslogs-region        = local.region
+        }
+      }
+
+      linux_parameters = {
+        capabilities = {
+          add = []
+          drop = [ "NET_RAW" ]
+        }
+      }
+
+      memory_reservation = 100
+    }
+  }
+
+  subnet_ids = module.vpc.private_subnets
+
+  security_group_rules = {
+    mongo_ingress = {
+      type                     = "ingress"
+      from_port                = 27017
+      to_port                  = 27017
+      protocol                 = "tcp"
+      source_security_group_id = module.ecs_service.security_group_id
+    }
+    egress_all = {
+      type        = "egress"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+
+  service_connect_configuration = {
+    namespace = aws_service_discovery_http_namespace.this.arn
+    services = {
+      discovery_name = "mongo"
+      port_name      = "mongo"
+      client_aliases = [
+        {
+          port     = 27017
+          dns_name = "mongo"
+        }
+      ]
+    }
+  }
+
+  tags = local.tags
+}
+
 
 ################################################################################
 # RDS Module
