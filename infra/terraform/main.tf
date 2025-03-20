@@ -226,6 +226,21 @@ module "mongo_service" {
   enable_execute_command = true
   platform_version       = "LATEST"
 
+  volume = {
+    "${local.name}-mongo-efs" = {
+      name = "${local.name}-mongo-efs"
+      efs_volume_configuration = {
+        file_system_id     = aws_efs_file_system.mongo.id
+        transit_encryption = "ENABLED"
+        authorization_config = {
+          iam = "ENABLED"
+        }
+        # Optionally, add root_directory if needed:
+        # root_directory = "/"
+      }
+    }
+  }
+
   container_definitions = {
     mongo = {
       image         = "mongo:8.0"
@@ -254,6 +269,15 @@ module "mongo_service" {
           name = "MONGO_INITDB_DATABASE",
           value = var.doc_db_name
         },
+      ]
+
+      # Mount the EFS volume at /data/db
+      mount_points = [
+        {
+          sourceVolume  = "${local.name}-mongo-efs"
+          containerPath = "/data/db"
+          readOnly      = false
+        }
       ]
 
       readonly_root_filesystem = false
@@ -289,6 +313,14 @@ module "mongo_service" {
       protocol                 = "tcp"
       source_security_group_id = module.ecs_service.security_group_id
     }
+    efs_ingress = {
+      type                     = "ingress"
+      from_port                = 2049
+      to_port                  = 2049
+      protocol                 = "tcp"
+      source_security_group_id = module.mongo_service.security_group_id
+      description              = "Allow NFS traffic for EFS"
+    }
     egress_all = {
       type        = "egress"
       from_port   = 0
@@ -315,6 +347,26 @@ module "mongo_service" {
   }
 
   tags = local.tags
+}
+
+################################################################################
+# EFS for Persistence
+################################################################################
+
+resource "aws_efs_file_system" "mongo" {
+  creation_token = "${local.name}-mongo-efs"
+  performance_mode = "generalPurpose"
+  encrypted = false
+
+  tags = merge(local.tags, { Name = "${local.name}-mongo-efs" })
+}
+
+resource "aws_efs_mount_target" "mongo" {
+  for_each = toset(module.vpc.private_subnets)
+
+  file_system_id  = aws_efs_file_system.mongo.id
+  subnet_id       = each.value
+  security_groups = [module.mongo_service.security_group_id]
 }
 
 ################################################################################
