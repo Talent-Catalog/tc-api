@@ -35,6 +35,13 @@ public class AuthenticationFilter extends OncePerRequestFilter {
   @Override
   public void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws IOException, ServletException {
+
+    // Bypass authentication for actuator endpoints
+    if (request.getRequestURI().startsWith("/actuator/")) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     try {
       Authentication authentication = authenticationService.getAuthentication(request);
       SecurityContextHolder.getContext().setAuthentication(authentication);

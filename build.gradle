@@ -50,6 +50,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-batch"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
 
     // TC open api spec
     implementation "io.github.sadatmalik:tc-api-spec:1.0.2"

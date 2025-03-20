@@ -3,7 +3,6 @@ package org.tctalent.anonymization.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,7 +37,7 @@ public class SecurityConfig {
         .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
             authorizationManagerRequestMatcherRegistry
-                .requestMatchers("/actuator/health").permitAll() // permit healthcheck endpoints
+                .requestMatchers("/actuator/**").permitAll() // permit all healthcheck endpoints
                 .requestMatchers("/**").authenticated())
 
         .exceptionHandling(
