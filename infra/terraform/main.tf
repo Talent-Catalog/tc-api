@@ -117,11 +117,6 @@ module "ecs_service" {
         },
         {
           name  = "MONGO_URL"
-          # value = format(
-          #   "mongodb://%s:tctalent@mongo:27017/%s?authSource=admin&tls=false&directConnection=true",
-          #   var.doc_db_user_name,
-          #   var.doc_db_name,
-          # )
           value = format(
             "mongodb://%s:tctalent@%s.%s:27017/%s?authSource=admin&tls=false&directConnection=true",
             var.doc_db_user_name,
@@ -129,7 +124,6 @@ module "ecs_service" {
             var.dns_namespace,
             var.doc_db_name,
           )
-          # value = "mongodb://mongo.tc-api.local:27017/tcapi?authSource=admin&tls=false&directConnection=true"
         },
       ]
 
