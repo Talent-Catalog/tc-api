@@ -49,6 +49,14 @@ variable "doc_db_user_name" {
   description = "Doc data base user name"
 }
 
+variable "doc_db_service_name" {
+  description = "DNS name of the document database"
+}
+
+variable "dns_namespace" {
+  description = "Private DNS namespace"
+}
+
 variable "fargate_cpu" {
   description = "Fargate instance CPU units to provision (1 vCPU = 1024 CPU units)"
   default     = "1024"

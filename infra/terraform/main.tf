@@ -122,7 +122,14 @@ module "ecs_service" {
           #   var.doc_db_user_name,
           #   var.doc_db_name,
           # )
-          value = "mongodb://mongo.tc-api.local:27017/tcapi?authSource=admin&tls=false&directConnection=true"
+          value = format(
+            "mongodb://%s:tctalent@%s.%s:27017/%s?authSource=admin&tls=false&directConnection=true",
+            var.doc_db_user_name,
+            var.doc_db_service_name,
+            var.dns_namespace,
+            var.doc_db_name,
+          )
+          # value = "mongodb://mongo.tc-api.local:27017/tcapi?authSource=admin&tls=false&directConnection=true"
         },
       ]
 
@@ -430,13 +437,13 @@ resource "aws_service_discovery_http_namespace" "this" {
 }
 
 resource "aws_service_discovery_private_dns_namespace" "this" {
-  name = "${local.name}.local"
-  description = "Private DNS namespace for ${local.name}.local"
+  name = var.dns_namespace
+  description = "Private DNS namespace for ${var.dns_namespace}"
   vpc  = module.vpc.vpc_id
 }
 
 resource "aws_service_discovery_service" "mongo" {
-  name         = "mongo"
+  name         = var.doc_db_service_name
   namespace_id = aws_service_discovery_private_dns_namespace.this.id
   dns_config {
     namespace_id = aws_service_discovery_private_dns_namespace.this.id
