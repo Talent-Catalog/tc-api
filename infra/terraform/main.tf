@@ -154,14 +154,6 @@ module "ecs_service" {
 
   service_connect_configuration = {
     namespace = aws_service_discovery_private_dns_namespace.this.arn
-    # service = {
-    #   client_alias = {
-    #     port     = local.container_port
-    #     dns_name = local.container_name
-    #   }
-    #   port_name      = local.container_name
-    #   discovery_name = local.container_name
-    # }
     services = [{
       discovery_name = local.container_name
       port_name      = local.container_name
@@ -301,14 +293,6 @@ module "mongo_service" {
 
   service_connect_configuration = {
     namespace = aws_service_discovery_private_dns_namespace.this.arn
-    # service = {
-    #   discovery_name = "mongo"
-    #   port_name      = "mongo"
-    #   client_alias = {
-    #     dns_name = "mongo-server"
-    #     port     = 27017
-    #   }
-    # }
     services = [{
       discovery_name = "mongo"
       port_name      = "mongo"
