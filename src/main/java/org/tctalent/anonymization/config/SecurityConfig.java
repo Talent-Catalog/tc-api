@@ -37,7 +37,10 @@ public class SecurityConfig {
             httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-            authorizationManagerRequestMatcherRegistry.requestMatchers("/**").authenticated())
+            authorizationManagerRequestMatcherRegistry
+                .requestMatchers("/actuator/health").permitAll() // permit healthcheck endpoints
+                .requestMatchers("/**").authenticated())
+
         .exceptionHandling(
             exception -> {
               exception.authenticationEntryPoint(restAuthenticationEntryPoint);
