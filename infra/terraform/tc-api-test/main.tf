@@ -13,4 +13,5 @@ module tc-test {
   doc_db_service_name = "mongo"
   dns_namespace = "tc-api.local"
   app_port = 8082
+  health_check_path = "/actuator/health"
 }
