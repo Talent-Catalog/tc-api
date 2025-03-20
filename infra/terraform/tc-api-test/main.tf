@@ -12,4 +12,5 @@ module tc-test {
   doc_db_user_name = "tcapi"
   doc_db_service_name = "mongo"
   dns_namespace = "tc-api.local"
+  app_port = 8082
 }
