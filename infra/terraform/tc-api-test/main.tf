@@ -14,4 +14,8 @@ module tc-test {
   dns_namespace = "tc-api.local"
   app_port = 8082
   health_check_path = "/actuator/health"
+  tc_api_url = "https://tctalent-test.org/admin-portal"
+  tc_api_search_id = 2682
+  tc_api_username = "tc-api"
+  run_anonymisation_on_startup = true
 }

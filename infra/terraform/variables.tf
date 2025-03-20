@@ -67,3 +67,18 @@ variable "fargate_memory" {
   default     = "4096"
 }
 
+variable "tc_api_url" {
+  description = "Talent Catalog core service URL"
+}
+
+variable "tc_api_search_id" {
+  description = "Talent Catalog search id used by tc-api"
+}
+
+variable "tc_api_username" {
+  description = "Talent Catalog username used by tc-api"
+}
+
+variable "run_anonymisation_on_startup" {
+  description = "If true run the DB anonymisation on startup"
+}

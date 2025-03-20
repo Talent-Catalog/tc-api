@@ -125,6 +125,27 @@ module "ecs_service" {
             var.doc_db_name,
           )
         },
+        {
+          name  = "TC_API_URL"
+          value = var.tc_api_url
+        },
+        {
+          name  = "TC_SEARCH_ID"
+          value = var.tc_api_search_id
+        },
+        {
+          name  = "TC_USERNAME"
+          value = var.tc_api_username
+        },
+        {
+          name  = "TC_PASSWORD"
+          value = ""
+        },
+        {
+          name  = "SPRING_BATCH_JOB_ENABLED"
+          value = var.run_anonymisation_on_startup
+        },
+
       ]
 
       # Example image used requires access to write to root filesystem
