@@ -51,6 +51,4 @@ public class CandidateLanguage extends AbstractDomainEntity<Long> {
     @Column(name = "spoken_level", nullable = true)
     private String spokenLevelName;
 
-    private String migrationLanguage;
-
 }
