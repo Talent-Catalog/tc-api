@@ -242,14 +242,14 @@ module "mongo_service" {
         }
       ]
       environment   = [
-        # {
-        #   name = "MONGO_INITDB_ROOT_USERNAME",
-        #   value = var.doc_db_user_name
-        # },
-        # {
-        #   name = "MONGO_INITDB_ROOT_PASSWORD",
-        #   value = "tctalent"
-        # },
+        {
+          name = "MONGO_INITDB_ROOT_USERNAME",
+          value = var.doc_db_user_name
+        },
+        {
+          name = "MONGO_INITDB_ROOT_PASSWORD",
+          value = "tctalent"
+        },
         {
           name = "MONGO_INITDB_DATABASE",
           value = var.doc_db_name
