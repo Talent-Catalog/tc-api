@@ -117,11 +117,12 @@ module "ecs_service" {
         },
         {
           name  = "MONGO_URL"
-          value = format(
-            "mongodb://%s:tctalent@mongo:27017/%s?authSource=admin",
-            var.doc_db_user_name,
-            var.doc_db_name,
-          )
+          # value = format(
+          #   "mongodb://%s:tctalent@mongo:27017/%s?authSource=admin&tls=false&directConnection=true",
+          #   var.doc_db_user_name,
+          #   var.doc_db_name,
+          # )
+          value = "mongodb://mongo.tc-api.local:27017/tcapi?authSource=admin&tls=false&directConnection=true"
         },
       ]
 
@@ -152,15 +153,26 @@ module "ecs_service" {
   }
 
   service_connect_configuration = {
-    namespace = aws_service_discovery_http_namespace.this.arn
-    service = {
-      client_alias = {
-        port     = local.container_port
-        dns_name = local.container_name
-      }
-      port_name      = local.container_name
+    namespace = aws_service_discovery_private_dns_namespace.this.arn
+    # service = {
+    #   client_alias = {
+    #     port     = local.container_port
+    #     dns_name = local.container_name
+    #   }
+    #   port_name      = local.container_name
+    #   discovery_name = local.container_name
+    # }
+    services = [{
       discovery_name = local.container_name
-    }
+      port_name      = local.container_name
+      client_aliases = []
+    }]
+
+    client_services = [{
+      discovery_name = "mongo"
+      port           = 27017
+      dns_name       = "mongo"
+    }]
   }
 
   load_balancer = {
@@ -231,14 +243,14 @@ module "mongo_service" {
         }
       ]
       environment   = [
-        {
-          name = "MONGO_INITDB_ROOT_USERNAME",
-          value = var.doc_db_user_name
-        },
-        {
-          name = "MONGO_INITDB_ROOT_PASSWORD",
-          value = "tctalent"
-        },
+        # {
+        #   name = "MONGO_INITDB_ROOT_USERNAME",
+        #   value = var.doc_db_user_name
+        # },
+        # {
+        #   name = "MONGO_INITDB_ROOT_PASSWORD",
+        #   value = "tctalent"
+        # },
         {
           name = "MONGO_INITDB_DATABASE",
           value = var.doc_db_name
@@ -288,15 +300,27 @@ module "mongo_service" {
   }
 
   service_connect_configuration = {
-    namespace = aws_service_discovery_http_namespace.this.arn
-    service = {
-      client_alias = {
-        port     = 27017
-        dns_name = "mongo"
-      }
-      port_name      = "mongo"
+    namespace = aws_service_discovery_private_dns_namespace.this.arn
+    # service = {
+    #   discovery_name = "mongo"
+    #   port_name      = "mongo"
+    #   client_alias = {
+    #     dns_name = "mongo-server"
+    #     port     = 27017
+    #   }
+    # }
+    services = [{
       discovery_name = "mongo"
-    }
+      port_name      = "mongo"
+      client_aliases = [{
+        dns_name = "mongo"
+        port     = 27017
+      }]
+    }]
+  }
+
+  service_registries = {
+    registry_arn = aws_service_discovery_service.mongo.arn
   }
 
   tags = local.tags
@@ -419,6 +443,25 @@ resource "aws_service_discovery_http_namespace" "this" {
   name        = local.name
   description = "CloudMap namespace for ${local.name}"
   tags        = local.tags
+}
+
+resource "aws_service_discovery_private_dns_namespace" "this" {
+  name = "${local.name}.local"
+  description = "Private DNS namespace for ${local.name}.local"
+  vpc  = module.vpc.vpc_id
+}
+
+resource "aws_service_discovery_service" "mongo" {
+  name         = "mongo"
+  namespace_id = aws_service_discovery_private_dns_namespace.this.id
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.this.id
+    dns_records {
+      type = "A"
+      ttl  = 10
+    }
+    routing_policy = "MULTIVALUE"
+  }
 }
 
 module "alb" {
