@@ -377,7 +377,7 @@ resource "aws_efs_file_system" "mongo" {
 }
 
 resource "aws_efs_mount_target" "mongo" {
-  for_each = toset(module.vpc.private_subnets)
+  for_each = { for idx, subnet in module.vpc.private_subnets : idx => subnet }
 
   file_system_id  = aws_efs_file_system.mongo.id
   subnet_id       = each.value
@@ -401,18 +401,28 @@ module "db" {
     one = {}
   }
 
-  master_username = var.db_user_name
+  publicly_accessible = true
 
+  master_username = var.db_user_name
   database_name = var.db_name
 
   vpc_id               = module.vpc.vpc_id
   db_subnet_group_name = module.vpc.database_subnet_group
   security_group_rules = {
-    ex1_ingress = {
-      cidr_blocks = ["10.20.0.0/20"]
-    }
-    ex1_ingress = {
-      source_security_group_id = module.security_group.security_group_id
+    allow_local_access = {
+      type                     = "ingress"
+      from_port                = 5432
+      to_port                  = 5432
+      protocol                 = "tcp"
+      description = "Allow local access to Aurora"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    egress_all = {
+      type        = "egress"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
     }
   }
 
@@ -459,6 +469,11 @@ module "vpc" {
   database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
 
   create_database_subnet_group = true
+  create_database_subnet_route_table = true
+  create_database_internet_gateway_route = true
+
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 
   enable_nat_gateway = true
   single_nat_gateway = true
@@ -481,7 +496,7 @@ module "security_group" {
       to_port     = 5432
       protocol    = "tcp"
       description = "PostgreSQL access from within VPC"
-      cidr_blocks = module.vpc.vpc_cidr_block
+      cidr_blocks = "0.0.0.0/0"
     },
   ]
 
