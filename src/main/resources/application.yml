@@ -51,14 +51,14 @@ spring:
   # Mongo
   data:
     mongodb:
-      uri: mongodb://tctalent:tctalent@localhost:27018/tctalent?authSource=admin
+      uri: ${MONGO_URL:mongodb://tctalent:tctalent@localhost:27018/tctalent?authSource=admin}
 
   # Batch
   batch:
     jdbc:
       initialize-schema: never # batch schema are initialised by flyway
     job:
-      enabled: ${SPRING_BATCH_JOB_ENABLED:false} # enable/disable auto-run of jobs
+      enabled: ${SPRING_BATCH_JOB_ENABLED:true} # enable/disable auto-run of jobs
 
 # Actuator
 management:
