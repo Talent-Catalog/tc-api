@@ -1,5 +1,7 @@
 package org.tctalent.anonymization.batch.listener;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.StepExecution;
@@ -17,12 +19,18 @@ import org.tctalent.anonymization.logging.LogBuilder;
 @Component
 public class LoggingChunkListener implements ChunkListener {
 
+  @PersistenceContext
+  private EntityManager entityManager;
+
   @Override
   public void afterChunk(ChunkContext context) {
     LogBuilder.builder(log)
         .action("Chunk processed successfully")
         .message("Chunk details: " + context.getStepContext().getStepExecution())
         .logInfo();
+
+    // Clear the persistence context after each chunk to avoid lingering managed entities.
+    entityManager.clear();
   }
 
   @Override
