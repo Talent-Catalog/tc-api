@@ -1,6 +1,7 @@
 package org.tctalent.anonymization.batch.config;
 
 import lombok.RequiredArgsConstructor;
+import org.bson.codecs.configuration.CodecConfigurationException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -24,7 +25,8 @@ import org.tctalent.anonymization.batch.listener.LoggingRestToDocumentProcessLis
 import org.tctalent.anonymization.batch.listener.LoggingRestToEntityProcessListener;
 import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
 import org.tctalent.anonymization.batch.listener.LoggingEntityWriteListener;
-import org.tctalent.anonymization.batch.listener.LoggingSkipListener;
+import org.tctalent.anonymization.batch.listener.LoggingEntitySkipListener;
+import org.tctalent.anonymization.batch.listener.LoggingDocumentSkipListener;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
@@ -101,7 +103,7 @@ public class BatchConfig {
       LoggingRestReadListener loggingRestReadListener,
       LoggingRestToEntityProcessListener loggingRestToEntityProcessListener,
       LoggingEntityWriteListener loggingEntityWriteListener,
-      LoggingSkipListener loggingSkipListener) {
+      LoggingEntitySkipListener loggingEntitySkipListener) {
 
     return new StepBuilder("candidateRestToAuroraStep", jobRepository)
         .<IdentifiableCandidate, CandidateEntity>chunk(batchProperties.getChunkSize(), transactionManager)
@@ -115,7 +117,7 @@ public class BatchConfig {
         .faultTolerant()
         .skip(DataIntegrityViolationException.class)
         .skip(ValidationException.class)
-        .listener(loggingSkipListener)
+        .listener(loggingEntitySkipListener)
         .skipPolicy(new ConditionalSkipPolicy(batchProperties.getMaxReadSkips()))
         .build();
   }
@@ -130,7 +132,8 @@ public class BatchConfig {
       LoggingChunkListener loggingChunkListener,
       LoggingRestReadListener loggingRestReadListener,
       LoggingRestToDocumentProcessListener loggingRestToDocumentProcessListener,
-      LoggingDocumentWriteListener loggingDocumentWriteListener) {
+      LoggingDocumentWriteListener loggingDocumentWriteListener,
+      LoggingDocumentSkipListener loggingDocumentSkipListener) {
 
     return new StepBuilder("candidateRestToMongoStep", jobRepository)
         .<IdentifiableCandidate, CandidateDocument>chunk(batchProperties.getChunkSize(), new ResourcelessTransactionManager())
@@ -142,6 +145,8 @@ public class BatchConfig {
         .listener(loggingRestToDocumentProcessListener)
         .listener(loggingDocumentWriteListener)
         .faultTolerant()
+        .skip(CodecConfigurationException.class)
+        .listener(loggingDocumentSkipListener)
         .skipPolicy(new ConditionalSkipPolicy(batchProperties.getMaxReadSkips()))
         .build();
   }

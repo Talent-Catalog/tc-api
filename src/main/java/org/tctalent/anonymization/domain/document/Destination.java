@@ -9,5 +9,4 @@ import org.tctalent.anonymization.domain.common.YesNoUnsure;
 public class Destination {
   private Country country;
   private YesNoUnsure interest;
-  private String notes;
 }

@@ -6,17 +6,16 @@ import org.springframework.batch.core.SkipListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.tctalent.anonymization.domain.entity.BatchFailedItem;
-import org.tctalent.anonymization.domain.entity.CandidateEntity;
+import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.service.BatchFailedItemService;
-
+import org.tctalent.anonymization.domain.entity.BatchFailedItem;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 @StepScope
-public class LoggingSkipListener implements SkipListener<IdentifiableCandidate, CandidateEntity> {
+public class LoggingDocumentSkipListener implements SkipListener<IdentifiableCandidate, CandidateDocument> {
 
   private final BatchFailedItemService batchFailedItemService;
 
@@ -32,8 +31,7 @@ public class LoggingSkipListener implements SkipListener<IdentifiableCandidate, 
   @Override
   public void onSkipInProcess(IdentifiableCandidate item, Throwable t) {
     String publicId = item.getPublicId();
-    // todo log builder
-    log.warn("Skipping item in PROCESSING due to error: {}, item: {}", t.getMessage(), publicId);
+    log.warn("Skipping item in PROCESSING for MongoDB due to error: {}, item: {}", t.getMessage(), publicId);
 
     BatchFailedItem failedItem = BatchFailedItem.builder()
         .jobExecutionId(jobExecutionId)
@@ -49,16 +47,15 @@ public class LoggingSkipListener implements SkipListener<IdentifiableCandidate, 
   }
 
   @Override
-  public void onSkipInWrite(CandidateEntity item, Throwable t) {
-    String publicId = item.getPublicId();
-    // todo log builder
-    log.warn("Skipping item in WRITING due to error: {}, item: {}", t.getMessage(), publicId);
+  public void onSkipInWrite(CandidateDocument item, Throwable t) {
+    String publicId = String.valueOf(item.getId());
+    log.warn("Skipping item in WRITING for MongoDB due to error: {}, item: {}", t.getMessage(), publicId);
 
     BatchFailedItem failedItem = BatchFailedItem.builder()
         .jobExecutionId(jobExecutionId)
         .stepExecutionId(stepExecutionId)
         .stepName(stepName)
-        .itemType("CandidateEntity")
+        .itemType("CandidateDocument")
         .itemPublicId(publicId)
         .errorPhase("WRITING")
         .errorMessage(t.getMessage())
@@ -66,6 +63,4 @@ public class LoggingSkipListener implements SkipListener<IdentifiableCandidate, 
 
     batchFailedItemService.recordFailure(failedItem);
   }
-
-
 }

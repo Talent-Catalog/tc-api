@@ -3,9 +3,11 @@ package org.tctalent.anonymization.service;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.RestClientException;
 import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
+import org.tctalent.anonymization.dto.request.RegisterCandidateByPartnerRequest;
 import org.tctalent.anonymization.dto.response.Partner;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
 import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
+import org.tctalent.anonymization.model.RegisterCandidate201Response;
 
 /**
  * Access the main Talent Catalog Server
@@ -13,7 +15,6 @@ import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
  * @author John Cameron
  */
 public interface TalentCatalogService {
-
 
   /**
    * Creates an OfferToAssist from the given request
@@ -64,4 +65,13 @@ public interface TalentCatalogService {
    */
   @Nullable
   Partner findPartnerByPublicApiKey(String apiKey);
+
+  /**
+   * Registers a candidate using data in the given request
+   * @param request contains details of the candidate being registered
+   * @return includes the publicId of the registered candidate
+   * @throws RestClientException if errors are returned (eg unauthorized)
+   */
+  RegisterCandidate201Response register(RegisterCandidateByPartnerRequest request)
+      throws RestClientException;
 }

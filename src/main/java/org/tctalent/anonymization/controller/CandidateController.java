@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tctalent.anonymization.api.V1Api;
 import org.tctalent.anonymization.domain.entity.ApiUser;
 import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
+import org.tctalent.anonymization.dto.request.RegisterCandidateByPartnerRequest;
 import org.tctalent.anonymization.exception.UnauthorisedActionException;
 import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidateAssistanceType;
@@ -162,10 +163,27 @@ public class CandidateController implements V1Api {
   public ResponseEntity<RegisterCandidate201Response> registerCandidate(
       RegisterCandidateRequest registerCandidateRequest) {
 
-    //TODO JC Connect to tctalent server and simulate a series of updates mimicking a normal registration
-    //TODO JC The server should send the candidate an email notifying them of their registration with instructions on how to log in.
-    //TODO JC Return the public id of the created candidate as well as the message and request id in the RegisterCandidate201Response
+    //Get the partner id of the public api user
+    final Optional<ApiUser> currentApiUser = authenticationService.getCurrentApiUser();
+    if (currentApiUser.isEmpty()) {
+      throw new UnauthorisedActionException("registerCandidate");
+    }
+    long partnerId = currentApiUser.get().getPartner().getPartnerId();
 
-    return V1Api.super.registerCandidate(registerCandidateRequest);
+    //Create an internal TC server request from the external request received from the public api user
+    RegisterCandidateByPartnerRequest registrationRequest = new RegisterCandidateByPartnerRequest(
+        registerCandidateRequest);
+    //... and add the partner id of that user - retrieved above from the authentication service.
+    registrationRequest.setPartnerId(partnerId);
+
+    //Log in if needed
+    if (!talentCatalogService.isLoggedIn()) {
+      talentCatalogService.login();
+    }
+    //...and send the request to the server
+    final RegisterCandidate201Response response =
+        talentCatalogService.register(registrationRequest);
+    //...and return the response
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 }

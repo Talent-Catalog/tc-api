@@ -36,14 +36,12 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate asylumYear;
   private YesNoUnsure arrestImprison;
-  private String arrestImprisonNotes;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate availDate;
   private YesNo availImmediate;
   private String availImmediateJobOps;
   private AvailImmediateReason availImmediateReason;
-  private String availImmediateNotes;
   private Country birthCountry;
 
   @Valid
@@ -67,8 +65,6 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
   @Valid
   private List<@Valid CandidateLanguage> candidateLanguages = new ArrayList<>();
 
-  private String candidateMessage;
-
   @Valid
   private List<@Valid CandidateOccupation> candidateOccupations = new ArrayList<>();
 
@@ -81,7 +77,6 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
   private YesNo canDrive;
   private String city;
   private YesNo conflict;
-  private String conflictNotes;
   private Boolean contactConsentTcPartners;
   private Boolean contactConsentRegistration;
   private Country country;
@@ -91,23 +86,17 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
   private LocalDate covidVaccinatedDate;
 
   private String covidVaccineName;
-  private String covidVaccineNotes;
   private VaccinationStatus covidVaccinatedStatus;
   private YesNoUnsure crimeConvict;
-  private String crimeConvictNotes;
   private YesNo destLimit;
-  private String destLimitNotes;
   private DocumentStatus drivingLicense;
   private Country drivingLicenseCountry;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate drivingLicenseExp;
 
-  private String englishAssessment;
   private String englishAssessmentScoreIelts;
   private YesNo familyMove;
-  private String familyMoveNotes;
-  private String frenchAssessment;
   private Long frenchAssessmentScoreNclc;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -115,28 +104,19 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
 
   private Gender gender;
   private YesNo healthIssues;
-  private String healthIssuesNotes;
-  private String homeLocation;
-  private String hostChallenges;
   private YesNo hostEntryLegally;
-  private String hostEntryLegallyNotes;
   private Integer hostEntryYear;
-  private String hostEntryYearNotes;
   private Float ieltsScore;
 
   @Valid
   private List<IntRecruitReason> intRecruitReasons = new ArrayList<>();
 
-  private String intRecruitOther;
   private YesNoUnsure intRecruitRural;
-  private String intRecruitRuralNotes;
-  private String leftHomeNotes;
 
   @Valid
   private List<LeftHomeReason> leftHomeReasons = new ArrayList<>();
 
   private MaritalStatus maritalStatus;
-  private String maritalStatusNotes;
   private EducationLevel maxEducationLevel;
   private String mediaWillingness;
   private EducationMajor migrationEducationMajor;
@@ -148,8 +128,6 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate militaryEnd;
-
-  private String militaryNotes;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private Instant miniIntakeCompletedDate;
@@ -171,35 +149,23 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
   private Long partnerIeltsYr;
   private Occupation partnerOccupation;
   private ResidenceStatus residenceStatus;
-  private String residenceStatusNotes;
   private YesNoUnsure returnedHome;
-  private String returnedHomeReason;
-  private String returnedHomeReasonNo;
   private YesNoUnsure returnHomeSafe;
   private YesNoUnsure returnHomeFuture;
   private YesNo resettleThird;
-  private String resettleThirdStatus;
-  private String state;
   private CandidateStatus status;
   private SurveyType surveyType;
-  private String surveyComment;
   private YesNo unhcrConsent;
-  private String unhcrNotes;
   private NotRegisteredStatus unhcrNotRegStatus;
   private YesNoUnsure unhcrRegistered;
   private UnhcrStatus unhcrStatus;
-  private String unrwaNotes;
   private NotRegisteredStatus unrwaNotRegStatus;
   private YesNoUnsure unrwaRegistered;
   private YesNoUnsure visaIssues;
-  private String visaIssuesNotes;
   private YesNoUnsure visaReject;
-  private String visaRejectNotes;
   private YesNo workAbroad;
-  private String workAbroadNotes;
   private WorkPermit workPermit;
   private YesNoUnsure workPermitDesired;
-  private String workPermitDesiredNotes;
   private Integer yearOfArrival;
   private Integer yearOfBirth;
 

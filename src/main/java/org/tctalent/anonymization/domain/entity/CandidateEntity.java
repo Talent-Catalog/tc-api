@@ -52,8 +52,6 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNoUnsure arrestImprison;
 
-  private String arrestImprisonNotes;
-
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate availDate;
 
@@ -65,8 +63,6 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   @Enumerated(EnumType.STRING)
   private AvailImmediateReason availImmediateReason;
-
-  private String availImmediateNotes;
 
   // Store the isoCode directly instead of a foreign key reference
   @Size(max = 3)
@@ -157,8 +153,6 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
     this.candidateLanguages.addAll(languages);
   }
 
-  private String candidateMessage;
-
   @Valid
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CandidateOccupation> candidateOccupations = new ArrayList<>();
@@ -199,8 +193,6 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNo conflict;
 
-  private String conflictNotes;
-
   private Boolean contactConsentRegistration;
 
   private Boolean contactConsentTcPartners;
@@ -219,20 +211,14 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Column(name = "covid_vaccine_name", length = 255)
   private String covidVaccineName;
 
-  private String covidVaccineNotes;
-
   @Enumerated(EnumType.STRING)
   private VaccinationStatus covidVaccinatedStatus;
 
   @Enumerated(EnumType.STRING)
   private YesNoUnsure crimeConvict;
 
-  private String crimeConvictNotes;
-
   @Enumerated(EnumType.STRING)
   private YesNo destLimit;
-
-  private String destLimitNotes;
 
   @Enumerated(EnumType.STRING)
   private DocumentStatus drivingLicense;
@@ -244,18 +230,12 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   private LocalDate drivingLicenseExp;
 
-  private String englishAssessment;
-
   @Size(max = 255)
   @Column(name = "english_assessment_score_ielts", length = 255)
   private String englishAssessmentScoreIelts;
 
   @Enumerated(EnumType.STRING)
   private YesNo familyMove;
-
-  private String familyMoveNotes;
-
-  private String frenchAssessment;
 
   private Long frenchAssessmentScoreNclc;
 
@@ -268,20 +248,10 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNo healthIssues;
 
-  private String healthIssuesNotes;
-
-  private String homeLocation;
-
-  private String hostChallenges;
-
   @Enumerated(EnumType.STRING)
   private YesNo hostEntryLegally;
 
-  private String hostEntryLegallyNotes;
-
   private Integer hostEntryYear;
-
-  private String hostEntryYearNotes;
 
   private BigDecimal ieltsScore;
 
@@ -290,16 +260,8 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Column(name = "int_recruit_reasons", length = 255)
   private List<IntRecruitReason> intRecruitReasons;
 
-  @Size(max = 255)
-  @Column(name = "int_recruit_other", length = 255)
-  private String intRecruitOther;
-
   @Enumerated(EnumType.STRING)
   private YesNoUnsure intRecruitRural;
-
-  private String intRecruitRuralNotes;
-
-  private String leftHomeNotes;
 
   @Convert(converter = LeftHomeReasonsConverter.class)
   @Size(max = 255)
@@ -308,8 +270,6 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
 
   @Enumerated(EnumType.STRING)
   private MaritalStatus maritalStatus;
-
-  private String maritalStatusNotes;
 
   // Store the education level directly instead of a foreign key reference
   @Column(name = "max_education_level", nullable = true)
@@ -328,8 +288,6 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   private LocalDate militaryStart;
 
   private LocalDate militaryEnd;
-
-  private String militaryNotes;
 
   @Column(name = "mini_intake_completed_date")
   private OffsetDateTime miniIntakeCompletedDate;
@@ -414,18 +372,8 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private ResidenceStatus residenceStatus;
 
-  private String residenceStatusNotes;
-
   @Enumerated(EnumType.STRING)
   private YesNoUnsure returnedHome;
-
-  @Size(max = 255)
-  @Column(name = "returned_home_reason", length = 255)
-  private String returnedHomeReason;
-
-  @Size(max = 255)
-  @Column(name = "returned_home_reason_no", length = 255)
-  private String returnedHomeReasonNo;
 
   @Enumerated(EnumType.STRING)
   private YesNoUnsure returnHomeSafe;
@@ -436,13 +384,6 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNo resettleThird;
 
-  @Size(max = 255)
-  @Column(name = "resettle_third_status", length = 255)
-  private String resettleThirdStatus;
-
-  @Size(max = 255)
-  @Column(name = "state", length = 255)
-  private String state;
 
   @Enumerated(EnumType.STRING)
   private CandidateStatus status;
@@ -452,11 +393,7 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Column(name = "survey_type", nullable = true, length = 255)
   private String surveyType;
 
-  private String surveyComment;
-
   private YesNo unhcrConsent;
-
-  private String unhcrNotes;
 
   @Enumerated(EnumType.STRING)
   private NotRegisteredStatus unhcrNotRegStatus;
@@ -467,8 +404,6 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private UnhcrStatus unhcrStatus;
 
-  private String unrwaNotes;
-
   @Enumerated(EnumType.STRING)
   private NotRegisteredStatus unrwaNotRegStatus;
 
@@ -478,25 +413,17 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private YesNoUnsure visaIssues;
 
-  private String visaIssuesNotes;
-
   @Enumerated(EnumType.STRING)
   private YesNoUnsure visaReject;
 
-  private String visaRejectNotes;
-
   @Enumerated(EnumType.STRING)
   private YesNo workAbroad;
-
-  private String workAbroadNotes;
 
   @Enumerated(EnumType.STRING)
   private WorkPermit workPermit;
 
   @Enumerated(EnumType.STRING)
   private YesNoUnsure workPermitDesired;
-
-  private String workPermitDesiredNotes;
 
   private Integer yearOfArrival;
 

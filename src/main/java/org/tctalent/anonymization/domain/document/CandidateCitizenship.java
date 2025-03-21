@@ -14,5 +14,4 @@ public class CandidateCitizenship {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate passportExp;
   private Country nationality;
-  private String notes;
 }

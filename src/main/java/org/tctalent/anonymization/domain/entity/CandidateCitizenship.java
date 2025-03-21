@@ -54,6 +54,4 @@ public class CandidateCitizenship extends AbstractDomainEntity<Long> {
     @Column(name = "nationality_iso_code", nullable = false)
     private String nationalityIsoCode;
 
-    private String notes;
-
 }
