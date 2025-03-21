@@ -58,4 +58,14 @@ spring:
     jdbc:
       initialize-schema: never # batch schema are initialised by flyway
     job:
-      enabled: false # enable/disable auto-run of jobs
+      enabled: ${SPRING_BATCH_JOB_ENABLED:false} # enable/disable auto-run of jobs
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
