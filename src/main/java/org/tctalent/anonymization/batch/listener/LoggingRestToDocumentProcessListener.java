@@ -21,7 +21,7 @@ public class LoggingRestToDocumentProcessListener implements ItemProcessListener
   public void onProcessError(IdentifiableCandidate item, Exception e) {
     LogBuilder.builder(log)
         .action("Error processing item")
-        .message("Item details:" + item.toString())
+        .message("Item details: " + item.toString())
         .logError(e);
   }
 }

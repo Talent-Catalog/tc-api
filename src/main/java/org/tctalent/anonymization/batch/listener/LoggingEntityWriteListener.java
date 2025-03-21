@@ -26,19 +26,15 @@ public class LoggingEntityWriteListener implements ItemWriteListener<CandidateEn
 
     LogBuilder.builder(log)
         .action("Writing entity items")
-        .message("Entity items to write:" + itemDetails)
+        .message("Entity items to write: " + itemDetails)
         .logInfo();
   }
 
   @Override
   public void afterWrite(Chunk<? extends CandidateEntity> items) {
-    String itemDetails = items.getItems().stream()
-        .map(Object::toString)
-        .collect(Collectors.joining(", "));
-
     LogBuilder.builder(log)
-        .action("Entity items written successfully")
-        .message("Entity items written:" + itemDetails)
+        .action("Writing entity items")
+        .message("Entity items written: " + items.size())
         .logInfo();
   }
 
@@ -50,7 +46,7 @@ public class LoggingEntityWriteListener implements ItemWriteListener<CandidateEn
 
     LogBuilder.builder(log)
         .action("Error writing entity items")
-        .message("Failed to write entity items:" + itemDetails)
+        .message("Failed to write entity items: " + itemDetails)
         .logError(exception);
   }
 
