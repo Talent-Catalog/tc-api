@@ -28,9 +28,6 @@ public class LoggingChunkListener implements ChunkListener {
         .action("Chunk processed successfully")
         .message("Chunk details: " + context.getStepContext().getStepExecution())
         .logInfo();
-
-    // Clear the persistence context after each chunk to avoid lingering managed entities.
-    entityManager.clear();
   }
 
   @Override
