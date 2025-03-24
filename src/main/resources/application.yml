@@ -51,7 +51,6 @@ spring:
   # Mongo
   data:
     mongodb:
-      auto-index-creation: true
       uri: ${MONGO_URL:mongodb://tctalent:tctalent@localhost:27018/tctalent?authSource=admin}
 
   # Batch
@@ -59,7 +58,7 @@ spring:
     jdbc:
       initialize-schema: never # batch schema are initialised by flyway
     job:
-      enabled: ${SPRING_BATCH_JOB_ENABLED:false} # enable/disable auto-run of jobs
+      enabled: ${SPRING_BATCH_JOB_ENABLED:true} # enable/disable auto-run of jobs
 
 # Actuator
 management:

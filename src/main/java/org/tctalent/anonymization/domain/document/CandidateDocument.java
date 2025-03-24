@@ -8,7 +8,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.tctalent.anonymization.domain.common.AvailImmediateReason;
@@ -32,7 +31,6 @@ import org.tctalent.anonymization.domain.common.YesNoUnsure;
 @Document(collection = "candidates")
 public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
 
-  @Indexed(unique = true)
   private String publicId;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
