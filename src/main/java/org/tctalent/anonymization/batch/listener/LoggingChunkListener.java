@@ -19,9 +19,6 @@ import org.tctalent.anonymization.logging.LogBuilder;
 @Component
 public class LoggingChunkListener implements ChunkListener {
 
-  @PersistenceContext
-  private EntityManager entityManager;
-
   @Override
   public void afterChunk(ChunkContext context) {
     LogBuilder.builder(log)
