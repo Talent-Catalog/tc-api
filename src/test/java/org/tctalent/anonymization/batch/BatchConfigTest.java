@@ -15,6 +15,7 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.tctalent.anonymization.batch.config.BatchConfig;
 import org.tctalent.anonymization.batch.config.BatchProperties;
@@ -57,7 +58,7 @@ class BatchConfigTest {
   @Mock private LoggingDocumentSkipListener loggingDocumentSkipListener;
   @Mock private LoggingEntitySkipListener loggingEntitySkipListener;
   @Mock private CandidateEntityRepository candidateEntityRepository;
-  @Mock private CandidateDocumentRepository candidateDocumentRepository;
+  @Mock private MongoTemplate mongoTemplate;
 
   @InjectMocks private BatchConfig batchConfig;
 
@@ -134,9 +135,9 @@ class BatchConfigTest {
   @Test
   @DisplayName("Test Mongo item writer configuration")
   void testMongoItemWriter() {
-    ItemWriter<CandidateDocument> writer = batchConfig.mongoItemWriter(candidateDocumentRepository);
+    ItemWriter<CandidateDocument> writer = batchConfig.mongoItemWriter(mongoTemplate);
 
-    assertNotNull(writer);
+    assertNotNull(writer, "ItemWriter should not be null");
   }
 
   @Test
@@ -144,7 +145,7 @@ class BatchConfigTest {
   void testAuroraItemWriter() {
     ItemWriter<CandidateEntity> writer = batchConfig.jpaItemWriter(candidateEntityRepository);
 
-    assertNotNull(writer);
+    assertNotNull(writer, "ItemWriter should not be null");
   }
 
 }
