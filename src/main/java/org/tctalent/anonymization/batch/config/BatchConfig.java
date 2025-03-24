@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.tctalent.anonymization.batch.listener.LoggingDocumentWriteListener;
 import org.tctalent.anonymization.batch.listener.LoggingJobExecutionListener;
@@ -27,11 +28,11 @@ import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
 import org.tctalent.anonymization.batch.listener.LoggingEntityWriteListener;
 import org.tctalent.anonymization.batch.listener.LoggingEntitySkipListener;
 import org.tctalent.anonymization.batch.listener.LoggingDocumentSkipListener;
+import org.tctalent.anonymization.batch.writer.DocumentFindAndReplaceItemWriter;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.repository.CandidateEntityRepository;
-import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
 /**
  * Batch configuration class for setting up the candidate migration job, including its steps,
@@ -162,18 +163,18 @@ public class BatchConfig {
   }
 
   /**
-   * Configures an ItemWriter to save CandidateDocument objects to the MongoDB repository.
+   * Configures an ItemWriter that uses a find-and-replace (upsert) strategy to persist
+   * CandidateDocument objects in MongoDB.
+   * <p>
+   * For each CandidateDocument, if a document with the same publicId exists in the target
+   * collection, it is entirely replaced; if not, a new document is inserted.
    *
-   * @param candidateDocumentRepository the repository used to persist CandidateDocument objects
+   * @param mongoTemplate the {@link MongoTemplate} used to perform MongoDB operations
    * @return an ItemWriter for writing CandidateDocument objects to MongoDB
    */
   @Bean
-  public ItemWriter<CandidateDocument> mongoItemWriter(
-      CandidateDocumentRepository candidateDocumentRepository) {
-    return new RepositoryItemWriterBuilder<CandidateDocument>()
-        .repository(candidateDocumentRepository)
-        .methodName("save") // Implicitly throttles the batch, which is preferred. Use "saveAll" if performance is an issue.
-        .build();
+  public ItemWriter<CandidateDocument> mongoItemWriter(MongoTemplate mongoTemplate) {
+    return new DocumentFindAndReplaceItemWriter(mongoTemplate);
   }
 
 }
