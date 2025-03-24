@@ -10,14 +10,12 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.batch.item.validator.ValidationException;
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.tctalent.anonymization.batch.listener.LoggingDocumentWriteListener;
 import org.tctalent.anonymization.batch.listener.LoggingJobExecutionListener;
@@ -28,11 +26,9 @@ import org.tctalent.anonymization.batch.listener.LoggingRestReadListener;
 import org.tctalent.anonymization.batch.listener.LoggingEntityWriteListener;
 import org.tctalent.anonymization.batch.listener.LoggingEntitySkipListener;
 import org.tctalent.anonymization.batch.listener.LoggingDocumentSkipListener;
-import org.tctalent.anonymization.batch.writer.DocumentFindAndReplaceItemWriter;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
-import org.tctalent.anonymization.repository.CandidateEntityRepository;
 
 /**
  * Batch configuration class for setting up the candidate migration job, including its steps,
@@ -150,31 +146,6 @@ public class BatchConfig {
         .listener(loggingDocumentSkipListener)
         .skipPolicy(new ConditionalSkipPolicy(batchProperties.getMaxReadSkips()))
         .build();
-  }
-
-  // todo javadoc
-  @Bean
-  public ItemWriter<CandidateEntity> jpaItemWriter(
-      CandidateEntityRepository candidateEntityRepository) {
-    return new RepositoryItemWriterBuilder<CandidateEntity>()
-        .repository(candidateEntityRepository)
-        .methodName("saveAndFlush")
-        .build();
-  }
-
-  /**
-   * Configures an ItemWriter that uses a find-and-replace (upsert) strategy to persist
-   * CandidateDocument objects in MongoDB.
-   * <p>
-   * For each CandidateDocument, if a document with the same publicId exists in the target
-   * collection, it is entirely replaced; if not, a new document is inserted.
-   *
-   * @param mongoTemplate the {@link MongoTemplate} used to perform MongoDB operations
-   * @return an ItemWriter for writing CandidateDocument objects to MongoDB
-   */
-  @Bean
-  public ItemWriter<CandidateDocument> mongoItemWriter(MongoTemplate mongoTemplate) {
-    return new DocumentFindAndReplaceItemWriter(mongoTemplate);
   }
 
 }
