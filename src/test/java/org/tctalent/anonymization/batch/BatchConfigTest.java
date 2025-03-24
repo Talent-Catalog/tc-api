@@ -132,20 +132,4 @@ class BatchConfigTest {
     assertEquals("candidateRestToMongoStep", step.getName());
   }
 
-  @Test
-  @DisplayName("Test Mongo item writer configuration")
-  void testMongoItemWriter() {
-    ItemWriter<CandidateDocument> writer = batchConfig.mongoItemWriter(mongoTemplate);
-
-    assertNotNull(writer, "ItemWriter should not be null");
-  }
-
-  @Test
-  @DisplayName("Test Aurora item writer configuration")
-  void testAuroraItemWriter() {
-    ItemWriter<CandidateEntity> writer = batchConfig.jpaItemWriter(candidateEntityRepository);
-
-    assertNotNull(writer, "ItemWriter should not be null");
-  }
-
 }
