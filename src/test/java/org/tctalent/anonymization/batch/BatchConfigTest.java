@@ -33,7 +33,6 @@ import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.repository.CandidateEntityRepository;
-import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
 /**
  * Unit tests for the {@link BatchConfig} class.
@@ -57,8 +56,6 @@ class BatchConfigTest {
   @Mock private LoggingDocumentWriteListener loggingDocumentWriteListener;
   @Mock private LoggingDocumentSkipListener loggingDocumentSkipListener;
   @Mock private LoggingEntitySkipListener loggingEntitySkipListener;
-  @Mock private CandidateEntityRepository candidateEntityRepository;
-  @Mock private MongoTemplate mongoTemplate;
 
   @InjectMocks private BatchConfig batchConfig;
 
