@@ -76,7 +76,11 @@ public class BatchConfig {
   /**
    * Configures a candidate migration step to read candidates from the
    * {@link org.tctalent.anonymization.service.TalentCatalogService}, process them to anonymised
-   * equivalent documents, and write them to MongoDB.
+   * equivalent documents, and write them to AuroraDB.
+   * <p>
+   * The step is configured to be fault-tolerant, skipping {@link DataIntegrityViolationException}
+   * and {@link ValidationException} when encountered, and applies a custom skip policy based on the
+   * maximum number of allowed read skips.
    *
    * @param jobRepository the repository for storing step metadata
    * @param transactionManager the transaction manager for the step
@@ -119,7 +123,30 @@ public class BatchConfig {
         .build();
   }
 
-  // todo java doc
+  /**
+   * Configures a candidate migration step that reads candidate records from the
+   * {@link org.tctalent.anonymization.service.TalentCatalogService}, processes them into anonymised
+   * {@link CandidateDocument} instances, and writes them to MongoDB.
+   * <p>
+   * This step uses a {@link ResourcelessTransactionManager} for transaction management since
+   * MongoDB in this configuration does not support full transactions. The writer employs a
+   * find-and-replace (upsert) strategy to check that if a document with the same publicId already
+   * exists in the Mongo collection, it is completely replaced with the new document.
+   * <p>
+   * The step is configured to be fault-tolerant, skipping {@link CodecConfigurationException} when
+   * encountered, and applies a custom skip policy based on the maximum number of allowed read skips.
+   *
+   * @param jobRepository the repository for storing step metadata
+   * @param tcItemReader the reader to fetch candidate records from the Talent Catalog Service
+   * @param candidateDocumentProcessor the processor to transform candidate records into {@link CandidateDocument} instances
+   * @param mongoItemWriter the writer that persists {@link CandidateDocument} objects to MongoDB using a find-and-replace strategy
+   * @param loggingChunkListener the listener for logging at the chunk level
+   * @param loggingRestReadListener the listener for logging at the item read level
+   * @param loggingRestToDocumentProcessListener the listener for logging during candidate-to-document processing
+   * @param loggingDocumentWriteListener the listener for logging at the item write level
+   * @param loggingDocumentSkipListener the listener for logging when an item is skipped during processing
+   * @return the configured candidate migration step for writing to MongoDB
+   */
   @Bean
   @Qualifier("candidateRestToMongoStep")
   public Step candidateRestToMongoStep(JobRepository jobRepository,
