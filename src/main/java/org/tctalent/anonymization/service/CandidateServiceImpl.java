@@ -49,13 +49,15 @@ public class CandidateServiceImpl implements CandidateService {
     filters.forEach((key, values) -> query
         .addCriteria(Criteria.where(key).in(values)));
 
+    //Count the total number of candidates (ie without paging limits).
+    //Get the count before adding the paging because adding that will mutate the query
+    long count = mongoTemplate.count(query, CandidateDocument.class);
+
     //Run the query requesting just the page required
     List<Candidate> candidates = mongoTemplate.find(query.with(pageable), CandidateDocument.class)
             .stream()
             .map(documentMapper::toCandidateModel)
             .toList();
-    //Count the total number of candidates (ie without paging limits).
-    long count = mongoTemplate.count(query, CandidateDocument.class);
 
     //Construct a page
     Page<Candidate> candidatePage = new PageImpl<>(candidates, pageable, count);
