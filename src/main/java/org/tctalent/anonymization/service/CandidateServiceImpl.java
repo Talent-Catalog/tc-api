@@ -50,7 +50,8 @@ public class CandidateServiceImpl implements CandidateService {
         .addCriteria(Criteria.where(key).in(values)));
 
     //Count the total number of candidates (ie without paging limits).
-    //Get the count before adding the paging because adding that will mutate the query
+    //Get the count before adding the paging. Adding the paging mutates the query returning the page
+    //count not total count.
     long count = mongoTemplate.count(query, CandidateDocument.class);
 
     //Run the query requesting just the page required
