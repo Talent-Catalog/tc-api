@@ -11,13 +11,6 @@ import org.springframework.data.annotation.Id;
 @NoArgsConstructor
 public abstract class AbstractDomainDocument<IdType extends Serializable>  implements Serializable {
 
-  /*
-     See https://stackoverflow.com/questions/4560813/specifying-distinct-sequence-per-table-in-hibernate-on-subclasses
-     Unfortunate side effect is that it generates "Duplicate generator name seq_gen" warnings
-     for each entity at start up.
-     Hibernate has a JPA_ID_GENERATOR_GLOBAL_SCOPE_COMPLIANCE setting which can be set false
-     but haven't figured out how to set this yet.
-   */
   @Id
   private IdType id;
 

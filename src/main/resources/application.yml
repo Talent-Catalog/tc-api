@@ -39,9 +39,9 @@ spring:
 
   # Aurora-Postgres
   datasource:
-    url: jdbc:postgresql://localhost:5433/tctalent
-    username: tctalent
-    password: tctalent
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/tctalent}
+    username: ${DATABASE_USERNAME:tctalent}
+    password: ${DATABASE_PASSWORD:tctalent}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -51,11 +51,22 @@ spring:
   # Mongo
   data:
     mongodb:
-      uri: mongodb://tctalent:tctalent@localhost:27018/tctalent?authSource=admin
+      auto-index-creation: true
+      uri: ${MONGO_URL:mongodb://tctalent:tctalent@localhost:27018/tctalent?authSource=admin}
 
   # Batch
   batch:
     jdbc:
       initialize-schema: never # batch schema are initialised by flyway
     job:
-      enabled: false # enable/disable auto-run of jobs
+      enabled: ${SPRING_BATCH_JOB_ENABLED:false} # enable/disable auto-run of jobs
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

@@ -26,19 +26,15 @@ public class LoggingDocumentWriteListener implements ItemWriteListener<Candidate
 
     LogBuilder.builder(log)
         .action("Writing document items")
-        .message("Document items to write:" + itemDetails)
+        .message("Document items to write: " + itemDetails)
         .logInfo();
   }
 
   @Override
   public void afterWrite(Chunk<? extends CandidateDocument> items) {
-    String itemDetails = items.getItems().stream()
-        .map(Object::toString)
-        .collect(Collectors.joining(", "));
-
     LogBuilder.builder(log)
-        .action("Document items written successfully")
-        .message("Document items written:" + itemDetails)
+        .action("Writing document items")
+        .message("Document items written: " + items.size())
         .logInfo();
   }
 
@@ -50,7 +46,7 @@ public class LoggingDocumentWriteListener implements ItemWriteListener<Candidate
 
     LogBuilder.builder(log)
         .action("Error writing document items")
-        .message("Failed to write document items:" + itemDetails)
+        .message("Failed to write document items: " + itemDetails)
         .logError(exception);
   }
 

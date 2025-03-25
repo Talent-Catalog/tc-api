@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.tctalent.anonymization.domain.entity.BatchFailedItem;
 import org.tctalent.anonymization.domain.entity.CandidateEntity;
+import org.tctalent.anonymization.logging.LogBuilder;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.service.BatchFailedItemService;
 
@@ -32,8 +33,13 @@ public class LoggingEntitySkipListener implements SkipListener<IdentifiableCandi
   @Override
   public void onSkipInProcess(IdentifiableCandidate item, Throwable t) {
     String publicId = item.getPublicId();
-    // todo log builder
-    log.warn("Skipping item in PROCESSING due to error: {}, item: {}", t.getMessage(), publicId);
+    String message = String.format("Skipping item in PROCESSING due to error: %s, item: %s",
+        t.getMessage(), publicId);
+
+    LogBuilder.builder(log)
+        .action("Skip processing")
+        .message(message)
+        .logWarn();
 
     BatchFailedItem failedItem = BatchFailedItem.builder()
         .jobExecutionId(jobExecutionId)
@@ -52,7 +58,13 @@ public class LoggingEntitySkipListener implements SkipListener<IdentifiableCandi
   public void onSkipInWrite(CandidateEntity item, Throwable t) {
     String publicId = item.getPublicId();
     // todo log builder
-    log.warn("Skipping item in WRITING due to error: {}, item: {}", t.getMessage(), publicId);
+    String message = String.format("Skipping item in WRITING due to error: %s, item: %s",
+        t.getMessage(), publicId);
+
+    LogBuilder.builder(log)
+        .action("Skip writing")
+        .message(message)
+        .logWarn();
 
     BatchFailedItem failedItem = BatchFailedItem.builder()
         .jobExecutionId(jobExecutionId)

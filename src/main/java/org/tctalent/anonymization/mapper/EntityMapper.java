@@ -30,6 +30,7 @@ import org.tctalent.anonymization.model.SurveyType;
 @Mapper(uses = {})
 public interface EntityMapper {
 
+  @Mapping(target = "id", ignore = true)
   @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
   @Mapping(target = "birthCountryIsoCode", source = "birthCountry", qualifiedByName = "mapCountryToIsoCode")
   @Mapping(target = "nationalityIsoCode", source = "nationality", qualifiedByName = "mapCountryToIsoCode")

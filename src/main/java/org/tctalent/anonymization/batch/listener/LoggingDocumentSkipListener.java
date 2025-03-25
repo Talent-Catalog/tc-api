@@ -7,6 +7,7 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
+import org.tctalent.anonymization.logging.LogBuilder;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.service.BatchFailedItemService;
 import org.tctalent.anonymization.domain.entity.BatchFailedItem;
@@ -31,7 +32,13 @@ public class LoggingDocumentSkipListener implements SkipListener<IdentifiableCan
   @Override
   public void onSkipInProcess(IdentifiableCandidate item, Throwable t) {
     String publicId = item.getPublicId();
-    log.warn("Skipping item in PROCESSING for MongoDB due to error: {}, item: {}", t.getMessage(), publicId);
+    String message = String.format("Skipping item in PROCESSING for MongoDB due to error: %s, item: %s",
+        t.getMessage(), publicId);
+
+    LogBuilder.builder(log)
+        .action("Skip processing")
+        .message(message)
+        .logWarn();
 
     BatchFailedItem failedItem = BatchFailedItem.builder()
         .jobExecutionId(jobExecutionId)
@@ -49,7 +56,13 @@ public class LoggingDocumentSkipListener implements SkipListener<IdentifiableCan
   @Override
   public void onSkipInWrite(CandidateDocument item, Throwable t) {
     String publicId = String.valueOf(item.getId());
-    log.warn("Skipping item in WRITING for MongoDB due to error: {}, item: {}", t.getMessage(), publicId);
+    String message = String.format("Skipping item in WRITING for MongoDB due to error: %s, item: %s",
+        t.getMessage(), publicId);
+
+    LogBuilder.builder(log)
+        .action("Skip writing")
+        .message(message)
+        .logWarn();
 
     BatchFailedItem failedItem = BatchFailedItem.builder()
         .jobExecutionId(jobExecutionId)

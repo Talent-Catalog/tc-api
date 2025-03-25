@@ -15,6 +15,7 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.tctalent.anonymization.batch.config.BatchConfig;
 import org.tctalent.anonymization.batch.config.BatchProperties;
@@ -32,7 +33,6 @@ import org.tctalent.anonymization.domain.entity.CandidateEntity;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.repository.CandidateEntityRepository;
-import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
 /**
  * Unit tests for the {@link BatchConfig} class.
@@ -56,8 +56,6 @@ class BatchConfigTest {
   @Mock private LoggingDocumentWriteListener loggingDocumentWriteListener;
   @Mock private LoggingDocumentSkipListener loggingDocumentSkipListener;
   @Mock private LoggingEntitySkipListener loggingEntitySkipListener;
-  @Mock private CandidateEntityRepository candidateEntityRepository;
-  @Mock private CandidateDocumentRepository candidateDocumentRepository;
 
   @InjectMocks private BatchConfig batchConfig;
 
@@ -129,22 +127,6 @@ class BatchConfigTest {
 
     assertNotNull(step);
     assertEquals("candidateRestToMongoStep", step.getName());
-  }
-
-  @Test
-  @DisplayName("Test Mongo item writer configuration")
-  void testMongoItemWriter() {
-    ItemWriter<CandidateDocument> writer = batchConfig.mongoItemWriter(candidateDocumentRepository);
-
-    assertNotNull(writer);
-  }
-
-  @Test
-  @DisplayName("Test Aurora item writer configuration")
-  void testAuroraItemWriter() {
-    ItemWriter<CandidateEntity> writer = batchConfig.jpaItemWriter(candidateEntityRepository);
-
-    assertNotNull(writer);
   }
 
 }

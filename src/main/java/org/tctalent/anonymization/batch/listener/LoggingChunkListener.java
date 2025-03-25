@@ -1,5 +1,7 @@
 package org.tctalent.anonymization.batch.listener;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.StepExecution;
