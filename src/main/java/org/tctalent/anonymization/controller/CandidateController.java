@@ -47,13 +47,13 @@ public class CandidateController implements V1Api {
   @Override
   @PreAuthorize("hasAuthority('READ_CANDIDATE_DATA')")
   public ResponseEntity<CandidatePage> findCandidates(Integer page, Integer limit,
-      String location, String nationality, String occupation) {
+      String location, String nationality, String occupation, Boolean includeEmployed) {
     Pageable pageable = PageRequest.of(page, limit);
 
     //Extract values from comma separated strings of filtering locations, nationalities and
     //occupations
     CandidatePage candidatesPage = candidateService.findAll(pageable,
-        split(location), split(nationality), split(occupation));
+        split(location), split(nationality), split(occupation), includeEmployed);
     return ResponseEntity.ok(candidatesPage);
   }
 

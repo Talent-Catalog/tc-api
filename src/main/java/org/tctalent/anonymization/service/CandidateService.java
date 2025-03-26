@@ -21,7 +21,8 @@ public interface CandidateService {
   CandidatePage findAll(Pageable pageable,
       @Nullable List<String> locations,
       @Nullable List<String> nationalities,
-      @Nullable List<String> occupations);
+      @Nullable List<String> occupations,
+      @Nullable Boolean includeEmployed);
 
   /**
    * Returns candidate associated with given id
