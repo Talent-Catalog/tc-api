@@ -11,5 +11,4 @@ public class CandidateLanguage {
   private Language language;
   private LanguageLevel writtenLevel;
   private LanguageLevel spokenLevel;
-  private String migrationLanguage;
 }
