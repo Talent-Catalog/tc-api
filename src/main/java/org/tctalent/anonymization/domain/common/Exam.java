@@ -25,5 +25,6 @@ public enum Exam {
     IELTS_GEN,
     IELTS_ACA,
     TOEFL,
-    OTHER
+    OTHER,
+    DET_OFFICIAL
 }
