@@ -51,7 +51,7 @@ public class CandidateServiceImpl implements CandidateService {
 
 
     // If includeEmployed is null or false, exclude candidates with status "employed"
-    if (includeEmployed == null || includeEmployed.equals(Boolean.FALSE)) {
+    if (!Boolean.TRUE.equals(includeEmployed)) {
       query.addCriteria(Criteria.where("status").ne("employed"));
     }
 
