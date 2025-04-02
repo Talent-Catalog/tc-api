@@ -29,7 +29,7 @@ public class CandidateServiceImpl implements CandidateService {
 
   @Override
   public CandidatePage findAll(Pageable pageable, List<String> locations,
-      List<String> nationalities, List<String> occupations) {
+      List<String> nationalities, List<String> occupations, Boolean includeEmployed) {
 
     Map<String, List<String>> filters = new HashMap<>();
     if (locations != null) {
@@ -48,6 +48,12 @@ public class CandidateServiceImpl implements CandidateService {
         .collation(Collation.of("en").strength(Collation.ComparisonLevel.secondary()));
     filters.forEach((key, values) -> query
         .addCriteria(Criteria.where(key).in(values)));
+
+
+    // If includeEmployed is null or false, exclude candidates with status "employed"
+    if (!Boolean.TRUE.equals(includeEmployed)) {
+      query.addCriteria(Criteria.where("status").ne("employed"));
+    }
 
     //Count the total number of candidates (ie without paging limits).
     //Get the count before adding the paging. Adding the paging mutates the query returning the page

@@ -45,6 +45,9 @@ class TalentCatalogServiceImplTest {
   @Test
   void fetchPageOfCandidateDataAsJson() {
     try {
+      tcService.login();
+      assertTrue(tcService.isLoggedIn());
+
       String pageOfDataAsJson = tcService.fetchPageOfCandidateDataAsJson(0);
       assertNotNull(pageOfDataAsJson);
     } catch (RestClientException ex) {
