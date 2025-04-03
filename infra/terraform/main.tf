@@ -207,7 +207,7 @@ module "ecs_service" {
   }
 
   service_tags = {
-    "ServiceTag" = "Tag on service level"
+    Name = "${local.name}-service"
   }
 
   tags = local.tags
