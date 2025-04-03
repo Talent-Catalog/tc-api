@@ -19,3 +19,12 @@ module tc-test {
   tc_api_username = "tc-api"
   run_anonymisation_on_startup = true
 }
+
+terraform {
+  backend "s3" {
+    bucket         = "tc-api-terraform-state"
+    key            = "state/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+  }
+}

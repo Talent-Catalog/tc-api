@@ -1,16 +1,6 @@
 # Use standard Terraform AWS modules where possible.
 # See https://registry.terraform.io/browse/modules?provider=aws
 
-# todo Store state on s3 so shared by everyone
-# terraform {
-#   backend "s3" {
-#     bucket         = "my-terraform-state"
-#     key            = "state/terraform.tfstate"
-#     region         = "us-east-1"
-#     encrypt        = true
-#   }
-# }
-
 # todo Use secrets manager
 
 provider "aws" {
