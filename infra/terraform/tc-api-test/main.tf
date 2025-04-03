@@ -17,7 +17,7 @@ module tc-test {
   tc_api_url = "https://tctalent-test.org/api/admin"
   tc_api_search_id = 2682
   tc_api_username = "tc-api"
-  run_anonymisation_on_startup = true
+  run_anonymisation_on_startup = false
 }
 
 terraform {
