@@ -21,6 +21,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
@@ -41,6 +43,22 @@ public class CandidateJobExperience extends AbstractDomainEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "candidate_id")
     private CandidateEntity candidate;
+
+    /**
+     * Synchronizes the candidate field with the candidate obtained from the associated
+     * CandidateOccupation.
+     * <p>
+     * This method is automatically invoked before the entity is persisted or updated so that the
+     * candidate_id column in the candidate_job_experience table is correctly populated.
+     * </p>
+     */
+    @PrePersist
+    @PreUpdate
+    private void syncCandidate() {
+        if (this.candidateOccupation != null) {
+            this.candidate = this.candidateOccupation.getCandidate();
+        }
+    }
 
     // Store the isoCode directly instead of a foreign key reference
     @Size(max = 3)

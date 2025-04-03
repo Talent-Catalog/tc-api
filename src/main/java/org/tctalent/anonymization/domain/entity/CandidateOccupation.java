@@ -62,10 +62,7 @@ public class CandidateOccupation extends AbstractDomainEntity<Long> {
 
     public void setCandidateJobExperiences(List<CandidateJobExperience> experiences) {
         this.candidateJobExperiences.clear();
-        experiences.forEach(experience -> {
-            experience.setCandidateOccupation(this);
-            experience.setCandidate(candidate);
-        });
+        experiences.forEach(experience -> experience.setCandidateOccupation(this));
         this.candidateJobExperiences.addAll(experiences);
     }
 
