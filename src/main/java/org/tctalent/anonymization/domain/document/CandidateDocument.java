@@ -121,7 +121,6 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
   private MaritalStatus maritalStatus;
   private EducationLevel maxEducationLevel;
   private String mediaWillingness;
-  private EducationMajor migrationEducationMajor;
   private YesNo militaryService;
   private YesNoUnsure militaryWanted;
 
