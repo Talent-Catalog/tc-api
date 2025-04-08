@@ -22,7 +22,7 @@ module tc-prod {
 
 terraform {
   backend "s3" {
-    bucket         = "tc-api-terraform-state"
+    bucket         = "tc-api-terraform-state-prod"
     key            = "state/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
