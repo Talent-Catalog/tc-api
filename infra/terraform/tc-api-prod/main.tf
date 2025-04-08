@@ -10,7 +10,8 @@ module tc-prod {
   db_instance_class = "db.t3.medium" # 2vCPU, 4GB RAM
   doc_db_name = "tcapi"
   doc_db_user_name = "tcapi"
-  doc_db_service_name = "mongo"
+  doc_db_password = ""
+  doc_db_cluster_name = "prod.t9anmq2.mongodb.net"
   dns_namespace = "tc-api.local"
   app_port = 8082
   health_check_path = "/actuator/health"
