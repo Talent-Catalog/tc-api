@@ -10,7 +10,8 @@ module tc-test {
   db_instance_class = "db.t3.medium" # smallest test instance available for aurora
   doc_db_name = "tcapi"
   doc_db_user_name = "tcapi"
-  doc_db_service_name = "mongo"
+  doc_db_password = ""
+  doc_db_cluster_name = "staging.c8pam.mongodb.net"
   dns_namespace = "tc-api.local"
   app_port = 8082
   health_check_path = "/actuator/health"
