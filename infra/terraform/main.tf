@@ -172,11 +172,12 @@ module "ecs_service" {
       client_aliases = []
     }]
 
-    client_services = [{
-      discovery_name = "mongo"
-      port           = 27017
-      dns_name       = "mongo"
-    }]
+    # MODEL - This block is an example of discovering other ECS services
+    # client_services = [{
+    #   discovery_name = "mongo"
+    #   port           = 27017
+    #   dns_name       = "mongo"
+    # }]
   }
 
   load_balancer = {
