@@ -49,8 +49,12 @@ variable "doc_db_user_name" {
   description = "Doc data base user name"
 }
 
-variable "doc_db_service_name" {
-  description = "DNS name of the document database"
+variable "doc_db_password" {
+  description = "Doc data base password"
+}
+
+variable "doc_db_cluster_name" {
+  description = "Cluster name of the document database"
 }
 
 variable "dns_namespace" {
