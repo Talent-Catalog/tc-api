@@ -1,16 +1,6 @@
 # Use standard Terraform AWS modules where possible.
 # See https://registry.terraform.io/browse/modules?provider=aws
 
-# todo Store state on s3 so shared by everyone
-# terraform {
-#   backend "s3" {
-#     bucket         = "my-terraform-state"
-#     key            = "state/terraform.tfstate"
-#     region         = "us-east-1"
-#     encrypt        = true
-#   }
-# }
-
 # todo Use secrets manager
 
 provider "aws" {
@@ -118,10 +108,10 @@ module "ecs_service" {
         {
           name  = "MONGO_URL"
           value = format(
-            "mongodb://%s:tctalent@%s.%s:27017/%s?authSource=admin&tls=false&directConnection=true",
+            "mongodb+srv://%s:%s@%s/%s?retryWrites=true&w=majority&appName=staging",
             var.doc_db_user_name,
-            var.doc_db_service_name,
-            var.dns_namespace,
+            var.doc_db_password,
+            var.doc_db_cluster_name,
             var.doc_db_name,
           )
         },
@@ -182,11 +172,12 @@ module "ecs_service" {
       client_aliases = []
     }]
 
-    client_services = [{
-      discovery_name = "mongo"
-      port           = 27017
-      dns_name       = "mongo"
-    }]
+    # MODEL - This block is an example of discovering other ECS services
+    # client_services = [{
+    #   discovery_name = "mongo"
+    #   port           = 27017
+    #   dns_name       = "mongo"
+    # }]
   }
 
   load_balancer = {
@@ -217,171 +208,10 @@ module "ecs_service" {
   }
 
   service_tags = {
-    "ServiceTag" = "Tag on service level"
+    Name = "${local.name}-service"
   }
 
   tags = local.tags
-}
-
-################################################################################
-# Mongo DB Service
-################################################################################
-
-module "mongo_service" {
-  source      = "terraform-aws-modules/ecs/aws//modules/service"
-  name        = "${local.name}-mongo"
-  cluster_arn = module.ecs_cluster.arn
-
-  cpu           = 256
-  memory        = 512
-  desired_count = 1
-  launch_type   = "FARGATE"
-
-  # Enables ECS Exec
-  enable_execute_command = true
-  platform_version       = "LATEST"
-
-  volume = {
-    "${local.name}-mongo-efs" = {
-      name = "${local.name}-mongo-efs"
-      efs_volume_configuration = {
-        file_system_id     = aws_efs_file_system.mongo.id
-        transit_encryption = "ENABLED"
-        authorization_config = {
-          iam = "ENABLED"
-        }
-        # Optionally, add root_directory if needed:
-        # root_directory = "/"
-      }
-    }
-  }
-
-  container_definitions = {
-    mongo = {
-      image         = "mongo:8.0"
-      cpu           = 256
-      memory        = 512
-      essential     = true
-
-      port_mappings = [
-        {
-          name          = "mongo"
-          containerPort = 27017,
-          hostPort      = 27017
-          protocol      = "tcp"
-        }
-      ]
-      environment   = [
-        {
-          name = "MONGO_INITDB_ROOT_USERNAME",
-          value = var.doc_db_user_name
-        },
-        {
-          name = "MONGO_INITDB_ROOT_PASSWORD",
-          value = "tctalent"
-        },
-        {
-          name = "MONGO_INITDB_DATABASE",
-          value = var.doc_db_name
-        },
-      ]
-
-      # Mount the EFS volume at /data/db
-      mount_points = [
-        {
-          sourceVolume  = "${local.name}-mongo-efs"
-          containerPath = "/data/db"
-          readOnly      = false
-        }
-      ]
-
-      readonly_root_filesystem = false
-
-      enable_cloudwatch_logging = true
-      log_configuration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = "/fargate/service/${local.name}-mongo-log"
-          awslogs-stream-prefix = "mongodb"
-          awslogs-region        = local.region
-        }
-      }
-
-      linux_parameters = {
-        capabilities = {
-          add = []
-          drop = [ "NET_RAW" ]
-        }
-      }
-
-      memory_reservation = 100
-    }
-  }
-
-  subnet_ids = module.vpc.private_subnets
-
-  security_group_rules = {
-    mongo_ingress = {
-      type                     = "ingress"
-      from_port                = 27017
-      to_port                  = 27017
-      protocol                 = "tcp"
-      source_security_group_id = module.ecs_service.security_group_id
-    }
-    efs_ingress = {
-      type                     = "ingress"
-      from_port                = 2049
-      to_port                  = 2049
-      protocol                 = "tcp"
-      source_security_group_id = module.mongo_service.security_group_id
-      description              = "Allow NFS traffic for EFS"
-    }
-    egress_all = {
-      type        = "egress"
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  }
-
-  service_connect_configuration = {
-    namespace = aws_service_discovery_private_dns_namespace.this.arn
-    services = [{
-      discovery_name = "mongo"
-      port_name      = "mongo"
-      client_aliases = [{
-        dns_name = "mongo"
-        port     = 27017
-      }]
-    }]
-  }
-
-  service_registries = {
-    registry_arn = aws_service_discovery_service.mongo.arn
-  }
-
-  tags = local.tags
-}
-
-################################################################################
-# EFS for Persistence
-################################################################################
-
-resource "aws_efs_file_system" "mongo" {
-  creation_token = "${local.name}-mongo-efs"
-  performance_mode = "generalPurpose"
-  encrypted = false
-
-  tags = merge(local.tags, { Name = "${local.name}-mongo-efs" })
-}
-
-resource "aws_efs_mount_target" "mongo" {
-  for_each = { for idx, subnet in module.vpc.private_subnets : idx => subnet }
-
-  file_system_id  = aws_efs_file_system.mongo.id
-  subnet_id       = each.value
-  security_groups = [module.mongo_service.security_group_id]
 }
 
 ################################################################################
@@ -524,19 +354,6 @@ resource "aws_service_discovery_private_dns_namespace" "this" {
   vpc  = module.vpc.vpc_id
 }
 
-resource "aws_service_discovery_service" "mongo" {
-  name         = var.doc_db_service_name
-  namespace_id = aws_service_discovery_private_dns_namespace.this.id
-  dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.this.id
-    dns_records {
-      type = "A"
-      ttl  = 10
-    }
-    routing_policy = "MULTIVALUE"
-  }
-}
-
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 9.0"
@@ -559,6 +376,12 @@ module "alb" {
       ip_protocol = "tcp"
       cidr_ipv4   = "0.0.0.0/0"
     }
+    https = {
+      from_port   = 443
+      to_port     = 443
+      ip_protocol = "tcp"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
   }
   security_group_egress_rules = {
     all = {
@@ -571,6 +394,18 @@ module "alb" {
     ex_http = {
       port     = 80
       protocol = "HTTP"
+
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+    ex_https = {
+      port            = 443
+      protocol        = "HTTPS"
+      ssl_policy      = "ELBSecurityPolicy-2016-08"
+      certificate_arn = var.acm_certificate_arn
 
       forward = {
         target_group_key = "ex_ecs"

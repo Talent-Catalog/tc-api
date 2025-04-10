@@ -49,8 +49,12 @@ variable "doc_db_user_name" {
   description = "Doc data base user name"
 }
 
-variable "doc_db_service_name" {
-  description = "DNS name of the document database"
+variable "doc_db_password" {
+  description = "Doc data base password"
+}
+
+variable "doc_db_cluster_name" {
+  description = "Cluster name of the document database"
 }
 
 variable "dns_namespace" {
@@ -81,4 +85,8 @@ variable "tc_api_username" {
 
 variable "run_anonymisation_on_startup" {
   description = "If true run the DB anonymisation on startup"
+}
+
+variable "acm_certificate_arn" {
+  description = "The ARN of an ACM certificate"
 }
