@@ -19,6 +19,7 @@ module tc-prod {
   tc_api_search_id = 3434
   tc_api_username = "tc-api"
   run_anonymisation_on_startup = false
+  acm_certificate_arn = "arn:aws:acm:us-east-1:968457613372:certificate/5dd8d298-5460-4396-ad5e-24e3a2dfa774"
 }
 
 terraform {

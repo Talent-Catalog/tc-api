@@ -19,6 +19,7 @@ module tc-test {
   tc_api_search_id = 2682
   tc_api_username = "tc-api"
   run_anonymisation_on_startup = false
+  acm_certificate_arn = "arn:aws:acm:us-east-1:231168606641:certificate/3a502945-f505-46f9-aa08-523c2be2593d"
 }
 
 terraform {
