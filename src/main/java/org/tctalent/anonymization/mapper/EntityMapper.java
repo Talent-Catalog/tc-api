@@ -27,7 +27,10 @@ import org.tctalent.anonymization.model.LanguageLevel;
 import org.tctalent.anonymization.model.Occupation;
 import org.tctalent.anonymization.model.SurveyType;
 
-@Mapper(uses = {})
+@Mapper(
+    componentModel = "spring",
+    uses = {}
+)
 public interface EntityMapper {
 
   @Mapping(target = "id", ignore = true)

@@ -5,7 +5,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface DateTimeMapper {
 
   default OffsetDateTime toOffsetDateTime(Instant instant) {
