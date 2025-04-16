@@ -2,7 +2,7 @@ module tc-prod {
   source = "./.."
   project_name = "tc-api"
   project_description = "Production setup for tc-api"
-  image_tag = "1.0.0"
+  image_tag = "1.0.1-SNAPSHOT"
   fargate_cpu = 512
   fargate_memory = 2048
   db_name = "tcapi"
