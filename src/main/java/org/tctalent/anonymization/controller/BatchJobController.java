@@ -1,12 +1,12 @@
 package org.tctalent.anonymization.controller;
 
 import java.time.LocalDate;
-import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/batch")
-@RequiredArgsConstructor
 public class BatchJobController {
 
-  private final JobLauncher jobLauncher;
+  private final JobLauncher asyncJobLauncher;
   private final Job candidateMigrationJob;
+
+  public BatchJobController(
+      @Qualifier("asyncJobLauncher") JobLauncher asyncJobLauncher,
+      @Qualifier("candidateMigrationJob") Job candidateMigrationJob) {
+
+    this.asyncJobLauncher = asyncJobLauncher;
+    this.candidateMigrationJob = candidateMigrationJob;
+  }
 
   /**
    * Launch a candidate anonymisation job.
@@ -34,7 +41,7 @@ public class BatchJobController {
           .addString("jobDate", LocalDate.now().toString()) // e.g., "2025-04-15"
           .toJobParameters();
 
-      jobLauncher.run(candidateMigrationJob, params);
+      asyncJobLauncher.run(candidateMigrationJob, params);
 
       return ResponseEntity.ok("Job '" + candidateMigrationJob.getName() + "' launched successfully.");
 
