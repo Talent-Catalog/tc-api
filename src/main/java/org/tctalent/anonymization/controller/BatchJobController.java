@@ -13,6 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+/**
+ * REST controller that exposes endpoints for managing and running batch jobs.
+ * <p>
+ * Provides an endpoint to launch a candidate anonymisation job. Only one job instance runs per day
+ * by including the current date as a unique job parameter. Access to the endpoint is secured with
+ * an 'ADMIN' authority.
+ *
+ * @author sadatmalik
+ */
 @RestController
 @RequestMapping("/batch")
 public class BatchJobController {
@@ -29,7 +39,14 @@ public class BatchJobController {
   }
 
   /**
-   * Launch a candidate anonymisation job.
+   * Launches the candidate anonymisation batch job.
+   * <p>
+   * A unique job parameter "jobDate" is added based on the current date to enforce a single job
+   * instance per day. The endpoint is secured and only accessible to users with the 'ADMIN'
+   * authority.
+   *
+   * @return a ResponseEntity with a success message if the job is launched successfully
+   * @throws JobExecutionException if the job launch fails
    */
   @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping("/jobs/run")
