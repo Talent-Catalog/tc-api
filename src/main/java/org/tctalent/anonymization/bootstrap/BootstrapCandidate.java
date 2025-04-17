@@ -19,6 +19,7 @@ import org.tctalent.anonymization.domain.common.Exam;
 import org.tctalent.anonymization.domain.common.FamilyRelations;
 import org.tctalent.anonymization.domain.common.Gender;
 import org.tctalent.anonymization.domain.common.HasPassport;
+import org.tctalent.anonymization.domain.common.HowHeardAboutUs;
 import org.tctalent.anonymization.domain.common.IeltsStatus;
 import org.tctalent.anonymization.domain.common.IntRecruitReason;
 import org.tctalent.anonymization.domain.common.JobOpportunityStage;
@@ -58,7 +59,6 @@ import org.tctalent.anonymization.domain.entity.Language;
 import org.tctalent.anonymization.domain.entity.LanguageLevel;
 import org.tctalent.anonymization.domain.entity.Occupation;
 import org.tctalent.anonymization.domain.entity.SalesforceJobOpp;
-import org.tctalent.anonymization.domain.entity.SurveyType;
 import org.tctalent.anonymization.repository.CandidateEntityRepository;
 
 @Component
@@ -156,7 +156,7 @@ public class BootstrapCandidate implements CommandLineRunner {
       candidate.setReturnHomeFuture(YesNoUnsure.NO_RESPONSE);
       candidate.setResettleThird(YesNo.NO_RESPONSE);
       candidate.setStatus(CandidateStatus.ACTIVE);
-      candidate.setSurveyType("Information Session");
+      candidate.setHowHeardAboutUs(HowHeardAboutUs.FRIEND_COLLEAGUE_REFERRAL);
       candidate.setUnhcrConsent(YesNo.YES);
       candidate.setUnhcrNotRegStatus(NotRegisteredStatus.NA);
       candidate.setUnhcrRegistered(YesNoUnsure.UNSURE);
@@ -468,13 +468,6 @@ public class BootstrapCandidate implements CommandLineRunner {
       major.setName("Accounting");
       major.setStatus(Status.ACTIVE);
       return major;
-  }
-
-  private SurveyType createSurveyType() {
-      SurveyType surveyType = new SurveyType();
-      surveyType.setName("Information Session");
-      surveyType.setStatus(Status.ACTIVE);
-      return surveyType;
   }
 
 }
