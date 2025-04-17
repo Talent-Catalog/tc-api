@@ -21,6 +21,7 @@ import org.tctalent.anonymization.domain.common.AvailImmediateReason;
 import org.tctalent.anonymization.domain.common.CandidateStatus;
 import org.tctalent.anonymization.domain.common.DocumentStatus;
 import org.tctalent.anonymization.domain.common.Gender;
+import org.tctalent.anonymization.domain.common.HowHeardAboutUs;
 import org.tctalent.anonymization.domain.common.IeltsStatus;
 import org.tctalent.anonymization.domain.common.IntRecruitReason;
 import org.tctalent.anonymization.domain.common.LeftHomeReason;
@@ -388,10 +389,9 @@ public class CandidateEntity extends AbstractDomainEntity<Long> {
   @Enumerated(EnumType.STRING)
   private CandidateStatus status;
 
-  // Store the survey type name directly instead of a foreign key reference
-  @Size(max = 255)
-  @Column(name = "survey_type", nullable = true, length = 255)
-  private String surveyType;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "how_heard_about_us", nullable = true)
+  private HowHeardAboutUs howHeardAboutUs;
 
   private YesNo unhcrConsent;
 
