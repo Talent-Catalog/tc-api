@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.JobExecutionException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.tctalent.anonymization.logging.LogBuilder;
 
 /**
  * Global exception handler that converts exceptions into Problem Details responses.
@@ -218,10 +220,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
   }
 
+  /**
+   * Handles standard Spring Batch JobExecutionException.
+   * <p/>
+   * See <a href="https://www.baeldung.com/spring-boot-return-errors-problemdetail">...</a>
+   * @param ex JobExecutionException containing details
+   * @return ProblemDetail
+   */
+  @ExceptionHandler(JobExecutionException.class)
+  public ProblemDetail handleJobExecutionException(JobExecutionException ex) {
+    return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+  }
+
   @ExceptionHandler(Exception.class)
   public ProblemDetail handleGeneralException(Exception ex) {
-    // todo - jc - use log builder
-    log.error("Unexpected error", ex);
+    LogBuilder.builder(log)
+        .action("handleGeneralException")
+        .message("Unexpected error")
+        .logError(ex);
 
     return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
   }
