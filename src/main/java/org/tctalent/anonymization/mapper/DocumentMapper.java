@@ -13,6 +13,7 @@ import org.tctalent.anonymization.model.IdentifiableCandidate;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.model.IdentifiableCandidateVisaJobCheck;
 import org.tctalent.anonymization.model.IdentifiableDependant;
+import org.tctalent.anonymization.model.SurveyType;
 
 @Mapper(
     componentModel = "spring",
@@ -47,6 +48,7 @@ public interface DocumentMapper {
   @Mapping(source = "partnerCandidate.publicId", target = "partnerPublicId")
   @Mapping(source = "dob", target = "yearOfBirth", qualifiedByName = "extractYearFromLocalDate")
   @Mapping(target = "id", ignore = true)
+  @Mapping(source = "surveyType", target = "howHeardAboutUs",  qualifiedByName = "mapEnumToString")
   CandidateDocument anonymize(IdentifiableCandidate model);
 
   @Mapping(source = "dob", target = "yearOfBirth", qualifiedByName = "extractYearFromLocalDate")
@@ -60,4 +62,8 @@ public interface DocumentMapper {
     return dob != null ? dob.getYear() : null;
   }
 
+  @Named("mapEnumToString")
+  default String mapEnumToString(SurveyType surveyType) {
+    return surveyType != null ? surveyType.getName() : null;
+  }
 }
