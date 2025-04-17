@@ -1,9 +1,12 @@
 package org.tctalent.anonymization.mapper;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.tctalent.anonymization.domain.common.HowHeardAboutUs;
 import org.tctalent.anonymization.domain.entity.CandidateCitizenship;
 import org.tctalent.anonymization.domain.entity.CandidateDependant;
 import org.tctalent.anonymization.domain.entity.CandidateDestination;
@@ -25,7 +28,6 @@ import org.tctalent.anonymization.model.IdentifiablePartner;
 import org.tctalent.anonymization.model.Language;
 import org.tctalent.anonymization.model.LanguageLevel;
 import org.tctalent.anonymization.model.Occupation;
-import org.tctalent.anonymization.model.SurveyType;
 
 @Mapper(
     componentModel = "spring",
@@ -46,7 +48,7 @@ public interface EntityMapper {
   @Mapping(target = "partnerOccupationIsco08Code", source = "partnerOccupation", qualifiedByName = "mapOccupationToIscoCode")
   @Mapping(target = "partnerOccupationName", source = "partnerOccupation", qualifiedByName = "mapOccupationToName")
   @Mapping(target = "partnerPublicId", source = "partnerCandidate", qualifiedByName = "mapPartnerToPublicId")
-  @Mapping(target = "surveyType", source = "surveyType", qualifiedByName = "mapSurveyTypeToName")
+  @Mapping(target = "howHeardAboutUs", source = "candidate", qualifiedByName = "mapEnumToHowHeardAboutUs")
   CandidateEntity anonymize(IdentifiableCandidate candidate);
 
   @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
@@ -136,8 +138,37 @@ public interface EntityMapper {
     return (partner != null) ? partner.getPublicId() : null;
   }
 
-  @Named("mapSurveyTypeToName")
-  default String mapSurveyTypeToName(SurveyType surveyType) {
-    return (surveyType != null) ? surveyType.getName() : null;
+
+  @Named("mapEnumToHowHeardAboutUs")
+  default HowHeardAboutUs mapEnumToHowHeardAboutUs(IdentifiableCandidate candidate) {
+    if (candidate.getSurveyType() == null || candidate.getSurveyType().getName() == null) {
+      return null;
+    }
+    String surveyTypeName = candidate.getSurveyType().getName();
+
+    final Map<String, HowHeardAboutUs> SURVEY_TYPE_MAPPING = new HashMap<>();
+    SURVEY_TYPE_MAPPING.put("Online Google Search", HowHeardAboutUs.ONLINE_GOOGLE_SEARCH);
+    SURVEY_TYPE_MAPPING.put("Facebook", HowHeardAboutUs.FACEBOOK);
+    SURVEY_TYPE_MAPPING.put("Instagram", HowHeardAboutUs.INSTAGRAM);
+    SURVEY_TYPE_MAPPING.put("LinkedIn", HowHeardAboutUs.LINKEDIN);
+    SURVEY_TYPE_MAPPING.put("X", HowHeardAboutUs.X);
+    SURVEY_TYPE_MAPPING.put("WhatsApp", HowHeardAboutUs.WHATSAPP);
+    SURVEY_TYPE_MAPPING.put("YouTube", HowHeardAboutUs.YOUTUBE);
+    SURVEY_TYPE_MAPPING.put("Friend or colleague referral", HowHeardAboutUs.FRIEND_COLLEAGUE_REFERRAL);
+    SURVEY_TYPE_MAPPING.put("University or school referral", HowHeardAboutUs.UNIVERSITY_SCHOOL_REFERRAL);
+    SURVEY_TYPE_MAPPING.put("Employer referral", HowHeardAboutUs.EMPLOYER_REFERRAL);
+    SURVEY_TYPE_MAPPING.put("Event or webinar", HowHeardAboutUs.EVENT_WEBINAR);
+    SURVEY_TYPE_MAPPING.put("Information Session", HowHeardAboutUs.INFORMATION_SESSION);
+    SURVEY_TYPE_MAPPING.put("Community centre posting - flyers", HowHeardAboutUs.COMMUNITY_CENTRE_POSTING_FLYERS);
+    SURVEY_TYPE_MAPPING.put("Outreach worker", HowHeardAboutUs.OUTREACH_WORKER);
+    SURVEY_TYPE_MAPPING.put("NGO", HowHeardAboutUs.NGO);
+    SURVEY_TYPE_MAPPING.put("UNHCR", HowHeardAboutUs.UNHCR);
+    SURVEY_TYPE_MAPPING.put("Other", HowHeardAboutUs.OTHER);
+    HowHeardAboutUs mappedValue = SURVEY_TYPE_MAPPING.get(surveyTypeName);
+    try {
+        return mappedValue;
+    } catch (IllegalArgumentException e) {
+      return HowHeardAboutUs.OTHER;
+    }
   }
 }
