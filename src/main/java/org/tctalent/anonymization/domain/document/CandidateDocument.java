@@ -155,7 +155,7 @@ public class CandidateDocument extends AbstractDomainDocument<ObjectId> {
   private YesNoUnsure returnHomeFuture;
   private YesNo resettleThird;
   private CandidateStatus status;
-  private SurveyType surveyType;
+  private String howHeardAboutUs;
   private YesNo unhcrConsent;
   private NotRegisteredStatus unhcrNotRegStatus;
   private YesNoUnsure unhcrRegistered;
