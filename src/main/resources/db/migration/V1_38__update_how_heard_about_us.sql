@@ -2,34 +2,27 @@
 ALTER TABLE candidate
     ADD COLUMN how_heard_about_us VARCHAR(255);
 
--- Step 2: Populate the new how_heard_about_us column based on the existing survey_type_id
-UPDATE candidate
-SET how_heard_about_us =
-        CASE
-            WHEN survey_type = 'Online Google search' THEN 'ONLINE_GOOGLE_SEARCH'
-            WHEN survey_type = 'Facebook' THEN 'FACEBOOK'
-            WHEN survey_type = 'Instagram' THEN 'INSTAGRAM'
-            WHEN survey_type = 'LinkedIn' THEN 'LINKEDIN'
-            WHEN survey_type = 'X' THEN 'X'
-            WHEN survey_type = 'WhatsApp' THEN 'WHATSAPP'
-            WHEN survey_type = 'YouTube' THEN 'YOUTUBE'
-            WHEN survey_type = 'Friend or colleague referral' THEN 'FRIEND_COLLEAGUE_REFERRAL'
-            WHEN survey_type = 'University or school referral' THEN 'UNIVERSITY_SCHOOL_REFERRAL'
-            WHEN survey_type = 'Employer referral' THEN 'EMPLOYER_REFERRAL'
-            WHEN survey_type = 'Event or webinar' THEN 'EVENT_WEBINAR'
-            WHEN survey_type = 'Information Session' THEN 'INFORMATION_SESSION'
-            WHEN survey_type = 'Community centre posting - flyers' THEN 'COMMUNITY_CENTRE_POSTING_FLYERS'
-            WHEN survey_type = 'Outreach worker' THEN 'OUTREACH_WORKER'
-            WHEN survey_type = 'NGO' THEN 'NGO'
-            WHEN survey_type = 'UNHCR' THEN 'UNHCR'
-            WHEN survey_type = 'Other' THEN 'OTHER'
-            ELSE 'OTHER'
-            END;
+update survey_type
+set name = 'Friend or colleague referral'
+where name = 'From a friend';
 
--- -- Step 3: Drop the old survey_type column from the candidate table
-ALTER TABLE candidate
-DROP COLUMN survey_type;
+-- Merge 'Facebook - through an organisation' into 'Facebook'
+update survey_type
+set name = 'Facebook'
+where name = 'Facebook - through an organisation';
 
--- Step 4: Drop the survey_type table since it's no longer needed
-DROP TABLE survey_type CASCADE;
+-- Insert new values from HowHeardAboutUs enum that are not in the table
+insert into survey_type (id,name, status) values (14,'Online Google search', 'active');
+insert into survey_type (id,name, status) values (15,'Instagram', 'active');
+insert into survey_type (id,name, status) values (16,'LinkedIn', 'active');
+insert into survey_type (id,name, status) values (17,'X', 'active');
+insert into survey_type (id,name, status) values (18,'WhatsApp', 'active');
+insert into survey_type (id,name, status) values (19,'YouTube', 'active');
+insert into survey_type (id,name, status) values (20,'University or school referral', 'active');
+insert into survey_type (id,name, status) values (21,'Employer referral', 'active');
+insert into survey_type (id,name, status) values (22,'Event or webinar', 'active');
 
+-- Update candidate Facebook - through an organisation to Facebook
+update candidate
+set survey_type = 'Facebook'
+where survey_type = 'Facebook - through an organisation';
