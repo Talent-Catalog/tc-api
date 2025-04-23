@@ -18,11 +18,13 @@ SET how_heard_about_us =
             WHEN LOWER(TRIM(survey_type)) = 'outreach worker' THEN 'OUTREACH_WORKER'
             WHEN LOWER(TRIM(survey_type)) = 'ngo' THEN 'NGO'
             WHEN LOWER(TRIM(survey_type)) = 'unhcr' THEN 'UNHCR'
+            WHEN LOWER(TRIM(survey_type)) = 'US-Afghan' THEN 'US_AFGHAN'
+            WHEN LOWER(TRIM(survey_type)) = 'ULYP' THEN 'ULYP'
+            WHEN LOWER(TRIM(survey_type)) = 'Techfugees' THEN 'TECHFUGEES'
+            WHEN LOWER(TRIM(survey_type)) = 'Al Ghurair Foundation' THEN 'AL_GHURAIR_FOUNDATION'
             WHEN LOWER(TRIM(survey_type)) = 'other' THEN 'OTHER'
             ELSE 'OTHER'
             END;
-
-
 
 -- Remove  facebook through an organisation record
 delete from survey_type
@@ -33,4 +35,3 @@ DROP COLUMN survey_type;
 
 -- Step 4: Drop the survey_type table since it's no longer needed
 DROP TABLE survey_type CASCADE;
-
