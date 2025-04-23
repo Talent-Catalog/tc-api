@@ -48,7 +48,7 @@ public interface EntityMapper {
   @Mapping(target = "partnerOccupationIsco08Code", source = "partnerOccupation", qualifiedByName = "mapOccupationToIscoCode")
   @Mapping(target = "partnerOccupationName", source = "partnerOccupation", qualifiedByName = "mapOccupationToName")
   @Mapping(target = "partnerPublicId", source = "partnerCandidate", qualifiedByName = "mapPartnerToPublicId")
-  @Mapping(target = "howHeardAboutUs", source = "candidate", qualifiedByName = "mapEnumToHowHeardAboutUs")
+  @Mapping(target = "howHeardAboutUs", source = "candidate", qualifiedByName = "mapSurveyTypeToHowHeardAboutUs")
   CandidateEntity anonymize(IdentifiableCandidate candidate);
 
   @Mapping(target = "countryIsoCode", source = "country", qualifiedByName = "mapCountryToIsoCode")
@@ -139,7 +139,7 @@ public interface EntityMapper {
   }
 
 
-  @Named("mapEnumToHowHeardAboutUs")
+  @Named("mapSurveyTypeToHowHeardAboutUs")
   default HowHeardAboutUs mapEnumToHowHeardAboutUs(IdentifiableCandidate candidate) {
     if (candidate.getSurveyType() == null || candidate.getSurveyType().getName() == null) {
       return null;
@@ -149,12 +149,14 @@ public interface EntityMapper {
     final Map<String, HowHeardAboutUs> SURVEY_TYPE_MAPPING = new HashMap<>();
     SURVEY_TYPE_MAPPING.put("Online Google Search", HowHeardAboutUs.ONLINE_GOOGLE_SEARCH);
     SURVEY_TYPE_MAPPING.put("Facebook", HowHeardAboutUs.FACEBOOK);
+    SURVEY_TYPE_MAPPING.put("Facebook - through an organisation", HowHeardAboutUs.FACEBOOK);
     SURVEY_TYPE_MAPPING.put("Instagram", HowHeardAboutUs.INSTAGRAM);
     SURVEY_TYPE_MAPPING.put("LinkedIn", HowHeardAboutUs.LINKEDIN);
     SURVEY_TYPE_MAPPING.put("X", HowHeardAboutUs.X);
     SURVEY_TYPE_MAPPING.put("WhatsApp", HowHeardAboutUs.WHATSAPP);
     SURVEY_TYPE_MAPPING.put("YouTube", HowHeardAboutUs.YOUTUBE);
     SURVEY_TYPE_MAPPING.put("Friend or colleague referral", HowHeardAboutUs.FRIEND_COLLEAGUE_REFERRAL);
+    SURVEY_TYPE_MAPPING.put("From a friend", HowHeardAboutUs.FRIEND_COLLEAGUE_REFERRAL);
     SURVEY_TYPE_MAPPING.put("University or school referral", HowHeardAboutUs.UNIVERSITY_SCHOOL_REFERRAL);
     SURVEY_TYPE_MAPPING.put("Employer referral", HowHeardAboutUs.EMPLOYER_REFERRAL);
     SURVEY_TYPE_MAPPING.put("Event or webinar", HowHeardAboutUs.EVENT_WEBINAR);
@@ -163,6 +165,10 @@ public interface EntityMapper {
     SURVEY_TYPE_MAPPING.put("Outreach worker", HowHeardAboutUs.OUTREACH_WORKER);
     SURVEY_TYPE_MAPPING.put("NGO", HowHeardAboutUs.NGO);
     SURVEY_TYPE_MAPPING.put("UNHCR", HowHeardAboutUs.UNHCR);
+    SURVEY_TYPE_MAPPING.put("US-Afghan", HowHeardAboutUs.US_AFGHAN);
+    SURVEY_TYPE_MAPPING.put("ULYP", HowHeardAboutUs.ULYP);
+    SURVEY_TYPE_MAPPING.put("Techfugees", HowHeardAboutUs.TECHFUGEES);
+    SURVEY_TYPE_MAPPING.put("Al Ghurair Foundation", HowHeardAboutUs.AL_GHURAIR_FOUNDATION);
     SURVEY_TYPE_MAPPING.put("Other", HowHeardAboutUs.OTHER);
     HowHeardAboutUs mappedValue = SURVEY_TYPE_MAPPING.get(surveyTypeName);
     try {
