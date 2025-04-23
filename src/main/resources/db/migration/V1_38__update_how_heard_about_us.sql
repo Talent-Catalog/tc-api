@@ -26,3 +26,7 @@ insert into survey_type (id,name, status) values (22,'Event or webinar', 'active
 update candidate
 set survey_type = 'Facebook'
 where survey_type = 'Facebook - through an organisation';
+
+update candidate
+set survey_type = 'Friend or colleague referral'
+where survey_type = 'From a friend';
