@@ -18,5 +18,9 @@ public enum HowHeardAboutUs {
   OUTREACH_WORKER,
   NGO,
   UNHCR,
+  US_AFGHAN,
+  ULYP,
+  TECHFUGEES,
+  AL_GHURAIR_FOUNDATION,
   OTHER
 }
