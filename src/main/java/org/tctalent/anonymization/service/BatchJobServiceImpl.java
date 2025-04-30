@@ -91,7 +91,11 @@ public class BatchJobServiceImpl implements BatchJobService {
     LocalDateTime start = exec.getStartTime();
     LocalDateTime end   = exec.getEndTime();
     return String.format(
-        "[%d] %s %s %s - %s%n",
+        "Execution ID: %d%n" +
+            "Job Name    : %s%n" +
+            "Status      : %s%n" +
+            "Start Time  : %s%n" +
+            "End Time    : %s%n%n",
         exec.getId(),
         exec.getJobInstance().getJobName(),
         exec.getStatus(),
