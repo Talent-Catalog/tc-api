@@ -28,19 +28,18 @@ public class BatchJobServiceImpl implements BatchJobService {
 
   private final JobLauncher asyncJobLauncher;
   private final Job candidateMigrationJob;
-  private final JobExplorer jobExplorer;
   private final JobOperator jobOperator;
-
+  private final JobExplorer jobExplorer;
 
   public BatchJobServiceImpl(
       @Qualifier("asyncJobLauncher") JobLauncher asyncJobLauncher,
       @Qualifier("candidateMigrationJob") Job candidateMigrationJob,
-      JobExplorer jobExplorer,
-      JobOperator jobOperator) {
+      @Qualifier("asyncJobOperator") JobOperator jobOperator,
+      JobExplorer jobExplorer) {
     this.asyncJobLauncher = asyncJobLauncher;
     this.candidateMigrationJob = candidateMigrationJob;
-    this.jobExplorer = jobExplorer;
     this.jobOperator = jobOperator;
+    this.jobExplorer = jobExplorer;
   }
 
   /**

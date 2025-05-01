@@ -4,8 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.bson.codecs.configuration.CodecConfigurationException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
+import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -188,6 +192,23 @@ public class BatchConfig {
     jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
     jobLauncher.afterPropertiesSet();
     return jobLauncher;
+  }
+
+  @Bean
+  @Qualifier("asyncJobOperator")
+  public JobOperator asyncJobOperator(JobExplorer jobExplorer,
+      JobRepository jobRepository,
+      JobRegistry jobRegistry,
+      @Qualifier("asyncJobLauncher") JobLauncher asyncJobLauncher) throws Exception {
+
+    SimpleJobOperator jobOperator = new SimpleJobOperator();
+    jobOperator.setJobExplorer(jobExplorer);
+    jobOperator.setJobRepository(jobRepository);
+    jobOperator.setJobRegistry(jobRegistry);
+    jobOperator.setJobLauncher(asyncJobLauncher);  // Using the async job launcher
+    jobOperator.afterPropertiesSet();
+
+    return jobOperator;
   }
 
 }
