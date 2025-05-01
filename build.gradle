@@ -39,6 +39,7 @@ repositories {
 ext {
     mapstructVersion = "1.6.3"
     lombokMapstructBindingVersion = "0.2.0"
+    beanUtilsVersion = "1.9.4"
 }
 
 // Project dependencies
@@ -73,7 +74,7 @@ dependencies {
 
     // Additional libraries required by imported TC entities - todo check dependencies for curated versions or move to ext
     implementation "org.apache.commons:commons-lang3"
-    implementation ("commons-beanutils:commons-beanutils:1.9.4") { // todo - move version to ext - not a spring boot curated dep
+    implementation ("commons-beanutils:commons-beanutils:${beanUtilsVersion}") {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
     implementation "org.jsoup:jsoup:1.15.4"
