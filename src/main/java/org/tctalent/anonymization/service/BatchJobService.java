@@ -5,8 +5,8 @@ import org.springframework.batch.core.JobExecutionException;
 /**
  * Service interface for managing and running Spring Batch jobs.
  * <p>
- * Provides operations to launch the candidate anonymisation job and to retrieve a plain-text
- * summary of recent job executions.
+ * Provides operations to launch, stop and restart the candidate anonymisation job and to retrieve
+ * a plain-text summary of recent job executions.
  * </p>
  */
 public interface BatchJobService {
