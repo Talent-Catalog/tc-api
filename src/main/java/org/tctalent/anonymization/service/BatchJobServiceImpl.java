@@ -97,6 +97,12 @@ public class BatchJobServiceImpl implements BatchJobService {
         : "Job execution " + executionId + " could not be stopped (maybe already completed or not running).";
   }
 
+  @Override
+  public String restartJobExecution(Long executionId) throws Exception {
+    Long newExecutionId = jobOperator.restart(executionId);
+    return "Job execution " + executionId + " was restarted successfully with new execution ID: " + newExecutionId;
+  }
+
   /**
    * Formats a single JobExecution as: [<executionId>] <jobName> <status> <startTime> - <endTime>
    */

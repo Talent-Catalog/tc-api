@@ -27,4 +27,9 @@ public interface BatchJobService {
    */
   String stopJobExecution(Long executionId) throws Exception;
 
+  /**
+   * Attempts to restart a failed job execution by ID.
+   */
+  String restartJobExecution(Long executionId) throws Exception;
+
 }

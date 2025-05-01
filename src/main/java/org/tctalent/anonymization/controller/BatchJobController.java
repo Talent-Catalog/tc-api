@@ -67,4 +67,18 @@ public class BatchJobController {
     return ResponseEntity.ok(message);
   }
 
+  /**
+   * Attempts to restart a failed job execution.
+   *
+   * @param executionId the ID of the failed job execution to restart
+   * @return a 200 OK response with a message including the new execution ID
+   * @throws Exception if the restart fails (e.g. if the job isn't restartable)
+   */
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @PostMapping("/jobs/{executionId}/restart")
+  public ResponseEntity<String> restartJobExecution(@PathVariable Long executionId) throws Exception {
+    String message = batchJobService.restartJobExecution(executionId);
+    return ResponseEntity.ok(message);
+  }
+
 }
