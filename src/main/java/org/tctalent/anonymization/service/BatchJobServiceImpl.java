@@ -11,6 +11,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +29,18 @@ public class BatchJobServiceImpl implements BatchJobService {
   private final JobLauncher asyncJobLauncher;
   private final Job candidateMigrationJob;
   private final JobExplorer jobExplorer;
+  private final JobOperator jobOperator;
+
 
   public BatchJobServiceImpl(
       @Qualifier("asyncJobLauncher") JobLauncher asyncJobLauncher,
       @Qualifier("candidateMigrationJob") Job candidateMigrationJob,
-      JobExplorer jobExplorer) {
+      JobExplorer jobExplorer,
+      JobOperator jobOperator) {
     this.asyncJobLauncher = asyncJobLauncher;
     this.candidateMigrationJob = candidateMigrationJob;
     this.jobExplorer = jobExplorer;
+    this.jobOperator = jobOperator;
   }
 
   /**
@@ -82,6 +87,14 @@ public class BatchJobServiceImpl implements BatchJobService {
     }
 
     return !sb.isEmpty() ? sb.toString() : "No job executions found.";
+  }
+
+  @Override
+  public String stopJobExecution(Long executionId) throws Exception {
+    boolean stopped = jobOperator.stop(executionId);
+    return stopped
+        ? "Job execution " + executionId + " stop initiated successfully."
+        : "Job execution " + executionId + " could not be stopped (maybe already completed or not running).";
   }
 
   /**

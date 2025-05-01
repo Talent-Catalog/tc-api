@@ -5,6 +5,7 @@ import org.springframework.batch.core.JobExecutionException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,6 +51,20 @@ public class BatchJobController {
   public ResponseEntity<String> getJobExecutions() {
     String summary = batchJobService.getJobExecutionsSummary();
     return ResponseEntity.ok(summary);
+  }
+
+  /**
+   * Attempts to stop a running job execution.
+   *
+   * @param executionId the ID of the job execution to stop
+   * @return a ResponseEntity containing a message indicating whether the stop request was initiated successfully.
+   * @throws Exception if the stop operation fails (e.g. invalid execution ID or internal error)
+   */
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @PostMapping("/jobs/{executionId}/stop")
+  public ResponseEntity<String> stopJobExecution(@PathVariable Long executionId) throws Exception {
+    String message = batchJobService.stopJobExecution(executionId);
+    return ResponseEntity.ok(message);
   }
 
 }

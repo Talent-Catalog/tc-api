@@ -22,4 +22,9 @@ public interface BatchJobService {
    */
   String getJobExecutionsSummary();
 
- }
+  /**
+   * Attempts to stop a running job execution by ID.
+   */
+  String stopJobExecution(Long executionId) throws Exception;
+
+}
