@@ -68,7 +68,7 @@ public class BatchJobController {
   }
 
   /**
-   * Attempts to restart a failed job execution.
+   * Attempts to restart a job execution.
    *
    * @param executionId the ID of the failed job execution to restart
    * @return a 200 OK response with a message including the new execution ID
