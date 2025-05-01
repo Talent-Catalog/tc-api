@@ -25,6 +25,7 @@ import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -33,6 +34,7 @@ class BatchJobServiceImplTest {
   @Mock private JobLauncher asyncJobLauncher;
   @Mock private Job candidateMigrationJob;
   @Mock private JobExplorer jobExplorer;
+  @Mock private JobOperator jobOperator;
 
   @InjectMocks private BatchJobServiceImpl service;
 
@@ -117,6 +119,41 @@ class BatchJobServiceImplTest {
 
     // Then
     assertEquals("No job executions found.", summary);
+  }
+
+  @Test
+  @DisplayName("Get job execution summary with no executions")
+  void stopJobExecution_shouldReturnSuccessMessage_whenStopped() throws Exception {
+    long executionId = 1L;
+    when(jobOperator.stop(executionId)).thenReturn(true);
+
+    String result = service.stopJobExecution(executionId);
+
+    assertEquals("Job execution 1 stop initiated successfully.", result);
+  }
+
+  @Test
+  @DisplayName("Get job execution summary with no executions")
+  void stopJobExecution_shouldReturnFailureMessage_whenNotStopped() throws Exception {
+    long executionId = 2L;
+    when(jobOperator.stop(executionId)).thenReturn(false);
+
+    String result = service.stopJobExecution(executionId);
+
+    assertEquals("Job execution 2 could not be stopped (maybe already completed or not running).", result);
+  }
+
+  @Test
+  @DisplayName("Restart job execution should return success message with new execution ID")
+  void restartJobExecution_shouldReturnSuccessMessage_withNewExecutionId() throws Exception {
+    long oldExecutionId = 3L;
+    long newExecutionId = 100L;
+
+    when(jobOperator.restart(oldExecutionId)).thenReturn(newExecutionId);
+
+    String result = service.restartJobExecution(oldExecutionId);
+
+    assertEquals("Job execution 3 was restarted successfully with new execution ID: 100", result);
   }
 
 }
