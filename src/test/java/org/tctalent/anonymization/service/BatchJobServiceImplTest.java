@@ -101,8 +101,12 @@ class BatchJobServiceImplTest {
 
     // Then
     String expectedLine = String.format(
-        "[%d] %s %s %s - %s",
-        100L, "jobA", "COMPLETED", start.toString(), end.toString()
+        "Execution ID: %d%n" +
+            "Job Name    : %s%n" +
+            "Status      : %s%n" +
+            "Start Time  : %s%n" +
+            "End Time    : %s%n%n",
+        100L, "jobA", "COMPLETED", start, end
     );
     assertTrue(summary.contains(expectedLine));
     assertTrue(summary.endsWith("\n")); // Check each line ends with a newline
@@ -114,19 +118,20 @@ class BatchJobServiceImplTest {
     // Given no job names
     when(jobExplorer.getJobNames()).thenReturn(Collections.emptyList());
 
-    // When
+    // When / Then
     String summary = service.getJobExecutionsSummary();
 
-    // Then
     assertEquals("No job executions found.", summary);
   }
 
   @Test
   @DisplayName("Get job execution summary with no executions")
   void stopJobExecution_shouldReturnSuccessMessage_whenStopped() throws Exception {
+    // Given
     long executionId = 1L;
     when(jobOperator.stop(executionId)).thenReturn(true);
 
+    // When / Then
     String result = service.stopJobExecution(executionId);
 
     assertEquals("Job execution 1 stop initiated successfully.", result);
@@ -135,9 +140,11 @@ class BatchJobServiceImplTest {
   @Test
   @DisplayName("Get job execution summary with no executions")
   void stopJobExecution_shouldReturnFailureMessage_whenNotStopped() throws Exception {
+    // Given
     long executionId = 2L;
     when(jobOperator.stop(executionId)).thenReturn(false);
 
+    // When / Then
     String result = service.stopJobExecution(executionId);
 
     assertEquals("Job execution 2 could not be stopped (maybe already completed or not running).", result);
@@ -146,11 +153,13 @@ class BatchJobServiceImplTest {
   @Test
   @DisplayName("Restart job execution should return success message with new execution ID")
   void restartJobExecution_shouldReturnSuccessMessage_withNewExecutionId() throws Exception {
+    // Given
     long oldExecutionId = 3L;
     long newExecutionId = 100L;
 
     when(jobOperator.restart(oldExecutionId)).thenReturn(newExecutionId);
 
+    // When / Then
     String result = service.restartJobExecution(oldExecutionId);
 
     assertEquals("Job execution 3 was restarted successfully with new execution ID: 100", result);
