@@ -5,7 +5,7 @@ import org.springframework.batch.core.JobExecutionException;
 /**
  * Service interface for managing and running Spring Batch jobs.
  * <p>
- * Provides operations to launch, stop and restart the candidate anonymisation job and to retrieve
+ * Provides operations to launch, stop and restart the candidate migration jobs and to retrieve
  * a plain-text summary of recent job executions.
  * </p>
  */
@@ -16,6 +16,18 @@ public interface BatchJobService {
    * Returns a confirmation message or throws on failure.
    */
   String runCandidateMigrationJob() throws JobExecutionException;
+
+  /**
+   * Launches the auroraMigrationJob.
+   * Returns a confirmation message or throws on failure.
+   */
+  String runAuroraMigrationJob() throws JobExecutionException;
+
+  /**
+   * Launches the mongoMigrationJob.
+   * Returns a confirmation message or throws on failure.
+   */
+  String runMongoMigrationJob() throws JobExecutionException;
 
   /**
    * Builds a plain-text summary of job executions.
