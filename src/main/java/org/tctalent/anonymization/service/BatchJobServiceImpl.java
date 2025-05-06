@@ -2,6 +2,8 @@ package org.tctalent.anonymization.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -82,21 +84,28 @@ public class BatchJobServiceImpl implements BatchJobService {
   }
 
   /**
-   * Builds a plain-text summary of up to 20 recent executions per job.
+   * Builds a plain-text summary of up to 20 recent executions per job, sorted by execution ID.
    * Each line: [executionId] jobName status startTime - endTime
    */
   @Override
   public String getJobExecutionsSummary() {
-    StringBuilder sb = new StringBuilder();
+    List<JobExecution> allExecutions = new ArrayList<>();
 
     for (String jobName : jobExplorer.getJobNames()) {
       // fetch up to 20 recent instances
       List<JobInstance> instances = jobExplorer.getJobInstances(jobName, 0, 20);
       for (JobInstance instance : instances) {
-        for (JobExecution exec : jobExplorer.getJobExecutions(instance)) {
-          sb.append(formatExecution(exec));
-        }
+        allExecutions.addAll(jobExplorer.getJobExecutions(instance));
       }
+    }
+
+    // Sort by execution ID in descending order
+    allExecutions.sort(Comparator.comparing(JobExecution::getId).reversed());
+
+    // Build the summary string
+    StringBuilder sb = new StringBuilder();
+    for (JobExecution exec : allExecutions) {
+      sb.append(formatExecution(exec));
     }
 
     return !sb.isEmpty() ? sb.toString() : "No job executions found.";
