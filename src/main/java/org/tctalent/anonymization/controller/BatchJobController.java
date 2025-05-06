@@ -42,6 +42,32 @@ public class BatchJobController {
   }
 
   /**
+   * Launches the aurora migration batch job.
+   *
+   * @return a ResponseEntity with a success message if the job is launched successfully
+   * @throws JobExecutionException if the job launch fails
+   */
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @PostMapping("/jobs/run/aurora")
+  public ResponseEntity<String> runAuroraJob() throws Exception {
+    String message = batchJobService.runAuroraMigrationJob();
+    return ResponseEntity.ok(message);
+  }
+
+  /**
+   * Launches the mongo migration batch job.
+   *
+   * @return a ResponseEntity with a success message if the job is launched successfully
+   * @throws JobExecutionException if the job launch fails
+   */
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @PostMapping("/jobs/run/mongo")
+  public ResponseEntity<String> runMongoJob() throws Exception {
+    String message = batchJobService.runMongoMigrationJob();
+    return ResponseEntity.ok(message);
+  }
+
+  /**
    * Returns a plain-text list of recent job executions.
    *
    * @return a list of JobExecutionInfo DTOs
