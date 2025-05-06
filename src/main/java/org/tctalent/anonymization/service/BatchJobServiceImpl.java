@@ -28,43 +28,57 @@ public class BatchJobServiceImpl implements BatchJobService {
 
   private final JobLauncher asyncJobLauncher;
   private final Job candidateMigrationJob;
+  private final Job auroraMigrationJob;
+  private final Job mongoMigrationJob;
   private final JobOperator jobOperator;
   private final JobExplorer jobExplorer;
 
   public BatchJobServiceImpl(
       @Qualifier("asyncJobLauncher") JobLauncher asyncJobLauncher,
       @Qualifier("candidateMigrationJob") Job candidateMigrationJob,
+      @Qualifier("auroraMigrationJob") Job auroraMigrationJob,
+      @Qualifier("mongoMigrationJob") Job mongoMigrationJob,
       @Qualifier("asyncJobOperator") JobOperator jobOperator,
       JobExplorer jobExplorer) {
     this.asyncJobLauncher = asyncJobLauncher;
     this.candidateMigrationJob = candidateMigrationJob;
+    this.auroraMigrationJob = auroraMigrationJob;
+    this.mongoMigrationJob = mongoMigrationJob;
     this.jobOperator = jobOperator;
     this.jobExplorer = jobExplorer;
   }
 
   /**
-   * Launches the candidate anonymisation batch job. A unique job parameter "jobDate" is added
-   * based on the current date to enforce a single job instance per day.
+   * Launches the full candidate anonymisation batch job.
    *
    * @return a String with a success message if the job is launched successfully
    * @throws JobExecutionException if the job launch fails
    */
   @Override
   public String runCandidateMigrationJob() throws JobExecutionException {
-    try {
-      // Job params must be unique per job execution, if not the job will not run
-      // We enforce a max of one job instance per day by setting a date parameter
-      JobParameters params = new JobParametersBuilder()
-          .addString("jobDate", LocalDate.now().toString()) // e.g., "2025-04-15"
-          .toJobParameters();
+    return launchJob(candidateMigrationJob, "full");
+  }
 
-      asyncJobLauncher.run(candidateMigrationJob, params);
-      return "Job '" + candidateMigrationJob.getName() + "' launched successfully.";
+  /**
+   * Launches the aurora migration batch job.
+   *
+   * @return a String with a success message if the job is launched successfully
+   * @throws JobExecutionException if the job launch fails
+   */
+  @Override
+  public String runAuroraMigrationJob() throws JobExecutionException {
+    return launchJob(auroraMigrationJob, "aurora");
+  }
 
-    } catch (Exception e) {
-      throw new JobExecutionException("Job launch failed: " + e.getMessage());
-    }
-
+  /**
+   * Launches the mongo migration batch job.
+   *
+   * @return a String with a success message if the job is launched successfully
+   * @throws JobExecutionException if the job launch fails
+   */
+  @Override
+  public String runMongoMigrationJob() throws JobExecutionException {
+    return launchJob(mongoMigrationJob, "mongo");
   }
 
   /**
@@ -100,6 +114,23 @@ public class BatchJobServiceImpl implements BatchJobService {
   public String restartJobExecution(Long executionId) throws Exception {
     Long newExecutionId = jobOperator.restart(executionId);
     return "Job execution " + executionId + " was restarted successfully with new execution ID: " + newExecutionId;
+  }
+
+  private String launchJob(Job job, String label) throws JobExecutionException {
+    try {
+      // Job params must be unique per job execution, if not the job will not run
+      // We enforce a max of one job instance per job type per day by setting a date parameter
+      JobParameters params = new JobParametersBuilder()
+          .addString("jobDate", LocalDate.now().toString()) // e.g., "2025-04-15"
+          .addString("jobLabel", label)
+          .toJobParameters();
+
+      asyncJobLauncher.run(job, params);
+      return "Job '" + job.getName() + "' launched successfully.";
+
+    } catch (Exception e) {
+      throw new JobExecutionException("Job launch failed: " + e.getMessage(), e);
+    }
   }
 
   /**
