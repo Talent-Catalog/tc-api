@@ -15,7 +15,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
@@ -33,14 +32,27 @@ class BatchJobServiceImplTest {
 
   @Mock private JobLauncher asyncJobLauncher;
   @Mock private Job candidateMigrationJob;
+  @Mock private Job auroraMigrationJob;
+  @Mock private Job mongoMigrationJob;
   @Mock private JobExplorer jobExplorer;
   @Mock private JobOperator jobOperator;
 
-  @InjectMocks private BatchJobServiceImpl service;
+  private BatchJobServiceImpl service;
 
   @BeforeEach
   void setup() {
     when(candidateMigrationJob.getName()).thenReturn("candidateMigrationJob");
+    when(auroraMigrationJob.getName()).thenReturn("auroraMigrationJob");
+    when(mongoMigrationJob.getName()).thenReturn("mongoMigrationJob");
+
+    service = new BatchJobServiceImpl(
+        asyncJobLauncher,
+        candidateMigrationJob,
+        auroraMigrationJob,
+        mongoMigrationJob,
+        jobOperator,
+        jobExplorer
+    );
   }
 
   @Test
@@ -52,7 +64,7 @@ class BatchJobServiceImplTest {
     // Then
     assertEquals("Job 'candidateMigrationJob' launched successfully.", result);
 
-    // And verify that we passed a 'jobDate' param equal to today
+    // And verify that we passed a 'jobDate' param equal to today and a label param
     ArgumentCaptor<JobParameters> captor = ArgumentCaptor.forClass(JobParameters.class);
     verify(asyncJobLauncher).run(eq(candidateMigrationJob), captor.capture());
 
@@ -60,6 +72,8 @@ class BatchJobServiceImplTest {
     assertTrue(params.getParameters().containsKey("jobDate"));
     String dateParam = params.getString("jobDate");
     assertEquals(LocalDate.now().toString(), dateParam);
+    String labelParam = params.getString("jobLabel");
+    assertEquals("full", labelParam);
   }
 
   @Test
@@ -73,6 +87,76 @@ class BatchJobServiceImplTest {
     // When / Then
     JobExecutionException ex =
         assertThrows(JobExecutionException.class, () -> service.runCandidateMigrationJob());
+    assertTrue(ex.getMessage().contains("Job launch failed: boom!"));
+  }
+
+  @Test
+  @DisplayName("Run aurora migration job")
+  void runAuroraMigrationJob_success() throws Exception {
+    // When
+    String result = service.runAuroraMigrationJob();
+
+    // Then
+    assertEquals("Job 'auroraMigrationJob' launched successfully.", result);
+
+    // And verify that we passed a 'jobDate' param equal to today and a label
+    ArgumentCaptor<JobParameters> captor = ArgumentCaptor.forClass(JobParameters.class);
+    verify(asyncJobLauncher).run(eq(auroraMigrationJob), captor.capture());
+
+    JobParameters params = captor.getValue();
+    assertTrue(params.getParameters().containsKey("jobDate"));
+    String dateParam = params.getString("jobDate");
+    assertEquals(LocalDate.now().toString(), dateParam);
+    String labelParam = params.getString("jobLabel");
+    assertEquals("aurora", labelParam);
+  }
+
+  @Test
+  @DisplayName("Run aurora migration job fails")
+  void runAuroraMigrationJob_failure() throws Exception {
+    // Given
+    when(asyncJobLauncher
+        .run(eq(auroraMigrationJob), any(JobParameters.class)))
+        .thenThrow(new RuntimeException("boom!"));
+
+    // When / Then
+    JobExecutionException ex =
+        assertThrows(JobExecutionException.class, () -> service.runAuroraMigrationJob());
+    assertTrue(ex.getMessage().contains("Job launch failed: boom!"));
+  }
+
+  @Test
+  @DisplayName("Run mongo migration job")
+  void runMongoMigrationJob_success() throws Exception {
+    // When
+    String result = service.runMongoMigrationJob();
+
+    // Then
+    assertEquals("Job 'mongoMigrationJob' launched successfully.", result);
+
+    // And verify that we passed a 'jobDate' param equal to today and job label param
+    ArgumentCaptor<JobParameters> captor = ArgumentCaptor.forClass(JobParameters.class);
+    verify(asyncJobLauncher).run(eq(mongoMigrationJob), captor.capture());
+
+    JobParameters params = captor.getValue();
+    assertTrue(params.getParameters().containsKey("jobDate"));
+    String dateParam = params.getString("jobDate");
+    assertEquals(LocalDate.now().toString(), dateParam);
+    String labelParam = params.getString("jobLabel");
+    assertEquals("mongo", labelParam);
+  }
+
+  @Test
+  @DisplayName("Run mongo migration job fails")
+  void runMongoMigrationJob_failure() throws Exception {
+    // Given
+    when(asyncJobLauncher
+        .run(eq(mongoMigrationJob), any(JobParameters.class)))
+        .thenThrow(new RuntimeException("boom!"));
+
+    // When / Then
+    JobExecutionException ex =
+        assertThrows(JobExecutionException.class, () -> service.runMongoMigrationJob());
     assertTrue(ex.getMessage().contains("Job launch failed: boom!"));
   }
 
