@@ -1,5 +1,6 @@
 package org.tctalent.anonymization.service;
 
+import jakarta.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class BatchJobServiceImpl implements BatchJobService {
    */
   @Override
   public String runCandidateMigrationJob() throws JobExecutionException {
-    return launchJob(candidateMigrationJob, "full");
+    return launchJob(candidateMigrationJob, "full", null);
   }
 
   /**
@@ -69,7 +70,7 @@ public class BatchJobServiceImpl implements BatchJobService {
    */
   @Override
   public String runAuroraMigrationJob() throws JobExecutionException {
-    return launchJob(auroraMigrationJob, "aurora");
+    return launchJob(auroraMigrationJob, "aurora", null);
   }
 
   /**
@@ -80,7 +81,12 @@ public class BatchJobServiceImpl implements BatchJobService {
    */
   @Override
   public String runMongoMigrationJob() throws JobExecutionException {
-    return launchJob(mongoMigrationJob, "mongo");
+    return launchJob(mongoMigrationJob, "mongo", null);
+  }
+
+  @Override
+  public String runCandidateMigrationJobFromList(long listId) throws JobExecutionException {
+    return launchJob(candidateMigrationJob, "full", listId);
   }
 
   /**
@@ -125,17 +131,25 @@ public class BatchJobServiceImpl implements BatchJobService {
     return "Job execution " + executionId + " was restarted successfully with new execution ID: " + newExecutionId;
   }
 
-  private String launchJob(Job job, String label) throws JobExecutionException {
+  private String launchJob(Job job, String label, @Nullable Long listId) throws JobExecutionException {
     try {
       // Job params must be unique per job execution, if not the job will not run
       // We enforce a max of one job instance per job type per day by setting a date parameter
-      JobParameters params = new JobParametersBuilder()
+      JobParametersBuilder builder = new JobParametersBuilder()
           .addString("jobDate", LocalDate.now().toString()) // e.g., "2025-04-15"
-          .addString("jobLabel", label)
-          .toJobParameters();
+          .addString("jobLabel", label);
+
+      // If a listId is provided, add it to the job parameters
+      if (listId != null) {
+        builder.addLong("listId", listId)
+            .addString("jobTime", LocalDateTime.now().toString()); // Allows multiple list migrations runs per day
+      }
+
+      JobParameters params = builder.toJobParameters();
 
       asyncJobLauncher.run(job, params);
-      return "Job '" + job.getName() + "' launched successfully.";
+      return "Job '" + job.getName() + "' launched successfully" +
+          (listId != null ? " for listId: " + listId : ".");
 
     } catch (Exception e) {
       throw new JobExecutionException("Job launch failed: " + e.getMessage(), e);

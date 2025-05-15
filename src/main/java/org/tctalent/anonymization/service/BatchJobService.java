@@ -30,6 +30,12 @@ public interface BatchJobService {
   String runMongoMigrationJob() throws JobExecutionException;
 
   /**
+   * Launches the candidateMigrationJob with a specific listId.
+   * Returns a confirmation message or throws on failure.
+   */
+  String runCandidateMigrationJobFromList(long listId) throws JobExecutionException;
+
+  /**
    * Builds a plain-text summary of job executions.
    */
   String getJobExecutionsSummary();
