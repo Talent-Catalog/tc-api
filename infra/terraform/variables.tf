@@ -83,10 +83,6 @@ variable "tc_api_username" {
   description = "Talent Catalog username used by tc-api"
 }
 
-variable "run_anonymisation_on_startup" {
-  description = "If true run the DB anonymisation on startup"
-}
-
 variable "acm_certificate_arn" {
   description = "The ARN of an ACM certificate"
 }
