@@ -37,8 +37,16 @@ repositories {
 
 // Project-wide variables: Manage dependency versions
 ext {
-    mapstructVersion = "1.6.3"
+    tcApiSpecVersion              = '1.0.11'
+    mapstructVersion              = "1.6.3"
     lombokMapstructBindingVersion = "0.2.0"
+    beanUtilsVersion              = "1.9.4"
+    jsoupVersion                  = "1.15.4"
+    jakartaAnnotationVersion      = "2.1.1"
+    jjwtVersion                   = "0.11.2"
+    swaggerVersion                = "2.2.8"
+    jakartaValidationVersion      = "3.0.2"
+    jsr305Version                 = "3.0.2"
 }
 
 // Project dependencies
@@ -51,9 +59,11 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+    implementation "org.springframework.boot:spring-boot-starter-mail"
 
     // TC open api spec
-    implementation "io.github.sadatmalik:tc-api-spec:1.0.12"
+    implementation "io.github.sadatmalik:tc-api-spec:${tcApiSpecVersion}"
 
     // Database drivers and migration tools
     runtimeOnly "org.postgresql:postgresql"
@@ -71,26 +81,26 @@ dependencies {
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
     testImplementation 'org.springframework.security:spring-security-test'
 
-    // Additional libraries required by imported TC entities - todo check dependencies for curated versions or move to ext
+    // Additional libraries required by imported TC entities
     implementation "org.apache.commons:commons-lang3"
-    implementation "commons-beanutils:commons-beanutils:1.9.4" // todo - move version to ext - not a spring boot curated dep
-    implementation "org.jsoup:jsoup:1.15.4"
-    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-    implementation "org.springframework.boot:spring-boot-starter-mail"
-    implementation "jakarta.annotation:jakarta.annotation-api:2.1.1"
-    implementation "io.jsonwebtoken:jjwt-api:0.11.2"
+    implementation ("commons-beanutils:commons-beanutils:${beanUtilsVersion}") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    implementation "org.jsoup:jsoup:${jsoupVersion}"
+    implementation "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationVersion}"
+    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
 
-    // For OpenAPI 3.0 code generation - todo check if their are curated versions, if not move versions to ext
-    implementation "io.swagger.core.v3:swagger-annotations:2.2.8"
-    implementation "io.swagger.core.v3:swagger-models:2.2.8"
-    implementation "jakarta.validation:jakarta.validation-api:3.0.2"
+    // For OpenAPI 3.0 code generation
+    implementation "io.swagger.core.v3:swagger-annotations:${swaggerVersion}"
+    implementation "io.swagger.core.v3:swagger-models:${swaggerVersion}"
+    implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationVersion}"
 
     // Java 8 date/time handling with Jackson
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     // Mapstruct
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    implementation "com.google.code.findbugs:jsr305:3.0.2" // todo - move version to ext - not a spring boot curated dep
+    implementation "com.google.code.findbugs:jsr305:${jsr305Version}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
 }

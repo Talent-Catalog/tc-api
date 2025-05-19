@@ -35,7 +35,7 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: tctalent
       ME_CONFIG_MONGODB_ADMINPASSWORD: tctalent
       ME_CONFIG_MONGODB_URL: mongodb://tctalent:tctalent@mongo:27017/
-      ME_CONFIG_BASICAUTH: false
+      ME_CONFIG_BASICAUTH: "false"
 
 volumes:
   aurora-data:

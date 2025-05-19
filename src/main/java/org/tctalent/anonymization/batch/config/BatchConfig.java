@@ -4,8 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.bson.codecs.configuration.CodecConfigurationException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
+import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -39,7 +43,10 @@ import org.tctalent.anonymization.model.IdentifiableCandidate;
  * </p>
  * This class defines the Spring Batch beans required for the candidate migration process:
  * - A job to encapsulate the overall batch process
- * - A step to read, process, and write candidates
+ * - A job to migrate candidates to AuroraDB
+ * - A job to migrate candidates to MongoDB
+ * - A step to read, process, and write candidates to AuroraDB
+ * - A step to read, process, and write candidates to MongoDB
  * - Components for reading from the TC service or JPA repository, processing candidates into
  *   anonymised documents, and writing documents to MongoDB
  * </p>
@@ -73,6 +80,44 @@ public class BatchConfig {
         .listener(listener)
         .start(candidateRestToAuroraStep) // First create the aurora anon db
         .next(candidateRestToMongoStep) // Then create the mongo anon db
+        .build();
+  }
+
+  /**
+   * Configures a job for migrating candidates to AuroraDB only.
+   *
+   * @param jobRepository the repository for storing job metadata
+   * @param auroraStep the step to execute the aurora db migration process
+   * @param listener the listener to handle job completion events
+   * @return the configured aurora migration job
+   */
+  @Bean
+  public Job auroraMigrationJob(JobRepository jobRepository,
+      @Qualifier("candidateRestToAuroraStep") Step auroraStep,
+      LoggingJobExecutionListener listener) {
+
+    return new JobBuilder("auroraMigrationJob", jobRepository)
+        .start(auroraStep)
+        .listener(listener)
+        .build();
+  }
+
+  /**
+   * Configures a job for migrating candidates to MongoDB only.
+   *
+   * @param jobRepository the repository for storing job metadata
+   * @param mongoStep the step to execute the mongo db migration process
+   * @param listener the listener to handle job completion events
+   * @return the configured mongo migration job
+   */
+  @Bean
+  public Job mongoMigrationJob(JobRepository jobRepository,
+      @Qualifier("candidateRestToMongoStep") Step mongoStep,
+      LoggingJobExecutionListener listener) {
+
+    return new JobBuilder("mongoMigrationJob", jobRepository)
+        .start(mongoStep)
+        .listener(listener)
         .build();
   }
 
@@ -188,6 +233,23 @@ public class BatchConfig {
     jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
     jobLauncher.afterPropertiesSet();
     return jobLauncher;
+  }
+
+  @Bean
+  @Qualifier("asyncJobOperator")
+  public JobOperator asyncJobOperator(JobExplorer jobExplorer,
+      JobRepository jobRepository,
+      JobRegistry jobRegistry,
+      @Qualifier("asyncJobLauncher") JobLauncher asyncJobLauncher) throws Exception {
+
+    SimpleJobOperator jobOperator = new SimpleJobOperator();
+    jobOperator.setJobExplorer(jobExplorer);
+    jobOperator.setJobRepository(jobRepository);
+    jobOperator.setJobRegistry(jobRegistry);
+    jobOperator.setJobLauncher(asyncJobLauncher);  // Using the async job launcher
+    jobOperator.afterPropertiesSet();
+
+    return jobOperator;
   }
 
 }
