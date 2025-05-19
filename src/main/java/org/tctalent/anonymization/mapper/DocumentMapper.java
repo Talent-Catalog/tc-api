@@ -48,7 +48,7 @@ public interface DocumentMapper {
   @Mapping(source = "partnerCandidate.publicId", target = "partnerPublicId")
   @Mapping(source = "dob", target = "yearOfBirth", qualifiedByName = "extractYearFromLocalDate")
   @Mapping(target = "id", ignore = true)
-  @Mapping(source = "surveyType", target = "howHeardAboutUs",  qualifiedByName = "mapEnumToString")
+  @Mapping(source = "surveyType", target = "howHeardAboutUs",  qualifiedByName = "mapSurveyTypeToString")
   CandidateDocument anonymize(IdentifiableCandidate model);
 
   @Mapping(source = "dob", target = "yearOfBirth", qualifiedByName = "extractYearFromLocalDate")
@@ -62,8 +62,8 @@ public interface DocumentMapper {
     return dob != null ? dob.getYear() : null;
   }
 
-  @Named("mapEnumToString")
-  default String mapEnumToString(SurveyType surveyType) {
+  @Named("mapSurveyTypeToString")
+  default String mapSurveyTypeToString(SurveyType surveyType) {
     return surveyType != null ? surveyType.getName() : null;
   }
 }
