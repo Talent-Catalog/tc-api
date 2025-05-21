@@ -37,7 +37,7 @@ repositories {
 
 // Project-wide variables: Manage dependency versions
 ext {
-    tcApiSpecVersion              = '1.0.11'
+    tcApiSpecVersion              = '1.0.0'
     mapstructVersion              = "1.6.3"
     lombokMapstructBindingVersion = "0.2.0"
     beanUtilsVersion              = "1.9.4"
@@ -63,7 +63,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-mail"
 
     // TC open api spec
-    implementation "io.github.sadatmalik:tc-api-spec:${tcApiSpecVersion}"
+    implementation "org.tctalent:tc-api-spec:${tcApiSpecVersion}"
 
     // Database drivers and migration tools
     runtimeOnly "org.postgresql:postgresql"
