@@ -67,6 +67,13 @@ public class BatchJobController {
     return ResponseEntity.ok(message);
   }
 
+  @PostMapping("/jobs/run/list/{listId}")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity<String> runJobFromList(@PathVariable long listId) throws Exception {
+    String message = batchJobService.runCandidateMigrationJobFromList(listId);
+    return ResponseEntity.ok(message);
+  }
+
   /**
    * Returns a plain-text list of recent job executions.
    *

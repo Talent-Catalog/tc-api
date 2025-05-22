@@ -161,6 +161,42 @@ class BatchJobServiceImplTest {
   }
 
   @Test
+  @DisplayName("Run candidate migration job with listId")
+  void runCandidateMigrationJobFromList_success() throws Exception {
+    // Given
+    long listId = 12345L;
+
+    // When
+    String result = service.runCandidateMigrationJobFromList(listId);
+
+    // Then
+    assertTrue(result.contains("Job 'candidateMigrationJob' launched successfully"));
+    assertTrue(result.contains("for listId: " + listId));
+
+    ArgumentCaptor<JobParameters> captor = ArgumentCaptor.forClass(JobParameters.class);
+    verify(asyncJobLauncher).run(eq(candidateMigrationJob), captor.capture());
+
+    JobParameters params = captor.getValue();
+    assertEquals(LocalDate.now().toString(), params.getString("jobDate"));
+    assertEquals("full", params.getString("jobLabel"));
+    assertEquals(listId, params.getLong("listId"));
+  }
+
+  @Test
+  @DisplayName("Run migration job by list id fails")
+  void runCandidateMigrationJobFromList_failure() throws Exception {
+    // Given
+    when(asyncJobLauncher
+        .run(eq(candidateMigrationJob), any(JobParameters.class)))
+        .thenThrow(new RuntimeException("boom!"));
+
+    // When / Then
+    JobExecutionException ex =
+        assertThrows(JobExecutionException.class, () -> service.runCandidateMigrationJobFromList(1L));
+    assertTrue(ex.getMessage().contains("Job launch failed: boom!"));
+  }
+
+  @Test
   @DisplayName("Get job execution summary")
   void getJobExecutionsSummary_withExecutions() {
     // Given

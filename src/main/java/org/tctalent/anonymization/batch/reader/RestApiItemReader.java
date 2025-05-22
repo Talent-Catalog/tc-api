@@ -1,11 +1,15 @@
 package org.tctalent.anonymization.batch.reader;
 
+import jakarta.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
+import org.springframework.batch.core.scope.context.StepContext;
+import org.springframework.batch.core.scope.context.StepSynchronizationManager;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -67,9 +71,20 @@ public class RestApiItemReader implements ItemReader<IdentifiableCandidate>, Ste
     if (currentPage < totalPages) {
       applyRateLimiting();
 
+      // Read listId from job parameters if present
+      Long listId = getListIdFromJobParameters();
+
       // Fetch next batch
-      IdentifiableCandidatePage page = talentCatalogService
-          .fetchPageOfIdentifiableCandidateData(currentPage, batchProperties.getPageSize());
+      IdentifiableCandidatePage page;
+      if (listId != null) {
+        // Fetch using listId
+        page = talentCatalogService.fetchPageOfCandidateDataByListId(
+            listId, currentPage, batchProperties.getPageSize());
+      } else {
+        // Fallback to saved search
+        page = talentCatalogService.fetchPageOfIdentifiableCandidateData(
+            currentPage, batchProperties.getPageSize());
+      }
 
       if (page == null || page.getContent() == null) {
         throw new RestApiReaderException("Received null or invalid response from the REST API");
@@ -82,6 +97,17 @@ public class RestApiItemReader implements ItemReader<IdentifiableCandidate>, Ste
 
       lastFetchTime = System.currentTimeMillis(); // Update fetch timestamp
     }
+  }
+
+  @Nullable
+  private Long getListIdFromJobParameters() {
+    StepContext context = StepSynchronizationManager.getContext();
+    if (context == null) {
+      return null;
+    }
+
+    JobParameters params = context.getStepExecution().getJobParameters();
+    return params.getLong("listId"); // returns null if not present
   }
 
   private void applyRateLimiting() {
