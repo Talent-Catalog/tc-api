@@ -58,8 +58,6 @@ spring:
   batch:
     jdbc:
       initialize-schema: never # batch schema are initialised by flyway
-    job:
-      enabled: ${SPRING_BATCH_JOB_ENABLED:false} # enable/disable auto-run of jobs
 
 # Actuator
 management:

@@ -131,11 +131,6 @@ module "ecs_service" {
           name  = "TC_PASSWORD"
           value = ""
         },
-        {
-          name  = "SPRING_BATCH_JOB_ENABLED"
-          value = var.run_anonymisation_on_startup
-        },
-
       ]
 
       # Example image used requires access to write to root filesystem
