@@ -10,6 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.scope.context.StepContext;
+import org.springframework.batch.core.scope.context.StepSynchronizationManager;
 import org.tctalent.anonymization.batch.config.BatchProperties;
 import org.tctalent.anonymization.batch.reader.RestApiItemReader;
 import org.tctalent.anonymization.exception.RestApiReaderException;
@@ -35,6 +40,17 @@ class RestApiItemReaderTest {
     MockitoAnnotations.openMocks(this);
     when(batchProperties.getFetchDelayMillis()).thenReturn(1000L);
     when(batchProperties.getPageSize()).thenReturn(100);
+
+    StepExecution stepExecution = mock(StepExecution.class);
+    StepContext stepContext = mock(StepContext.class);
+    JobParameters jobParameters = new JobParametersBuilder()
+        .addLong("listId", 999L)
+        .toJobParameters();
+
+    when(stepExecution.getJobParameters()).thenReturn(jobParameters);
+    when(stepContext.getStepExecution()).thenReturn(stepExecution);
+    StepSynchronizationManager.close(); // clear any previous context
+    StepSynchronizationManager.register(stepExecution);
   }
 
   @Test
@@ -161,6 +177,24 @@ class RestApiItemReaderTest {
         () -> restApiItemReader.read(),
         "Should throw an exception if on API fetch error"
     );
+  }
+
+  @Test
+  @DisplayName("Test read Fetches candidate page using listId when present in job parameters")
+  void fetchesUsingListIdWhenPresent() {
+    IdentifiableCandidate candidate = new IdentifiableCandidate();
+    IdentifiableCandidatePage page = new IdentifiableCandidatePage();
+    page.setContent(List.of(candidate));
+    page.setTotalPages(1);
+
+    when(talentCatalogService.isLoggedIn()).thenReturn(true);
+    when(talentCatalogService.fetchPageOfCandidateDataByListId(999L, 0, 100)).thenReturn(page);
+
+    IdentifiableCandidate result = restApiItemReader.read();
+
+    assertNotNull(result);
+    assertEquals(candidate, result);
+    verify(talentCatalogService).fetchPageOfCandidateDataByListId(999L, 0, 100);
   }
 
 }

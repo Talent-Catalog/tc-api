@@ -128,6 +128,31 @@ public class TalentCatalogServiceImpl implements TalentCatalogService {
     }
 
     @Override
+    public IdentifiableCandidatePage fetchPageOfCandidateDataByListId(long listId, int pageNumber,
+        int pageSize) throws RestClientException {
+        try {
+            SavedSearchGetRequest request = new SavedSearchGetRequest();
+            request.setPageSize(pageSize);
+            request.setPageNumber(pageNumber);
+
+            return restClient.post()
+                .uri("/saved-list-candidate/" + listId + "/search-paged")
+                .contentType(APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION,
+                    credentials.getTokenType() + " " + credentials.getAccessToken())
+                .body(request)
+                .retrieve()
+                .body(IdentifiableCandidatePage.class);
+        } catch (HttpClientErrorException e) {
+            //Check for logged out
+            if (e.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
+                credentials = null;
+            }
+            throw new TalentCatalogServiceException(e);
+        }
+    }
+
+    @Override
     @Nullable
     public Partner findPartnerByPublicApiKey(String apiKey) {
         try {

@@ -59,6 +59,20 @@ public interface TalentCatalogService {
   IdentifiableCandidatePage fetchPageOfIdentifiableCandidateData(int pageNumber, int pageSize) throws RestClientException;
 
   /**
+   * Returns the given page number and page size of identifiable candidate data.
+   * <p/>
+   * Uses a TC list request to get the candidates in the list with the given listId.
+   *
+   * @param listId List id
+   * @param pageNumber Page number
+   * @param pageSize Page size
+   * @return IdentifiableCandidatePage Page of candidates
+   * @throws RestClientException if errors are returned (eg unauthorized)
+   */
+  IdentifiableCandidatePage fetchPageOfCandidateDataByListId(long listId, int pageNumber, int pageSize)
+      throws RestClientException;
+
+  /**
    * Returns the partner associated with the given public API key
    * @param apiKey Public Api Key
    * @return Partner or null if none found with this key
