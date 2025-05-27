@@ -58,6 +58,8 @@ spring:
   batch:
     jdbc:
       initialize-schema: never # batch schema are initialised by flyway
+    job:
+      enabled: false
 
 # Actuator
 management:
