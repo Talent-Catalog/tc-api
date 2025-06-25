@@ -158,9 +158,46 @@ the [talentcatalog](https://github.com/Talent-Catalog/talentcatalog) repository 
 Once you have a local TC core service and database installed and running, you can run the 
 TcApiServiceApplication from IntelliJ - see 'Run the server' below for further details. 
 
-At the time of writing this ReadMe the application is configured to immediately start a batch job 
-that will read candidate data from the TC core database, map this to anonymised candidate data, and 
-save the anonymised data to Aurora and Mongo databases.
+### Configure the API search ###
+
+To enable the TC API service to fetch candidates for anonymisation, you must configure the service 
+with valid credentials and an associated saved search in the Talent Catalog (TC) application. This 
+is done via the following configuration properties, typically supplied via environment variables or 
+in your local application.yaml:
+
+```yaml
+tc-service:
+  apiUrl: ${TC_API_URL:http://localhost:8080/api/admin}
+  search-id: ${TC_SEARCH_ID:2679}
+  username: ${TC_USERNAME:appAnonDatabaseService}
+  password: ${TC_PASSWORD:xxxxxxxx}
+```
+
+#### Create a service user ####
+
+Before running the API service, you must:
+
+1. Launch the Talent Catalog locally (see the 
+   [talentcatalog](https://github.com/Talent-Catalog/talentcatalog) repository for setup 
+   instructions).
+2. Log in as an admin and create a new admin user that will act as the API service user (e.g., 
+   appAnonDatabaseService).
+
+#### Create a saved search ####
+
+Once the service user is created:
+
+1. Log into the Talent Catalog as the new service user. 
+2. Use the candidate search interface to configure a search query that identifies the candidates 
+   you want the API service to process. 
+3. Click "Save search" and take note of the saved search's ID
+4. Set the search-id property to match this ID (e.g., 2679 in the example above).
+
+> The API service will use this saved search when retrieving candidates to be anonymised and 
+> migrated to Aurora and MongoDB.
+
+You can now run the API service and it will authenticate with the TC core application and retrieve 
+candidates using this configured search.
 
 ### Run the server ###
 
