@@ -228,11 +228,81 @@ Started TcApiServiceApplication in 3.179 seconds (process running for 3.424)
 ```
 
 - Your server will be running on port 8082 (as defined in server.port in application.yml).
-- At the time of writing this Readme, the server initiates a batch process on startup that reads 
-  data from the TC core database, maps it to anonymised data, and writes this to Aurora and Mongo.
 - You can test out the server with a tool such as Postman by issuing a GET to the following 
   endpoint: 
   [http://localhost:8082/v1/candidates](http://localhost:8082/v1/candidates)
+
+### Run and Manage Anonymisation Jobs ###
+
+The TC API service exposes several batch management endpoints for running and monitoring 
+anonymisation jobs. These endpoints can be triggered either via:
+
+- Postman (or any REST client)
+- The Talent Catalog Admin API interface (Settings → System Admin API)
+
+#### API Authentication ####
+
+All batch management endpoints require authentication using a Partner API key.
+
+To set this up:
+
+1. Log into the Talent Catalog admin portal. 
+2. Go to Settings → Partners. 
+3. Select the desired partner and click Edit. 
+4. Enable Public API Access. 
+5. Assign from the following API Authorities:
+   - READ_CANDIDATE_DATA: Allows reading candidate records. 
+   - SUBMIT_JOB_MATCHES: Allows submitting job-candidate matches (not used by anonymisation, but 
+     required by job matching API partners). 
+   - OFFER_CANDIDATE_SERVICES: Enables offering services to candidates (required for OTA 
+     interactions). 
+   - REGISTER_CANDIDATES: Allows registering new candidates. 
+   - ADMIN: Grants full access to batch endpoints (most API partners will not need this).
+
+> The x-api-key header must be included in all HTTP requests to authorize access. You can find the 
+> API key in the Partner settings screen. It is displayed once when the API access is granted. You
+> must take note of it when it is shown. For security, it will not be visible again.
+
+#### API Migration Commands ####
+
+Below are the available batch job commands. These may be entered in the TC Admin API command box or 
+used in tools like Postman.
+
+| Command                               | Description                                                    |
+| ------------------------------------- | -------------------------------------------------------------- |
+| `run_api_migration`                   | Run the full anonymisation job (Aurora + Mongo)                |
+| `run_api_migration/aurora`            | Run only the Aurora migration step                             |
+| `run_api_migration/mongo`             | Run only the Mongo migration step                              |
+| `run_api_migration/list/{listId}`     | Run anonymisation using candidates from a specified saved list |
+| `list_api_migrations`                 | View recent job executions (ID, status, start/end time)        |
+| `stop_api_migration/{executionId}`    | Stop a currently running job                                   |
+| `restart_api_migration/{executionId}` | Restart a previously failed job                                |
+
+
+#### Using Postman ####
+
+1. Open Postman and create a new request. 
+2. Choose the method (GET or POST) based on the command. 
+3. Set the URL to your API server, e.g.:
+   ```shell
+   POST http://localhost:8082/api/admin/run_api_migration
+   ```
+4. Add the x-api-key header with your partner's API key:
+   ```shell
+   x-api-key: your-partner-api-key
+   ```
+5. Send the request. You should receive a response confirming job submission or an error message.
+
+#### Using the TC Admin API ####
+
+In the Talent Catalog frontend (admin portal):
+
+1. Navigate to Settings → Admin API. 
+2. In the API call input box, type one of the supported commands (e.g. run_api_migration). 
+3. Click Send. 
+4. The response will appear below, showing success messages or error output.
+
+> The list of available commands is displayed beneath the input field for convenience.
 
 ### Connect IntelliJ to your database ###
 
