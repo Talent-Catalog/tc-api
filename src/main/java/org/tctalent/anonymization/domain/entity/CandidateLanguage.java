@@ -47,8 +47,15 @@ public class CandidateLanguage extends AbstractDomainEntity<Long> {
     @Column(name = "written_level", nullable = true)
     private String writtenLevelName;
 
+    // Store the written_cefr_level directly instead of a foreign key reference
+    @Column(name = "written_cefr_level", nullable = true)
+    private String writtenCefrLevel;
+
     // Store the spoken_level directly instead of a foreign key reference
     @Column(name = "spoken_level", nullable = true)
     private String spokenLevelName;
 
+    // Store the spoken_cefr_level directly instead of a foreign key reference
+    @Column(name = "spoken_cefr_level", nullable = true)
+    private String spokenCefrLevel;
 }
