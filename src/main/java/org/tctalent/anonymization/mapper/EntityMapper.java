@@ -77,6 +77,8 @@ public interface EntityMapper {
   @Mapping(target = "name", source = "language", qualifiedByName = "mapLanguageToName")
   @Mapping(target = "writtenLevelName", source = "writtenLevel", qualifiedByName = "mapLanguageLevelToName")
   @Mapping(target = "spokenLevelName", source = "spokenLevel", qualifiedByName = "mapLanguageLevelToName")
+  @Mapping(target = "writtenCefrLevel", source = "writtenLevel", qualifiedByName = "mapLanguageLevelToCefrLevel")
+  @Mapping(target = "spokenCefrLevel", source = "spokenLevel", qualifiedByName = "mapLanguageLevelToCefrLevel")
   CandidateLanguage mapLanguage(
       org.tctalent.anonymization.model.CandidateLanguage language);
 
@@ -128,6 +130,11 @@ public interface EntityMapper {
     return (level != null) ? level.getName() : null;
   }
 
+  @Named("mapLanguageLevelToCefrLevel")
+  default String mapLanguageLevelToCefrLevel(LanguageLevel level) {
+    return (level != null) ? level.getCefrLevel().name() : null;
+  }
+
   @Named("mapEducationLevelToCode")
   default Integer mapEducationLevelToCode(EducationLevel level) {
     return (level != null) ? level.getLevel() : null;
@@ -137,7 +144,6 @@ public interface EntityMapper {
   default String mapPartnerToPublicId(IdentifiablePartner partner) {
     return (partner != null) ? partner.getPublicId() : null;
   }
-
 
   @Named("mapSurveyTypeToHowHeardAboutUs")
   default HowHeardAboutUs mapEnumToHowHeardAboutUs(IdentifiableCandidate candidate) {
