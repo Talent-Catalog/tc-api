@@ -2,7 +2,7 @@ package org.tctalent.anonymization.domain.document;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.tctalent.anonymization.model.CefrLevels;
+import org.tctalent.anonymization.domain.common.CefrLevels;
 
 @Getter
 @Setter
