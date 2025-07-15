@@ -4,12 +4,11 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.tctalent.anonymization.model.Country;
-import org.tctalent.anonymization.model.DocumentStatus;
-import org.tctalent.anonymization.model.FamilyRelations;
-import org.tctalent.anonymization.model.RiskLevel;
-import org.tctalent.anonymization.model.YesNo;
-import org.tctalent.anonymization.model.YesNoUnsure;
+import org.tctalent.anonymization.domain.common.DocumentStatus;
+import org.tctalent.anonymization.domain.common.FamilyRelations;
+import org.tctalent.anonymization.domain.common.RiskLevel;
+import org.tctalent.anonymization.domain.common.YesNo;
+import org.tctalent.anonymization.domain.common.YesNoUnsure;
 
 @Getter
 @Setter

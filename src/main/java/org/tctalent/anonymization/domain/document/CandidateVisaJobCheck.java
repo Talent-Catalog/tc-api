@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.tctalent.anonymization.model.JobOpportunity;
-import org.tctalent.anonymization.model.Occupation;
-import org.tctalent.anonymization.model.OtherVisas;
-import org.tctalent.anonymization.model.TcEligibilityAssessment;
-import org.tctalent.anonymization.model.VisaEligibility;
-import org.tctalent.anonymization.model.YesNo;
+import org.tctalent.anonymization.domain.common.OtherVisas;
+import org.tctalent.anonymization.domain.common.TcEligibilityAssessment;
+import org.tctalent.anonymization.domain.common.VisaEligibility;
+import org.tctalent.anonymization.domain.common.YesNo;
 
 @Getter
 @Setter
