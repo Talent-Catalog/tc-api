@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,8 @@ import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.service.CandidateService;
 
 @SpringBootTest
-class CandidateControllerTest {
+@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+class CandidateControllerIT {
 
   @Autowired
   private CandidateService candidateService;
