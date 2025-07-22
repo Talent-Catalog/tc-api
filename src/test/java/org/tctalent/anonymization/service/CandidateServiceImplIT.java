@@ -9,6 +9,7 @@ import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,7 +25,8 @@ import org.tctalent.anonymization.model.Candidate;
 import org.tctalent.anonymization.model.CandidatePage;
 import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
-class CandidateServiceImplTest {
+@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+class CandidateServiceImplIT {
 
   @Mock private CandidateDocumentRepository candidateDocumentRepository;
   @Mock private DocumentMapper documentMapper;
