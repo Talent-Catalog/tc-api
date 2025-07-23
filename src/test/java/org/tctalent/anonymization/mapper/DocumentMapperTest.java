@@ -6,11 +6,14 @@ import java.time.LocalDate;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
 import org.tctalent.anonymization.domain.document.Dependant;
 import org.tctalent.anonymization.model.DependantRelations;
@@ -24,12 +27,29 @@ import org.tctalent.anonymization.model.Registration;
 import org.tctalent.anonymization.model.TcEligibilityAssessment;
 import org.tctalent.anonymization.model.YesNo;
 
-@SpringBootTest
+
+/**
+ * Unit tests for the {@link DocumentMapper} class.
+ *
+ * @author sadatmalik
+ */
 public class DocumentMapperTest {
 
-  @Autowired
-  @Qualifier("documentMapperImpl")
   private DocumentMapper mapper;
+
+  @BeforeEach
+  void setUp() {
+    // this returns the MapStruct‐generated DocumentMapperImpl
+    mapper = Mappers.getMapper(DocumentMapper.class);
+
+    // Manually give it its DateTimeMapper
+    ReflectionTestUtils.setField(
+        mapper,
+        "dateTimeMapper",
+        Mappers.getMapper(DateTimeMapper.class)
+    );
+
+  }
 
   @Test
   void shouldMapContactConsentPartnersToContactConsentTcPartners() {
