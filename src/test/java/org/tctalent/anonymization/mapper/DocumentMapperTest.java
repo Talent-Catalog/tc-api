@@ -39,7 +39,7 @@ public class DocumentMapperTest {
 
   @BeforeEach
   void setUp() {
-    // this returns the MapStruct‐generated DocumentMapperImpl
+    // this returns the MapStruct-generated DocumentMapperImpl
     mapper = Mappers.getMapper(DocumentMapper.class);
 
     // Manually give it its DateTimeMapper
