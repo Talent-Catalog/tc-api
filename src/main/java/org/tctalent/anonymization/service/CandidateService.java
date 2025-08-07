@@ -31,4 +31,13 @@ public interface CandidateService {
    * @throws NoSuchObjectException if no candidate exists with that id
    */
   Candidate findByPublicId(String publicId) throws NoSuchObjectException;
+
+  /**
+   * Returns a page of candidates associated with the given public list id.
+   * <p>
+   * @param pageable Defines the page required - including page number and size
+   * @return A page of candidates
+   */
+  CandidatePage findByPublicListId(String publicListId, Pageable pageable);
+
 }
