@@ -37,7 +37,7 @@ repositories {
 
 // Project-wide variables: Manage dependency versions
 ext {
-    tcApiSpecVersion              = '1.0.0'
+    tcApiSpecVersion              = '1.0.1'
     mapstructVersion              = "1.6.3"
     lombokMapstructBindingVersion = "0.2.0"
     beanUtilsVersion              = "1.9.4"
