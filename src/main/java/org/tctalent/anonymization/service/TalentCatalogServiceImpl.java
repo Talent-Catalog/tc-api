@@ -16,6 +16,7 @@ import org.tctalent.anonymization.dto.request.RegisterCandidateByPartnerRequest;
 import org.tctalent.anonymization.dto.request.SavedSearchGetRequest;
 import org.tctalent.anonymization.dto.response.JwtAuthenticationResponse;
 import org.tctalent.anonymization.dto.response.Partner;
+import org.tctalent.anonymization.dto.response.PublicIdPage;
 import org.tctalent.anonymization.exception.TalentCatalogServiceException;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
 import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
@@ -150,6 +151,35 @@ public class TalentCatalogServiceImpl implements TalentCatalogService {
             }
             throw new TalentCatalogServiceException(e);
         }
+    }
+
+    @Override
+    public PublicIdPage fetchPageOfCandidatePublicIdsByPublicListId(String publicListId, int pageNumber, int pageSize)
+        throws RestClientException {
+        try {
+            // build the paged request
+            SavedSearchGetRequest request = new SavedSearchGetRequest();
+            request.setPageNumber(pageNumber);
+            request.setPageSize(pageSize);
+
+            // call the /public/{publicId}/public-ids-paged endpoint
+            return restClient.post()
+                .uri("/saved-list-candidate/public/" + publicListId + "/public-ids-paged")
+                .contentType(APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION,
+                    credentials.getTokenType() + " " + credentials.getAccessToken())
+                .body(request)
+                .retrieve()
+                .body(PublicIdPage.class);
+
+        } catch (HttpClientErrorException e) {
+            // if we’ve been logged out, reset creds so next call will re-authenticate
+            if (e.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
+                credentials = null;
+            }
+            throw new TalentCatalogServiceException(e);
+        }
+
     }
 
     @Override
