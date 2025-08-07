@@ -89,6 +89,19 @@ public class CandidateController implements V1Api {
    * {@inheritDoc}
    */
   @Override
+  @PreAuthorize("hasAuthority('READ_CANDIDATE_DATA')")
+  public ResponseEntity<CandidatePage> getCandidatesByPublicListId(String publicListId,
+      Integer page, Integer limit) {
+    Pageable pageable = PageRequest.of(page, limit);
+
+    CandidatePage candidatesPage = candidateService.findByPublicListId(publicListId, pageable);
+    return ResponseEntity.ok(candidatesPage);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   @PreAuthorize("hasAuthority('OFFER_CANDIDATE_SERVICES')")
   public ResponseEntity<OfferToAssistCandidates201Response> offerToAssistCandidates(
       OfferToAssistCandidatesRequest offerToAssistCandidatesRequest) {
