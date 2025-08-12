@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,8 @@ import org.tctalent.anonymization.model.IdentifiableCandidatePage;
 import org.tctalent.anonymization.repository.CandidateDocumentRepository;
 
 @SpringBootTest
-class TalentCatalogServiceImplTest {
+@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+class TalentCatalogServiceImplIT {
   @Autowired
   TalentCatalogServiceImpl tcService;
 

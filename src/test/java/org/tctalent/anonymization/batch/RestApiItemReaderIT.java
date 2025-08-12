@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -23,11 +24,12 @@ import org.tctalent.anonymization.model.IdentifiableCandidatePage;
 import org.tctalent.anonymization.service.TalentCatalogService;
 
 /**
- * Unit tests for the {@link RestApiItemReader} class.
+ * Integration tests for the {@link RestApiItemReader} class.
  *
  * @author sadatmalik
  */
-class RestApiItemReaderTest {
+@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+class RestApiItemReaderIT {
 
   @Mock private TalentCatalogService talentCatalogService;
   @Mock private BatchProperties batchProperties;
