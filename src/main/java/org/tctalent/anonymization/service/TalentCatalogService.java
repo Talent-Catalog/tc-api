@@ -5,6 +5,7 @@ import org.springframework.web.client.RestClientException;
 import org.tctalent.anonymization.dto.request.OfferToAssistRequest;
 import org.tctalent.anonymization.dto.request.RegisterCandidateByPartnerRequest;
 import org.tctalent.anonymization.dto.response.Partner;
+import org.tctalent.anonymization.dto.response.PublicIdPage;
 import org.tctalent.anonymization.model.IdentifiableCandidatePage;
 import org.tctalent.anonymization.model.OfferToAssistCandidates201Response;
 import org.tctalent.anonymization.model.RegisterCandidate201Response;
@@ -70,6 +71,20 @@ public interface TalentCatalogService {
    * @throws RestClientException if errors are returned (eg unauthorized)
    */
   IdentifiableCandidatePage fetchPageOfCandidateDataByListId(long listId, int pageNumber, int pageSize)
+      throws RestClientException;
+
+  /**
+   * Returns the given page number and page size of identifiable candidate public ids.
+   * <p/>
+   * Uses a TC list request to get the candidates in the public list with the given publicListId.
+   *
+   * @param publicListId Public list id
+   * @param pageNumber Page number
+   * @param pageSize Page size
+   * @return IdentifiableCandidatePage Page of candidates
+   * @throws RestClientException if errors are returned (eg unauthorized)
+   */
+  PublicIdPage fetchPageOfCandidatePublicIdsByPublicListId(String publicListId, int pageNumber, int pageSize)
       throws RestClientException;
 
   /**

@@ -1,5 +1,6 @@
 package org.tctalent.anonymization.service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.tctalent.anonymization.domain.document.CandidateDocument;
+import org.tctalent.anonymization.dto.response.PublicIdDto;
+import org.tctalent.anonymization.dto.response.PublicIdPage;
 import org.tctalent.anonymization.exception.NoSuchObjectException;
 import org.tctalent.anonymization.mapper.DocumentMapper;
 import org.tctalent.anonymization.model.Candidate;
@@ -26,6 +29,7 @@ public class CandidateServiceImpl implements CandidateService {
   private final CandidateDocumentRepository candidateDocumentRepository;
   private final MongoTemplate mongoTemplate;
   private final DocumentMapper documentMapper;
+  private final TalentCatalogService talentCatalogService;
 
   @Override
   public CandidatePage findAll(Pageable pageable, List<String> locations,
@@ -79,6 +83,55 @@ public class CandidateServiceImpl implements CandidateService {
         .findFirstByPublicId(publicId)
         .map(documentMapper::toCandidateModel)
         .orElseThrow(() -> new NoSuchObjectException(Candidate.class, publicId));
+  }
+
+  @Override
+  public CandidatePage findByPublicListId(String publicId, Pageable pageable) {
+    // Fetch the page of publicIds from the TC microservice
+    PublicIdPage pageOfIds = talentCatalogService
+        .fetchPageOfCandidatePublicIdsByPublicListId(
+            publicId,
+            pageable.getPageNumber(),
+            pageable.getPageSize()
+        );
+
+    // If empty, return an empty page
+    if (pageOfIds.getContent().isEmpty()) {
+      Page<Candidate> emptyPage = new PageImpl<>(
+          Collections.emptyList(),
+          pageable,
+          0L
+      );
+      return documentMapper.toCandidateModelPage(emptyPage);
+    }
+
+    // Extract the String IDs
+    List<String> ids = pageOfIds.getContent().stream()
+        .map(PublicIdDto::getPublicId)
+        .toList();
+
+    // Query Mongo for those IDs
+    Query query = new Query(Criteria.where("publicId").in(ids))
+        .collation(Collation.of("en")
+            .strength(Collation.ComparisonLevel.secondary()));
+
+    long count = mongoTemplate.count(query, CandidateDocument.class);
+
+    List<Candidate> candidates = mongoTemplate
+        .find(query, CandidateDocument.class)
+        .stream()
+        .map(documentMapper::toCandidateModel)
+        .toList();
+
+    // Build a Page<Candidate>
+    Page<Candidate> candidatePage = new PageImpl<>(
+        candidates,
+        pageable,
+        count
+    );
+
+    // Convert to CandidatePage DTO
+    return documentMapper.toCandidateModelPage(candidatePage);
   }
 
 }

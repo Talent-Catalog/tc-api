@@ -85,6 +85,22 @@ public class CandidateController implements V1Api {
     return ResponseEntity.ok(candidate);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @PreAuthorize("hasAuthority('READ_CANDIDATE_DATA')")
+  public ResponseEntity<CandidatePage> getCandidatesByPublicListId(String publicListId,
+      Integer page, Integer limit) {
+    Pageable pageable = PageRequest.of(page, limit);
+
+    CandidatePage candidatesPage = candidateService.findByPublicListId(publicListId, pageable);
+    return ResponseEntity.ok(candidatesPage);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @PreAuthorize("hasAuthority('OFFER_CANDIDATE_SERVICES')")
   public ResponseEntity<OfferToAssistCandidates201Response> offerToAssistCandidates(
@@ -96,6 +112,9 @@ public class CandidateController implements V1Api {
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @PreAuthorize("hasAuthority('SUBMIT_JOB_MATCHES')")
   public ResponseEntity<JobMatch201Response> jobMatch(JobMatchRequest jobMatchRequest) {
@@ -158,6 +177,9 @@ public class CandidateController implements V1Api {
     return talentCatalogService.create(offerToAssistRequest);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @PreAuthorize("hasAuthority('REGISTER_CANDIDATES')")
   public ResponseEntity<RegisterCandidate201Response> registerCandidate(
