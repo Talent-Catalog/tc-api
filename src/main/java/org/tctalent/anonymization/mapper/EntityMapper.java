@@ -132,7 +132,10 @@ public interface EntityMapper {
 
   @Named("mapLanguageLevelToCefrLevel")
   default String mapLanguageLevelToCefrLevel(LanguageLevel level) {
-    return (level != null) ? level.getCefrLevel().name() : null;
+    if (level == null || level.getCefrLevel() == null) {
+      return null;
+    }
+    return level.getCefrLevel().toString();
   }
 
   @Named("mapEducationLevelToCode")
