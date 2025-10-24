@@ -32,21 +32,18 @@ public class TcApiServiceApplication {
   @Bean
   @ConditionalOnProperty(name="spring.flyway.repair", havingValue="true")
   public FlywayMigrationStrategy fixFlyway() {
-    return new FlywayMigrationStrategy() {
-      @Override
-      public void migrate(Flyway flyway) {
-        try {
-          System.out.println("************* Starting flyway repair ***********************");
-          flyway.repair();
-          System.out.println("************* Finished flyway repair ***********************");
-          flyway.migrate();
-        } catch (Exception e) {
-          System.out.println("ERROR: unable to repair flyway");
-          LogBuilder.builder(log)
-              .action("flyway_repair_failed")
-              .message("Unable to repair flyway before migration")
-              .logError(e);
-        }
+    return flyway -> {
+      try {
+        System.out.println("************* Starting flyway repair ***********************");
+        flyway.repair();
+        System.out.println("************* Finished flyway repair ***********************");
+        flyway.migrate();
+      } catch (Exception e) {
+        System.out.println("ERROR: unable to repair flyway");
+        LogBuilder.builder(log)
+            .action("flyway_repair_failed")
+            .message("Unable to repair flyway before migration")
+            .logError(e);
       }
     };
   }
