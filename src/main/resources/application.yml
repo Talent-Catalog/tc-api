@@ -22,6 +22,7 @@ spring:
 
   flyway:
     enabled: true
+    repair: false # Repair the schema history table on startup if true
 
   jpa:
     show-sql: false
