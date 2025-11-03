@@ -109,4 +109,11 @@ public class AuthenticationService {
         return header == null ? null : header.trim();
     }
 
+    public void evictKey(String apiKey) {
+      keyToUserCache.invalidate(apiKey);
+    }
+
+    public void clearCache() {
+      keyToUserCache.invalidateAll();
+    }
 }
