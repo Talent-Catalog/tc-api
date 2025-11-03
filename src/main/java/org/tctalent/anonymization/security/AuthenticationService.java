@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.tctalent.anonymization.domain.entity.ApiUser;
 import org.tctalent.anonymization.dto.response.Partner;
+import org.tctalent.anonymization.logging.LogBuilder;
 import org.tctalent.anonymization.service.TalentCatalogService;
 
 /**
@@ -28,6 +30,7 @@ import org.tctalent.anonymization.service.TalentCatalogService;
  * @see <a href="https://www.baeldung.com/spring-boot-api-key-secret">
  */
 @Service
+@Slf4j
 public class AuthenticationService {
 
     private static final String AUTH_TOKEN_HEADER_NAME = "X-API-KEY";
@@ -51,7 +54,12 @@ public class AuthenticationService {
     public Authentication getAuthentication(HttpServletRequest request) {
         String presentedApiKey = normalise(request.getHeader(AUTH_TOKEN_HEADER_NAME));
         if (presentedApiKey == null || presentedApiKey.isEmpty()) {
-            throw new BadCredentialsException("Invalid API Key (missing)");
+          LogBuilder.builder(log)
+              .action("Auth failed")
+              .message("Missing API key header " + AUTH_TOKEN_HEADER_NAME)
+              .logWarn();
+
+          throw new BadCredentialsException("Invalid API Key (missing)");
         }
 
         ApiUser apiUser = keyToUserCache.getIfPresent(presentedApiKey);
@@ -61,9 +69,19 @@ public class AuthenticationService {
                 keyToUserCache.put(presentedApiKey, apiUser);
             }
             if (apiUser == null) {
-                throw new BadCredentialsException("Invalid API Key (unknown)");
+              LogBuilder.builder(log)
+                  .action("Auth failed")
+                  .message("Unknown API key " + maskKey(presentedApiKey))
+                  .logWarn();
+
+              throw new BadCredentialsException("Invalid API Key (unknown)");
             }
         }
+
+        LogBuilder.builder(log)
+            .action("Auth success")
+            .message("partnerId=" + apiUser.getPartner().getPartnerId() + " partnerName=" + apiUser.getPartner().getName())
+            .logWarn();
 
         // Convert the String authorities to GrantedAuthority objects
         List<SimpleGrantedAuthority> grantedAuthorities =
@@ -116,4 +134,14 @@ public class AuthenticationService {
     public void clearCache() {
       keyToUserCache.invalidateAll();
     }
+
+    // Log-safe mask: "xxxx…last4"
+    static String maskKey(String raw) {
+      if (raw == null || raw.isEmpty()) {
+        return "xxxx…";
+      }
+      String last4 = raw.length() <= 4 ? raw : raw.substring(raw.length() - 4);
+      return "xxxx…" + last4;
+    }
+
 }
