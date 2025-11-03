@@ -1,10 +1,11 @@
 package org.tctalent.anonymization.security;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -29,16 +30,19 @@ import org.tctalent.anonymization.service.TalentCatalogService;
 @Service
 public class AuthenticationService {
 
-    /**
-     * Simple cache of apiKeys to ApiUser's - avoiding unnecessary calls back to TC server.
-     * <p/>
-     * Cache is only cleared when server is restarted.
-     */
-    private final Map<String, ApiUser> keyToUserCache = new HashMap<>();
-
     private static final String AUTH_TOKEN_HEADER_NAME = "X-API-KEY";
 
     private final TalentCatalogService talentCatalogService;
+
+    /**
+     * Simple caffeine cache of apiKeys to ApiUser's - avoiding unnecessary calls back to TC server.
+     * <p/>
+     * Cache only successful lookups, with TTL + size bound
+     */
+    private final Cache<String, ApiUser> keyToUserCache = Caffeine.newBuilder()
+        .maximumSize(10_000) // Max 10k entries
+        .expireAfterWrite(Duration.ofMinutes(10)) // Entries expire after 10 minutes
+        .build();
 
     public AuthenticationService(TalentCatalogService talentCatalogService) {
         this.talentCatalogService = talentCatalogService;
@@ -46,19 +50,26 @@ public class AuthenticationService {
 
     public Authentication getAuthentication(HttpServletRequest request) {
         String presentedApiKey = request.getHeader(AUTH_TOKEN_HEADER_NAME);
-        if (presentedApiKey == null) {
-            throw new BadCredentialsException("Invalid API Key");
+        if (presentedApiKey == null || presentedApiKey.isEmpty()) {
+            throw new BadCredentialsException("Invalid API Key (missing)");
         }
 
-        ApiUser apiUser = findApiUserByApiKey(presentedApiKey);
+        ApiUser apiUser = keyToUserCache.getIfPresent(presentedApiKey);
         if (apiUser == null) {
-            throw new BadCredentialsException("Invalid API key");
+            apiUser = findApiUserByApiKey(presentedApiKey);
+            if (apiUser != null) {
+                keyToUserCache.put(presentedApiKey, apiUser);
+            }
+            if (apiUser == null) {
+                throw new BadCredentialsException("Invalid API Key (unknown)");
+            }
         }
 
         // Convert the String authorities to GrantedAuthority objects
         List<SimpleGrantedAuthority> grantedAuthorities =
             apiUser.getPartner().getPublicApiAuthorities().stream()
-                .map(SimpleGrantedAuthority::new).toList();
+                .map(SimpleGrantedAuthority::new)
+                .toList();
 
         return new ApiKeyAuthentication(apiUser, grantedAuthorities);
     }
@@ -71,25 +82,12 @@ public class AuthenticationService {
      */
     @Nullable
     private ApiUser findApiUserByApiKey(String apiKey) {
-
-        ApiUser apiUser;
-
-        //Get user from cache if we have already retrieved it
-        if (keyToUserCache.containsKey(apiKey)) {
-            apiUser = keyToUserCache.get(apiKey);
-        } else {
-            //Get user from TC service
-            if (!talentCatalogService.isLoggedIn()) {
-                talentCatalogService.login();
-            }
-            Partner partner = talentCatalogService.findPartnerByPublicApiKey(apiKey);
-            apiUser = partner == null ? null : new ApiUser(partner);
-
-            //Remember result in cache. Note that this can store nulls if the key is not recognized.
-            //This way repeated requests from an unknown key will only hit the TC server once.
-            keyToUserCache.put(apiKey, apiUser);
+        //Get user from TC service
+        if (!talentCatalogService.isLoggedIn()) {
+            talentCatalogService.login();
         }
-        return apiUser;
+        Partner partner = talentCatalogService.findPartnerByPublicApiKey(apiKey);
+        return partner == null ? null : new ApiUser(partner);
     }
 
     /**
