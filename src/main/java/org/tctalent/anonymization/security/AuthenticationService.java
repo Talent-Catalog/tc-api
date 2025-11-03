@@ -49,7 +49,7 @@ public class AuthenticationService {
     }
 
     public Authentication getAuthentication(HttpServletRequest request) {
-        String presentedApiKey = request.getHeader(AUTH_TOKEN_HEADER_NAME);
+        String presentedApiKey = normalise(request.getHeader(AUTH_TOKEN_HEADER_NAME));
         if (presentedApiKey == null || presentedApiKey.isEmpty()) {
             throw new BadCredentialsException("Invalid API Key (missing)");
         }
@@ -102,4 +102,11 @@ public class AuthenticationService {
         }
         return Optional.empty();
     }
+
+    // Normalize header string by trimming whitespace, return null if header is null
+    // Fixes potential issues with leading/trailing spaces when testing API keys from Postman or curl
+    private String normalise(String header) {
+        return header == null ? null : header.trim();
+    }
+
 }
