@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,14 +46,20 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     try {
       Authentication authentication = authenticationService.getAuthentication(request);
       SecurityContextHolder.getContext().setAuthentication(authentication);
-    } catch (Exception exp) {
+    } catch (BadCredentialsException badCredsEx) {
       // Clear any authentication context
+      SecurityContextHolder.clearContext();
+      // Delegate to the authentication entry point which will build a ProblemDetails response
+      // 401 Unauthorized for invalid key
+      authenticationEntryPoint.commence(request, response, badCredsEx);
+      return;
+    } catch (Exception exp) {
       SecurityContextHolder.clearContext();
       // Delegate to the authentication entry point which will build a ProblemDetails response
       //Note that an exception here means that we were unable to authenticate - not necessarily
       //that the credentials were not good.
       authenticationEntryPoint.commence(request, response,
-          new BadCredentialsException("Unable to authenticate", exp));
+          new AuthenticationServiceException("Unable to authenticate with TC server", exp));
       return;
     }
 
