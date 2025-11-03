@@ -47,6 +47,7 @@ ext {
     swaggerVersion                = "2.2.8"
     jakartaValidationVersion      = "3.0.2"
     jsr305Version                 = "3.0.2"
+    caffeineVersion               = "3.1.8"
 }
 
 // Project dependencies
@@ -64,6 +65,9 @@ dependencies {
 
     // TC open api spec
     implementation "org.tctalent:tc-api-spec:${tcApiSpecVersion}"
+
+    // Caffeine (for API key caching)
+    implementation "com.github.ben-manes.caffeine:caffeine:${caffeineVersion}"
 
     // Database drivers and migration tools
     runtimeOnly "org.postgresql:postgresql"
