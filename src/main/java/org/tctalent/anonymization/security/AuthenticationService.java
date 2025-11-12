@@ -1,10 +1,12 @@
 package org.tctalent.anonymization.security;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.tctalent.anonymization.domain.entity.ApiUser;
 import org.tctalent.anonymization.dto.response.Partner;
+import org.tctalent.anonymization.logging.LogBuilder;
 import org.tctalent.anonymization.service.TalentCatalogService;
 
 /**
@@ -27,38 +30,64 @@ import org.tctalent.anonymization.service.TalentCatalogService;
  * @see <a href="https://www.baeldung.com/spring-boot-api-key-secret">
  */
 @Service
+@Slf4j
 public class AuthenticationService {
-
-    /**
-     * Simple cache of apiKeys to ApiUser's - avoiding unnecessary calls back to TC server.
-     * <p/>
-     * Cache is only cleared when server is restarted.
-     */
-    private final Map<String, ApiUser> keyToUserCache = new HashMap<>();
 
     private static final String AUTH_TOKEN_HEADER_NAME = "X-API-KEY";
 
     private final TalentCatalogService talentCatalogService;
+
+    /**
+     * Simple caffeine cache of apiKeys to ApiUser's - avoiding unnecessary calls back to TC server.
+     * <p/>
+     * Cache only successful lookups, with TTL + size bound
+     */
+    private final Cache<String, ApiUser> keyToUserCache = Caffeine.newBuilder()
+        .maximumSize(10_000) // Max 10k entries
+        .expireAfterWrite(Duration.ofMinutes(10)) // Entries expire after 10 minutes
+        .build();
 
     public AuthenticationService(TalentCatalogService talentCatalogService) {
         this.talentCatalogService = talentCatalogService;
     }
 
     public Authentication getAuthentication(HttpServletRequest request) {
-        String presentedApiKey = request.getHeader(AUTH_TOKEN_HEADER_NAME);
-        if (presentedApiKey == null) {
-            throw new BadCredentialsException("Invalid API Key");
+        String presentedApiKey = normalise(request.getHeader(AUTH_TOKEN_HEADER_NAME));
+        if (presentedApiKey == null || presentedApiKey.isEmpty()) {
+          LogBuilder.builder(log)
+              .action("Auth failed")
+              .message("Missing API key header " + AUTH_TOKEN_HEADER_NAME)
+              .logWarn();
+
+          throw new BadCredentialsException("Invalid API Key (missing)");
         }
 
-        ApiUser apiUser = findApiUserByApiKey(presentedApiKey);
+        ApiUser apiUser = keyToUserCache.getIfPresent(presentedApiKey);
         if (apiUser == null) {
-            throw new BadCredentialsException("Invalid API key");
+            apiUser = findApiUserByApiKey(presentedApiKey);
+            if (apiUser != null) {
+                keyToUserCache.put(presentedApiKey, apiUser);
+            }
+            if (apiUser == null) {
+              LogBuilder.builder(log)
+                  .action("Auth failed")
+                  .message("Unknown API key " + maskKey(presentedApiKey))
+                  .logWarn();
+
+              throw new BadCredentialsException("Invalid API Key (unknown)");
+            }
         }
+
+        LogBuilder.builder(log)
+            .action("Auth success")
+            .message("partnerId=" + apiUser.getPartner().getPartnerId() + " partnerName=" + apiUser.getPartner().getName())
+            .logWarn();
 
         // Convert the String authorities to GrantedAuthority objects
         List<SimpleGrantedAuthority> grantedAuthorities =
             apiUser.getPartner().getPublicApiAuthorities().stream()
-                .map(SimpleGrantedAuthority::new).toList();
+                .map(SimpleGrantedAuthority::new)
+                .toList();
 
         return new ApiKeyAuthentication(apiUser, grantedAuthorities);
     }
@@ -71,25 +100,12 @@ public class AuthenticationService {
      */
     @Nullable
     private ApiUser findApiUserByApiKey(String apiKey) {
-
-        ApiUser apiUser;
-
-        //Get user from cache if we have already retrieved it
-        if (keyToUserCache.containsKey(apiKey)) {
-            apiUser = keyToUserCache.get(apiKey);
-        } else {
-            //Get user from TC service
-            if (!talentCatalogService.isLoggedIn()) {
-                talentCatalogService.login();
-            }
-            Partner partner = talentCatalogService.findPartnerByPublicApiKey(apiKey);
-            apiUser = partner == null ? null : new ApiUser(partner);
-
-            //Remember result in cache. Note that this can store nulls if the key is not recognized.
-            //This way repeated requests from an unknown key will only hit the TC server once.
-            keyToUserCache.put(apiKey, apiUser);
+        //Get user from TC service
+        if (!talentCatalogService.isLoggedIn()) {
+            talentCatalogService.login();
         }
-        return apiUser;
+        Partner partner = talentCatalogService.findPartnerByPublicApiKey(apiKey);
+        return partner == null ? null : new ApiUser(partner);
     }
 
     /**
@@ -104,4 +120,28 @@ public class AuthenticationService {
         }
         return Optional.empty();
     }
+
+    // Normalize header string by trimming whitespace, return null if header is null
+    // Fixes potential issues with leading/trailing spaces when testing API keys from Postman or curl
+    private String normalise(String header) {
+        return header == null ? null : header.trim();
+    }
+
+    public void evictKey(String apiKey) {
+      keyToUserCache.invalidate(apiKey);
+    }
+
+    public void clearCache() {
+      keyToUserCache.invalidateAll();
+    }
+
+    // Log-safe mask: "xxxx…last4"
+    static String maskKey(String raw) {
+      if (raw == null || raw.isEmpty()) {
+        return "xxxx…";
+      }
+      String last4 = raw.length() <= 4 ? raw : raw.substring(raw.length() - 4);
+      return "xxxx…" + last4;
+    }
+
 }
