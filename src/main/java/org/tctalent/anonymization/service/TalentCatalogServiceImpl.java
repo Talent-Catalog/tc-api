@@ -185,21 +185,27 @@ public class TalentCatalogServiceImpl implements TalentCatalogService {
     @Override
     @Nullable
     public Partner findPartnerByPublicApiKey(String apiKey) {
-        try {
-            return restClient.get()
-                .uri("/partner/public-api-key/" + apiKey)
-                .header(HttpHeaders.AUTHORIZATION,
-                    credentials.getTokenType() + " " + credentials.getAccessToken())
-                .retrieve()
-                .body(Partner.class);
-        } catch (HttpClientErrorException e) {
-            //Check for logged out
-            if (e.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
-                return null;
-            }
-            throw e;
+      try {
+        return doFindPartnerByPublicApiKey(apiKey);
+      } catch (HttpClientErrorException e) {
+        //Check for logged out
+        if (e.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
+          // token likely expired – re-login and retry once
+          login();
+          return doFindPartnerByPublicApiKey(apiKey);
         }
+        throw e;
+      }
     }
+
+  private Partner doFindPartnerByPublicApiKey(String apiKey) {
+    return restClient.get()
+        .uri("/partner/public-api-key/{apiKey}", apiKey) // safer than string concat
+        .header(HttpHeaders.AUTHORIZATION,
+            credentials.getTokenType() + " " + credentials.getAccessToken())
+        .retrieve()
+        .body(Partner.class);
+  }
 
     @Override
     public boolean isLoggedIn() {
