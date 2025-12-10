@@ -194,6 +194,10 @@ public class TalentCatalogServiceImpl implements TalentCatalogService {
           login();
           return doFindPartnerByPublicApiKey(apiKey);
         }
+        if (e.getStatusCode().isSameCodeAs(HttpStatus.NOT_FOUND)) {
+          // no partner found for this API key
+          return null;
+        }
         throw e;
       }
     }
