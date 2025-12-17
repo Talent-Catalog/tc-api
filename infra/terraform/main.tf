@@ -232,7 +232,7 @@ module "db" {
   name           = local.name
 
   engine         = "aurora-postgresql"
-  engine_version = "15"
+  engine_version = var.db_version
   instance_class = var.db_instance_class
   instances = {
     one = {}
@@ -278,6 +278,7 @@ module "db" {
 
   storage_encrypted   = true
   apply_immediately   = true
+  allow_major_version_upgrade = true
 
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
