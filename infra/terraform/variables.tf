@@ -36,6 +36,10 @@ variable "db_user_name" {
   description = "Data base user name"
 }
 
+variable "db_version" {
+  description = "Version of the database engine"
+}
+
 variable "db_instance_class" {
   description = "Instance class of database - see https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.Summary.html"
   default = "db.t3.micro"

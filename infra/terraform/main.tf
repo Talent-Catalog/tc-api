@@ -3,6 +3,15 @@
 
 # todo Use secrets manager
 
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.89.0"
+    }
+  }
+}
+
 provider "aws" {
   region = local.region
 }
@@ -36,6 +45,7 @@ locals {
 
 module "ecs_cluster" {
   source  = "terraform-aws-modules/ecs/aws//modules/cluster"
+  version = "5.12.0"
 
   cluster_name = local.name
 
@@ -63,6 +73,8 @@ module "ecs_cluster" {
 
 module "ecs_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
+  version = "5.12.0"
+
   depends_on = [module.db]
 
   name        = local.name
@@ -220,7 +232,7 @@ module "db" {
   name           = local.name
 
   engine         = "aurora-postgresql"
-  engine_version = "15"
+  engine_version = var.db_version
   instance_class = var.db_instance_class
   instances = {
     one = {}
@@ -266,6 +278,7 @@ module "db" {
 
   storage_encrypted   = true
   apply_immediately   = true
+  allow_major_version_upgrade = true
 
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
@@ -278,7 +291,7 @@ module "db" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "5.19.0"
 
   name = local.name
   cidr = local.vpc_cidr
@@ -351,7 +364,7 @@ resource "aws_service_discovery_private_dns_namespace" "this" {
 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "~> 9.0"
+  version = "9.14.0"
 
   name = local.name
 
