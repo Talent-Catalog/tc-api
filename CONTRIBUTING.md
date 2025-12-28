@@ -49,23 +49,16 @@ All source files must include a copyright header in the following format:
  */
 ```
 
-The earliest copyright year that appears in file-level headers in this repository is 2024, even 
-though the project itself originated earlier (2019). This is because, in 2024, we made a one-time 
-decision to re-stamp the copyright year to 2024 across the repository. While this was not strictly 
-required (as a file’s original year of first publication would also have been legally valid), it 
-now serves as the baseline for our current convention.
+This project was initiated in 2024, and file-level copyright headers reflect the year a file was 
+first introduced. Files created in 2024 correctly carry a 2024 copyright year; files introduced in 
+subsequent years will carry the year in which they are first created (e.g. 2025, 2026, and so on).
 
-From that point onward, the year in file headers is treated as the year a file was first introduced 
-(or first stamped) under this convention, rather than as an exact record of its earliest historical 
-origin.
-
-Files introduced in 2025 correctly carry a 2025 year; new files introduced in 2026 will carry 2026, 
-and so on. We do not retroactively adjust years for files that predate this baseline, as version 
-control already provides a precise historical record and further mass updates would introduce 
-unnecessary churn without legal or practical benefit.
+Copyright years are not retroactively updated when files are modified. Version control provides an 
+accurate historical record of changes, and avoiding mass updates prevents unnecessary churn without 
+providing additional legal or practical benefit.
 
 This approach avoids the need for annual copyright-only update PRs and keeps the repository 
-consistent, and in line with GPL licensing and common open-source conventions.
+consistent and in line with GPL licensing and common open-source conventions.
 
 ## Standard tools
 
