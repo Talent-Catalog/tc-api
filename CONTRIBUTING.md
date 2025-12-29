@@ -5,6 +5,7 @@ First of all, thank you for considering contributing to the Talent Catalog.
 [Please read and abide by our Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Code Style ##
+
 ### Java ###
 The style standard for this project is 
 [Google Java Style](http://google.github.io/styleguide/javaguide.html). 
@@ -67,7 +68,7 @@ See [the README for the standard tools we use for development](README.md).
 In particular, we use Intellij to edit, build and run code as well as using
 its Git and GitHub integration. Our standard Intellij configuration is 
 checked into version control which imposes many of our standards.
-It is certainly not necessary to use Intellij in order to contribute that is
+It is certainly not necessary to use Intellij in order to contribute but is
 probably the simplest way to go.
 
 
