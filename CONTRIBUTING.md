@@ -128,10 +128,10 @@ See:
 
 ## Make a Pull Request
 
-At this point, you should switch back to your master branch and make sure it's
-up to date with the ("upstream") talentcatalog master branch:
+At this point, you should switch back to your staging branch and make sure it's
+up to date with the ("upstream") talentcatalog staging branch:
 
-Then update your feature branch from your local copy of master, and push it!
+Then update your feature branch from your local copy of staging, and push it!
 
 Finally, go to GitHub and [make a Pull Request] 
 
