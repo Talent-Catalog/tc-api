@@ -95,6 +95,9 @@ A good branch name would be (where issue #325 is the one you're working on):
 git checkout -b 325-add-french-translations
 ```
 
+> **Note:** Please create your branch from `staging`. This branch contains the latest features
+> and code used in the staging environment, where active development and testing take place.
+
 ## Implement your fix or feature
 
 At this point, you're ready to make your changes! Feel free to ask for help;
@@ -110,6 +113,7 @@ Your patch should follow the same conventions & pass the same code quality
 checks as the rest of the project.
 
 ### Documentation
+
 To improve code readability and maintainability we aspire to document the code with clear 
 explanations of components, classes, functions and variables. The documentation standard we follow 
 is **JSDoc** for Angular and **Javadoc** for Java code.
