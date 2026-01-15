@@ -48,6 +48,8 @@ ext {
     jakartaValidationVersion      = "3.0.2"
     jsr305Version                 = "3.0.2"
     caffeineVersion               = "3.1.8"
+
+    set('flyway.version', '11.20.1')
 }
 
 // Project dependencies
@@ -74,6 +76,7 @@ dependencies {
     //Note that Spring Initializr pulls in org.flywaydb:flyway-core but that will not process
     //older Postgres DB versions. We need the the following dependency
     //See https://github.com/flyway/flyway/issues/3902
+    implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-database-postgresql'
 
     // Lombok
