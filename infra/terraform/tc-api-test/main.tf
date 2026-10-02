@@ -19,8 +19,9 @@ module tc-test {
   db_instance_class   = "db.t3.medium" # smallest test instance available for aurora
   db_version          = "17.7"
   dns_namespace       = "tc-api.local"
-  site_domain         = "test.api.tctalent.org"
-  manage_public_dns   = false
+  site_domain              = "test.api.tctalent.org"
+  manage_public_dns        = false
+  existing_certificate_arn = "arn:aws:acm:us-east-1:231168606641:certificate/3a502945-f505-46f9-aa08-523c2be2593d"
 
   # SSM-backed
   tc_api_url                   = "https://tctalent-test.org/api/admin"

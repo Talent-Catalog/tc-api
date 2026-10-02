@@ -19,8 +19,9 @@ module tc-prod {
   db_instance_class   = "db.t3.medium" # 2vCPU, 4GB RAM
   db_version          = "17.7"
   dns_namespace       = "tc-api.local"
-  site_domain         = "api.tctalent.org"
-  manage_public_dns   = false
+  site_domain              = "api.tctalent.org"
+  manage_public_dns        = false
+  existing_certificate_arn = "arn:aws:acm:us-east-1:968457613372:certificate/5dd8d298-5460-4396-ad5e-24e3a2dfa774"
 
   # SSM-backed
   tc_api_url                   = "https://tctalent.org/api/admin"

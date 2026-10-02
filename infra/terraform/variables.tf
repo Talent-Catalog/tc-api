@@ -75,6 +75,17 @@ variable "manage_public_dns" {
   default     = true
 }
 
+variable "existing_certificate_arn" {
+  description = "ACM certificate ARN to attach to the ALB when manage_public_dns is false."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.manage_public_dns || var.existing_certificate_arn != ""
+    error_message = "existing_certificate_arn is required when manage_public_dns is false."
+  }
+}
+
 # -----------------------------------------------------------------------------
 # SSM-backed config and secrets (stored in SSM, injected into ECS task)
 # -----------------------------------------------------------------------------

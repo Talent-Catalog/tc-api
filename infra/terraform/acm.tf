@@ -2,14 +2,6 @@
 # ACM Certificate
 ################################################################################
 
-data "aws_acm_certificate" "existing" {
-  count = var.manage_public_dns ? 0 : 1
-
-  domain      = var.site_domain
-  statuses    = ["ISSUED", "EXPIRED"]
-  most_recent = true
-}
-
 resource "aws_acm_certificate" "this" {
   count = var.manage_public_dns ? 1 : 0
 
