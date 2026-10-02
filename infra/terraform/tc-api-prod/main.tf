@@ -1,3 +1,25 @@
+# Secrets loaded from secrets.auto.tfvars and passed through to the child module
+variable "database_password" {
+  description = "RDS Aurora master password"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "doc_db_password" {
+  description = "MongoDB Atlas password"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "tc_password" {
+  description = "Talent Catalog API password"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 provider "aws" {
   region = "us-east-1"
 }
@@ -30,12 +52,12 @@ module tc-prod {
   tc_api_url                   = "https://tctalent.org/api/admin"
   tc_search_id             = 3434
   tc_username              = "tc-api"
-  tc_password              = "" # set via ssm-parameters.sh
-  database_password        = "" # set via ssm-parameters.sh
+  tc_password              = var.tc_password
+  database_password        = var.database_password
   doc_db_cluster_name      = "prod.t9anmq2.mongodb.net"
   doc_db_name              = "tcapi"
   doc_db_user_name         = "tcapi"
-  doc_db_password          = "" # set via ssm-parameters.sh
+  doc_db_password          = var.doc_db_password
   batch_chunk_size         = "20"
   batch_page_size          = "20"
   batch_max_read_skips     = "10"
