@@ -99,9 +99,9 @@ variable "create_database_internet_gateway_route" {
 }
 
 variable "manage_master_user_password" {
-  description = "When database_password is empty, let RDS manage the master password. Set false to keep a pre-existing static password."
+  description = "Let RDS manage the master password in Secrets Manager. When true, database_password is not sent to RDS (still used for ECS/SSM). When false, database_password is the static master password."
   type        = bool
-  default     = true
+  default     = false
 }
 
 # -----------------------------------------------------------------------------

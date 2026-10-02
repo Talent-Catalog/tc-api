@@ -18,8 +18,9 @@ module "db" {
   publicly_accessible = true
 
   master_username             = var.db_user_name
-  master_password             = var.database_password != "" ? var.database_password : null
-  manage_master_user_password = var.database_password != "" ? false : var.manage_master_user_password
+  # Keep Secrets Manager-managed clusters from also receiving MasterUserPassword.
+  master_password             = var.manage_master_user_password ? null : (var.database_password != "" ? var.database_password : null)
+  manage_master_user_password = var.manage_master_user_password ? true : (var.database_password != "" ? false : false)
   database_name               = var.db_name
 
   vpc_id               = module.vpc.vpc_id
