@@ -50,7 +50,7 @@ module "tc-opc-prod" {
   db_name             = "tcapi"
   db_user_name        = "tcapi"
   db_instance_class   = "db.t3.medium"
-  db_version          = "17.5"
+  db_version          = "17.7"
   dns_namespace       = "tc-api.local"
   site_domain         = "api.plus.tctalent.org"
 
