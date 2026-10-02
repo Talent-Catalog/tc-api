@@ -47,6 +47,7 @@ module tc-prod {
   create_database_internet_gateway_route = true
   manage_master_user_password = false
   existing_certificate_arn = "arn:aws:acm:us-east-1:968457613372:certificate/5dd8d298-5460-4396-ad5e-24e3a2dfa774"
+  vanta_user_data_stored   = "Pseudonymised candidate data"
 
   # SSM-backed
   tc_api_url                   = "https://tctalent.org/api/admin"

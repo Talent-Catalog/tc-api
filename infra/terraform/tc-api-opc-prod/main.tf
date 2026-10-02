@@ -53,6 +53,7 @@ module "tc-opc-prod" {
   db_version          = "17.7"
   dns_namespace       = "tc-api.local"
   site_domain         = "api.plus.tctalent.org"
+  vanta_user_data_stored = "Empty - migration target for tc-api-one in TBB account"
 
   # SSM-backed (stored in SSM, injected into ECS task)
   tc_api_url          = "https://plus.tctalent.org/api/admin"

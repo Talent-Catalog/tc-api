@@ -104,6 +104,11 @@ variable "manage_master_user_password" {
   default     = false
 }
 
+variable "vanta_user_data_stored" {
+  description = "Vanta data-classification tag (VantaUserDataStored) describing what user data this environment's database holds."
+  type        = string
+}
+
 # -----------------------------------------------------------------------------
 # SSM-backed config and secrets (stored in SSM, injected into ECS task)
 # -----------------------------------------------------------------------------

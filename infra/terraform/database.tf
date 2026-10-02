@@ -62,5 +62,8 @@ module "db" {
 
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
-  tags = local.tags
+  tags = merge(local.tags, {
+    VantaContainsUserData = "true"
+    VantaUserDataStored   = var.vanta_user_data_stored
+  })
 }
