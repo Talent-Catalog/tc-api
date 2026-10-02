@@ -234,7 +234,7 @@ module "alb" {
       port            = 443
       protocol        = "HTTPS"
       ssl_policy      = "ELBSecurityPolicy-2016-08"
-      certificate_arn = aws_acm_certificate_validation.this.certificate_arn
+      certificate_arn = var.manage_public_dns ? aws_acm_certificate_validation.this[0].certificate_arn : data.aws_acm_certificate.existing[0].arn
 
       forward = {
         target_group_key = "ex_ecs"

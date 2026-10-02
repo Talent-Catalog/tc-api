@@ -69,6 +69,12 @@ variable "site_domain" {
   description = "The domain name for the ACM certificate (e.g. skills.staging.example.org)"
 }
 
+variable "manage_public_dns" {
+  description = "Create public Route53 + ACM resources for site_domain; disable when DNS is owned by another account."
+  type        = bool
+  default     = true
+}
+
 # -----------------------------------------------------------------------------
 # SSM-backed config and secrets (stored in SSM, injected into ECS task)
 # -----------------------------------------------------------------------------
