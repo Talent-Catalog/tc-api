@@ -19,7 +19,7 @@ module "db" {
 
   master_username             = var.db_user_name
   master_password             = var.database_password != "" ? var.database_password : null
-  manage_master_user_password = var.database_password != "" ? false : true
+  manage_master_user_password = var.database_password != "" ? false : var.manage_master_user_password
   database_name               = var.db_name
 
   vpc_id               = module.vpc.vpc_id

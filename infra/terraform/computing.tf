@@ -124,8 +124,6 @@ module "ecs_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
   version = "5.12.0"
 
-  depends_on = [module.db]
-
   name        = local.name
   cluster_arn = module.ecs_cluster.arn
 

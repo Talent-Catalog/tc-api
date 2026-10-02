@@ -98,6 +98,12 @@ variable "create_database_internet_gateway_route" {
   default     = false
 }
 
+variable "manage_master_user_password" {
+  description = "When database_password is empty, let RDS manage the master password. Set false to keep a pre-existing static password."
+  type        = bool
+  default     = true
+}
+
 # -----------------------------------------------------------------------------
 # SSM-backed config and secrets (stored in SSM, injected into ECS task)
 # -----------------------------------------------------------------------------
