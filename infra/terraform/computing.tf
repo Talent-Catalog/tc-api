@@ -42,6 +42,80 @@ resource "aws_service_discovery_private_dns_namespace" "this" {
   vpc        = module.vpc.vpc_id
 }
 
+locals {
+  ssm_param_arns = var.manage_ssm_parameters ? [
+    aws_ssm_parameter.tc_api_url[0].arn,
+    aws_ssm_parameter.tc_search_id[0].arn,
+    aws_ssm_parameter.tc_username[0].arn,
+    aws_ssm_parameter.tc_password[0].arn,
+    aws_ssm_parameter.database_url[0].arn,
+    aws_ssm_parameter.database_username[0].arn,
+    aws_ssm_parameter.database_password[0].arn,
+    aws_ssm_parameter.mongo_url[0].arn,
+    aws_ssm_parameter.batch_chunk_size[0].arn,
+    aws_ssm_parameter.batch_page_size[0].arn,
+    aws_ssm_parameter.batch_max_read_skips[0].arn,
+    aws_ssm_parameter.batch_fetch_delay_millis[0].arn,
+  ] : []
+
+  ssm_secret_refs = var.manage_ssm_parameters ? [
+    { name = "TC_API_URL", valueFrom = aws_ssm_parameter.tc_api_url[0].arn },
+    { name = "TC_SEARCH_ID", valueFrom = aws_ssm_parameter.tc_search_id[0].arn },
+    { name = "TC_USERNAME", valueFrom = aws_ssm_parameter.tc_username[0].arn },
+    { name = "TC_PASSWORD", valueFrom = aws_ssm_parameter.tc_password[0].arn },
+    { name = "DATABASE_URL", valueFrom = aws_ssm_parameter.database_url[0].arn },
+    { name = "DATABASE_USERNAME", valueFrom = aws_ssm_parameter.database_username[0].arn },
+    { name = "DATABASE_PASSWORD", valueFrom = aws_ssm_parameter.database_password[0].arn },
+    { name = "MONGO_URL", valueFrom = aws_ssm_parameter.mongo_url[0].arn },
+    { name = "BATCH_CHUNK_SIZE", valueFrom = aws_ssm_parameter.batch_chunk_size[0].arn },
+    { name = "BATCH_PAGE_SIZE", valueFrom = aws_ssm_parameter.batch_page_size[0].arn },
+    { name = "BATCH_MAX_READ_SKIPS", valueFrom = aws_ssm_parameter.batch_max_read_skips[0].arn },
+    { name = "BATCH_FETCH_DELAY_MILLIS", valueFrom = aws_ssm_parameter.batch_fetch_delay_millis[0].arn },
+  ] : []
+
+  # Used to freeze legacy TBB roots on the pre-SSM task shape.
+  inline_env = [
+    {
+      name  = "DATABASE_URL"
+      value = "jdbc:postgresql://${module.db.cluster_endpoint}/${var.db_name}"
+    },
+    {
+      name  = "DATABASE_USERNAME"
+      value = var.db_user_name
+    },
+    {
+      name  = "DATABASE_PASSWORD"
+      value = var.database_password
+    },
+    {
+      name = "MONGO_URL"
+      value = format(
+        "mongodb+srv://%s:%s@%s/%s?retryWrites=true&w=majority&appName=staging",
+        var.doc_db_user_name,
+        var.doc_db_password,
+        var.doc_db_cluster_name,
+        var.doc_db_name,
+      )
+    },
+    {
+      name  = "TC_API_URL"
+      value = var.tc_api_url
+    },
+    {
+      name  = "TC_SEARCH_ID"
+      value = tostring(var.tc_search_id)
+    },
+    {
+      name  = "TC_USERNAME"
+      value = var.tc_username
+    },
+    {
+      name  = "TC_PASSWORD"
+      value = var.tc_password
+    },
+  ]
+}
+
 ################################################################################
 # TC API ECS Service
 ################################################################################
@@ -50,7 +124,7 @@ module "ecs_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
   version = "5.12.0"
 
-  depends_on = [module.db, aws_ssm_parameter.database_url]
+  depends_on = [module.db]
 
   name        = local.name
   cluster_arn = module.ecs_cluster.arn
@@ -59,83 +133,61 @@ module "ecs_service" {
   memory = var.fargate_memory
 
   # Allow task execution role to read SSM parameters (injected as secrets)
-  task_exec_ssm_param_arns = [
-    aws_ssm_parameter.tc_api_url.arn,
-    aws_ssm_parameter.tc_search_id.arn,
-    aws_ssm_parameter.tc_username.arn,
-    aws_ssm_parameter.tc_password.arn,
-    aws_ssm_parameter.database_url.arn,
-    aws_ssm_parameter.database_username.arn,
-    aws_ssm_parameter.database_password.arn,
-    aws_ssm_parameter.mongo_url.arn,
-    aws_ssm_parameter.batch_chunk_size.arn,
-    aws_ssm_parameter.batch_page_size.arn,
-    aws_ssm_parameter.batch_max_read_skips.arn,
-    aws_ssm_parameter.batch_fetch_delay_millis.arn,
-  ]
+  task_exec_ssm_param_arns = var.manage_ssm_parameters ? local.ssm_param_arns : []
 
   # Enables ECS Exec
   enable_execute_command = true
 
-  # Container definition(s) – secrets from SSM; no sensitive env vars in task def
+  # Container definition(s)
   container_definitions = {
 
-    (local.container_name) = {
-      cpu       = var.fargate_cpu
-      memory    = var.fargate_memory
-      essential = true
+    (local.container_name) = merge(
+      {
+        cpu       = var.fargate_cpu
+        memory    = var.fargate_memory
+        essential = true
 
-      image = "${aws_ecr_repository.repo.repository_url}:${var.image_tag}"
-      port_mappings = [
-        {
-          name          = local.container_name
-          containerPort = local.container_port
-          hostPort      = local.container_port
-          protocol      = "tcp"
+        image = "${aws_ecr_repository.repo.repository_url}:${var.image_tag}"
+        port_mappings = [
+          {
+            name          = local.container_name
+            containerPort = local.container_port
+            hostPort      = local.container_port
+            protocol      = "tcp"
+          }
+        ]
+
+        # Example image used requires access to write to root filesystem
+        readonly_root_filesystem = false
+
+        enable_cloudwatch_logging = true
+        log_configuration = {
+          logDriver = "awslogs"
+          options = {
+            awslogs-group         = "/fargate/service/${local.name}-fargate-log"
+            awslogs-stream-prefix = "ecs"
+            awslogs-region        = local.region
+          }
         }
-      ]
 
-      # Injected from SSM (path: /${var.project_name}/${var.environment}/...)
-      # Env var names must match application.yml ${...} placeholders exactly
-      secrets = [
-        { name = "TC_API_URL", valueFrom = aws_ssm_parameter.tc_api_url.arn },
-        { name = "TC_SEARCH_ID", valueFrom = aws_ssm_parameter.tc_search_id.arn },
-        { name = "TC_USERNAME", valueFrom = aws_ssm_parameter.tc_username.arn },
-        { name = "TC_PASSWORD", valueFrom = aws_ssm_parameter.tc_password.arn },
-        { name = "DATABASE_URL", valueFrom = aws_ssm_parameter.database_url.arn },
-        { name = "DATABASE_USERNAME", valueFrom = aws_ssm_parameter.database_username.arn },
-        { name = "DATABASE_PASSWORD", valueFrom = aws_ssm_parameter.database_password.arn },
-        { name = "MONGO_URL", valueFrom = aws_ssm_parameter.mongo_url.arn },
-        { name = "BATCH_CHUNK_SIZE", valueFrom = aws_ssm_parameter.batch_chunk_size.arn },
-        { name = "BATCH_PAGE_SIZE", valueFrom = aws_ssm_parameter.batch_page_size.arn },
-        { name = "BATCH_MAX_READ_SKIPS", valueFrom = aws_ssm_parameter.batch_max_read_skips.arn },
-        { name = "BATCH_FETCH_DELAY_MILLIS", valueFrom = aws_ssm_parameter.batch_fetch_delay_millis.arn },
-      ]
-
-      # Example image used requires access to write to root filesystem
-      readonly_root_filesystem = false
-
-      enable_cloudwatch_logging = true
-      log_configuration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = "/fargate/service/${local.name}-fargate-log"
-          awslogs-stream-prefix = "ecs"
-          awslogs-region        = local.region
+        linux_parameters = {
+          capabilities = {
+            add = []
+            drop = [
+              "NET_RAW"
+            ]
+          }
         }
+
+        memory_reservation = 100
+      },
+      var.manage_ssm_parameters ? {
+        # Env var names must match application.yml ${...} placeholders exactly.
+        secrets = local.ssm_secret_refs
+      } : {
+        environment = local.inline_env
       }
-
-      linux_parameters = {
-        capabilities = {
-          add = []
-          drop = [
-            "NET_RAW"
-          ]
-        }
-      }
-
-      memory_reservation = 100
-    }
+    )
   }
 
   service_connect_configuration = {

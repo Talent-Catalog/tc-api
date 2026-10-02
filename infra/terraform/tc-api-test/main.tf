@@ -21,6 +21,8 @@ module tc-test {
   dns_namespace       = "tc-api.local"
   site_domain              = "test.api.tctalent.org"
   manage_public_dns        = false
+  manage_ssm_parameters    = false
+  create_database_internet_gateway_route = true
   existing_certificate_arn = "arn:aws:acm:us-east-1:231168606641:certificate/3a502945-f505-46f9-aa08-523c2be2593d"
 
   # SSM-backed

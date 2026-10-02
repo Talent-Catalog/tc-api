@@ -21,6 +21,8 @@ module tc-prod {
   dns_namespace       = "tc-api.local"
   site_domain              = "api.tctalent.org"
   manage_public_dns        = false
+  manage_ssm_parameters    = false
+  create_database_internet_gateway_route = true
   existing_certificate_arn = "arn:aws:acm:us-east-1:968457613372:certificate/5dd8d298-5460-4396-ad5e-24e3a2dfa774"
 
   # SSM-backed

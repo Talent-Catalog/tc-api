@@ -86,6 +86,18 @@ variable "existing_certificate_arn" {
   }
 }
 
+variable "manage_ssm_parameters" {
+  description = "Create SSM parameters and inject them as ECS secrets. Disable to keep the existing inline-env task definition."
+  type        = bool
+  default     = true
+}
+
+variable "create_database_internet_gateway_route" {
+  description = "Create a 0.0.0.0/0 route from the database route table to the VPC internet gateway."
+  type        = bool
+  default     = false
+}
+
 # -----------------------------------------------------------------------------
 # SSM-backed config and secrets (stored in SSM, injected into ECS task)
 # -----------------------------------------------------------------------------
