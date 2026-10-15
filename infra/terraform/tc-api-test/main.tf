@@ -1,3 +1,25 @@
+# Secrets loaded from secrets.auto.tfvars and passed through to the child module
+variable "database_password" {
+  description = "RDS Aurora master password"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "doc_db_password" {
+  description = "MongoDB Atlas password"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "tc_password" {
+  description = "Talent Catalog API password"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 provider "aws" {
   region = "us-east-1"
 }
@@ -17,20 +39,26 @@ module tc-test {
   db_name             = "tcapi"
   db_user_name        = "tcapi"
   db_instance_class   = "db.t3.medium" # smallest test instance available for aurora
-  db_version          = "17.5"
+  db_version          = "17.7"
   dns_namespace       = "tc-api.local"
-  site_domain         = "test.api.tctalent.org"
+  site_domain              = "test.api.tctalent.org"
+  manage_public_dns        = false
+  manage_ssm_parameters    = false
+  create_database_internet_gateway_route = true
+  manage_master_user_password = true
+  existing_certificate_arn = "arn:aws:acm:us-east-1:231168606641:certificate/3a502945-f505-46f9-aa08-523c2be2593d"
+  vanta_user_data_stored   = "Pseudonymised candidate data"
 
   # SSM-backed
   tc_api_url                   = "https://tctalent-test.org/api/admin"
   tc_search_id             = 2682
   tc_username              = "tc-api"
-  tc_password              = "" # set via ssm-parameters.sh
-  database_password        = "" # set via ssm-parameters.sh
+  tc_password              = var.tc_password
+  database_password        = var.database_password
   doc_db_cluster_name      = "staging.c8pam.mongodb.net"
   doc_db_name              = "tcapi"
   doc_db_user_name         = "tcapi"
-  doc_db_password          = "" # set via ssm-parameters.sh
+  doc_db_password          = var.doc_db_password
   batch_chunk_size         = "20"
   batch_page_size          = "20"
   batch_max_read_skips     = "10"

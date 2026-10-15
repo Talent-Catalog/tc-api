@@ -3,6 +3,8 @@
 ################################################################################
 
 resource "aws_route53_zone" "this" {
+  count = var.manage_public_dns ? 1 : 0
+
   name = var.site_domain
 
   tags = local.tags
@@ -10,7 +12,9 @@ resource "aws_route53_zone" "this" {
 
 # A record pointing the domain to the ALB
 resource "aws_route53_record" "ipv4" {
-  zone_id = aws_route53_zone.this.zone_id
+  count = var.manage_public_dns ? 1 : 0
+
+  zone_id = aws_route53_zone.this[0].zone_id
   name    = var.site_domain
   type    = "A"
 
@@ -22,7 +26,9 @@ resource "aws_route53_record" "ipv4" {
 }
 
 resource "aws_route53_record" "www" {
-  zone_id = aws_route53_zone.this.zone_id
+  count = var.manage_public_dns ? 1 : 0
+
+  zone_id = aws_route53_zone.this[0].zone_id
   name    = "www"
   type    = "CNAME"
   ttl     = "600"

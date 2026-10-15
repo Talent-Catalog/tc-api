@@ -69,6 +69,46 @@ variable "site_domain" {
   description = "The domain name for the ACM certificate (e.g. skills.staging.example.org)"
 }
 
+variable "manage_public_dns" {
+  description = "Create public Route53 + ACM resources for site_domain; disable when DNS is owned by another account."
+  type        = bool
+  default     = true
+}
+
+variable "existing_certificate_arn" {
+  description = "ACM certificate ARN to attach to the ALB when manage_public_dns is false."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.manage_public_dns || var.existing_certificate_arn != ""
+    error_message = "existing_certificate_arn is required when manage_public_dns is false."
+  }
+}
+
+variable "manage_ssm_parameters" {
+  description = "Create SSM parameters and inject them as ECS secrets. Disable to keep the existing inline-env task definition."
+  type        = bool
+  default     = true
+}
+
+variable "create_database_internet_gateway_route" {
+  description = "Create a 0.0.0.0/0 route from the database route table to the VPC internet gateway."
+  type        = bool
+  default     = false
+}
+
+variable "manage_master_user_password" {
+  description = "Let RDS manage the master password in Secrets Manager. When true, database_password is not sent to RDS (still used for ECS/SSM). When false, database_password is the static master password."
+  type        = bool
+  default     = false
+}
+
+variable "vanta_user_data_stored" {
+  description = "Vanta data-classification tag (VantaUserDataStored) describing what user data this environment's database holds."
+  type        = string
+}
+
 # -----------------------------------------------------------------------------
 # SSM-backed config and secrets (stored in SSM, injected into ECS task)
 # -----------------------------------------------------------------------------
