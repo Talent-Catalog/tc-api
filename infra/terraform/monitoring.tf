@@ -90,10 +90,10 @@ resource "aws_cloudwatch_metric_alarm" "alb_latency_p95" {
   tags = merge(local.tags, { Name = "${local.name}-${var.environment}-alb-latency-p95" })
 }
 
-resource "aws_cloudwatch_metric_alarm" "alb_target_5xx" {
+resource "aws_cloudwatch_metric_alarm" "alb_5xx_target" {
   count = var.cloudwatch_alarms_enabled ? 1 : 0
 
-  alarm_name          = "${local.name}-${var.environment}-alb-target-5xx"
+  alarm_name          = "${local.name}-${var.environment}-alb-5xx-target"
   alarm_description   = "ALB ${local.name} (${var.environment}) target is returning 5XX responses. TC-1526."
   namespace           = "AWS/ApplicationELB"
   metric_name         = "HTTPCode_Target_5XX_Count"
@@ -112,13 +112,13 @@ resource "aws_cloudwatch_metric_alarm" "alb_target_5xx" {
   alarm_actions = [var.alarm_sns_topic_arn]
   ok_actions    = [var.alarm_sns_topic_arn]
 
-  tags = merge(local.tags, { Name = "${local.name}-${var.environment}-alb-target-5xx" })
+  tags = merge(local.tags, { Name = "${local.name}-${var.environment}-alb-5xx-target" })
 }
 
-resource "aws_cloudwatch_metric_alarm" "alb_elb_5xx" {
+resource "aws_cloudwatch_metric_alarm" "alb_5xx_elb" {
   count = var.cloudwatch_alarms_enabled ? 1 : 0
 
-  alarm_name          = "${local.name}-${var.environment}-alb-elb-5xx"
+  alarm_name          = "${local.name}-${var.environment}-alb-5xx-elb"
   alarm_description   = "ALB ${local.name} (${var.environment}) itself is returning 5XX responses. TC-1526."
   namespace           = "AWS/ApplicationELB"
   metric_name         = "HTTPCode_ELB_5XX_Count"
@@ -137,7 +137,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_elb_5xx" {
   alarm_actions = [var.alarm_sns_topic_arn]
   ok_actions    = [var.alarm_sns_topic_arn]
 
-  tags = merge(local.tags, { Name = "${local.name}-${var.environment}-alb-elb-5xx" })
+  tags = merge(local.tags, { Name = "${local.name}-${var.environment}-alb-5xx-elb" })
 }
 
 ################################################################################
