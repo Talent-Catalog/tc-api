@@ -177,3 +177,73 @@ variable "batch_fetch_delay_millis" {
   description = "Fetch delay in ms for batch jobs (BATCH_FETCH_DELAY_MILLIS in SSM)"
   type        = string
 }
+
+# -----------------------------------------------------------------------------
+# CloudWatch alarms (TC-1526: Vanta alarm coverage for ALB, RDS)
+# -----------------------------------------------------------------------------
+
+variable "cloudwatch_alarms_enabled" {
+  description = "Whether to create CloudWatch alarms for the ALB and RDS Aurora instances (TC-1526)"
+  type        = bool
+  default     = false
+}
+
+variable "alarm_sns_topic_arn" {
+  description = "SNS topic ARN to notify on alarm state changes (alarm_actions and ok_actions only). Must be set when cloudwatch_alarms_enabled is true"
+  type        = string
+  default     = null
+}
+
+variable "alarm_alb_unhealthy_host_count_threshold" {
+  description = "Threshold for ALB target group unhealthy host count alarm"
+  type        = number
+  default     = 0
+}
+
+variable "alarm_alb_latency_p95_threshold_seconds" {
+  description = "Threshold (seconds) for ALB p95 target response time alarm"
+  type        = number
+  default     = 2
+}
+
+variable "alarm_alb_target_5xx_threshold" {
+  description = "Threshold for ALB target group 5XX count alarm (per period)"
+  type        = number
+  default     = 10
+}
+
+variable "alarm_alb_elb_5xx_threshold" {
+  description = "Threshold for ALB load balancer 5XX count alarm (per period)"
+  type        = number
+  default     = 10
+}
+
+variable "alarm_rds_cpu_threshold_percent" {
+  description = "Threshold (percent) for RDS Aurora instance CPU utilization alarm"
+  type        = number
+  default     = 80
+}
+
+variable "alarm_rds_freeable_memory_threshold_percent" {
+  description = "Threshold as a percentage of total instance memory for the RDS Aurora instance freeable memory alarm"
+  type        = number
+  default     = 10
+}
+
+variable "alarm_rds_instance_memory_bytes_override" {
+  description = "Override for the total memory (in bytes) of the RDS instance class, used to compute the freeable memory alarm threshold when db_instance_class is not in the built-in map"
+  type        = number
+  default     = null
+}
+
+variable "alarm_rds_free_local_storage_threshold_bytes" {
+  description = "Threshold (bytes) for RDS Aurora instance free local storage alarm. Default is 2 GiB - verify against the current FreeLocalStorage metric before enabling, as db.t3.medium's local storage is small"
+  type        = number
+  default     = 2147483648
+}
+
+variable "alarm_rds_disk_queue_depth_threshold" {
+  description = "Threshold for RDS Aurora instance disk queue depth alarm"
+  type        = number
+  default     = 10
+}
