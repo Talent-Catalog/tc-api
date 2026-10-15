@@ -33,6 +33,13 @@ provider "aws" {
   }
 }
 
+# TC-1526: CloudWatch alarms notify the opc-prod-alarms SNS topic, which is
+# owned and created by the talentcatalog repo's opc-prod root. That root must
+# be applied before this one for the data lookup below to succeed.
+data "aws_sns_topic" "alarms" {
+  name = "opc-prod-alarms"
+}
+
 # tc-api infrastructure for OPC AWS production account
 module "tc-opc-prod" {
   source = "./.."
@@ -54,6 +61,10 @@ module "tc-opc-prod" {
   dns_namespace       = "tc-api.local"
   site_domain         = "api.plus.tctalent.org"
   vanta_user_data_stored = "Empty - migration target for tc-api-one in TBB account"
+
+  # TC-1526: CloudWatch alarm coverage for ALB and RDS
+  cloudwatch_alarms_enabled = true
+  alarm_sns_topic_arn       = data.aws_sns_topic.alarms.arn
 
   # SSM-backed (stored in SSM, injected into ECS task)
   tc_api_url          = "https://plus.tctalent.org/api/admin"

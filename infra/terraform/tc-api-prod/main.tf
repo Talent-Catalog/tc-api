@@ -24,6 +24,13 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# TC-1526: CloudWatch alarms notify the tbb-prod-alarms SNS topic, which is
+# created manually in the TBB prod account (us-east-1) per ADR 002 in the
+# talentcatalog repo. That topic must exist before this root is planned.
+data "aws_sns_topic" "alarms" {
+  name = "tbb-prod-alarms"
+}
+
 module tc-prod {
   source = "./.."
 
@@ -48,6 +55,10 @@ module tc-prod {
   manage_master_user_password = false
   existing_certificate_arn = "arn:aws:acm:us-east-1:968457613372:certificate/5dd8d298-5460-4396-ad5e-24e3a2dfa774"
   vanta_user_data_stored   = "Pseudonymised candidate data"
+
+  # TC-1526: CloudWatch alarm coverage for ALB and RDS
+  cloudwatch_alarms_enabled = true
+  alarm_sns_topic_arn       = data.aws_sns_topic.alarms.arn
 
   # SSM-backed
   tc_api_url                   = "https://tctalent.org/api/admin"
