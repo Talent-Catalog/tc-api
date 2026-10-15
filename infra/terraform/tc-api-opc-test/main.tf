@@ -33,6 +33,13 @@ provider "aws" {
   }
 }
 
+# TC-1526: CloudWatch alarms notify the opc-staging-alarms SNS topic, which is
+# owned and created by the talentcatalog repo's opc-staging root. That root
+# must be applied before this one for the data lookup below to succeed.
+data "aws_sns_topic" "alarms" {
+  name = "opc-staging-alarms"
+}
+
 # tc-api infrastructure for OPC AWS staging account
 module "tc-opc-test" {
   source = "./.."
@@ -54,6 +61,10 @@ module "tc-opc-test" {
   dns_namespace       = "tc-api.local"
   site_domain         = "test.api.tctalent.org"
   vanta_user_data_stored = "Pseudonymised candidate data"
+
+  # TC-1526: CloudWatch alarm coverage for ALB and RDS
+  cloudwatch_alarms_enabled = true
+  alarm_sns_topic_arn       = data.aws_sns_topic.alarms.arn
 
   # SSM-backed (stored in SSM, injected into ECS task)
   tc_api_url          = "https://tctalent-test.org/api/admin"

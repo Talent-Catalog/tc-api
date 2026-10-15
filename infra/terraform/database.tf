@@ -2,6 +2,14 @@
 # RDS Aurora PostgreSQL
 ################################################################################
 
+locals {
+  # Kept as a local (rather than inline in the module block) so CloudWatch
+  # alarms below can for_each over the same keys without an unknown value.
+  db_instances = {
+    one = {}
+  }
+}
+
 module "db" {
   source  = "terraform-aws-modules/rds-aurora/aws"
   version = "9.13.0"
@@ -11,9 +19,7 @@ module "db" {
   engine         = "aurora-postgresql"
   engine_version = var.db_version
   instance_class = var.db_instance_class
-  instances = {
-    one = {}
-  }
+  instances      = local.db_instances
 
   publicly_accessible = true
 
